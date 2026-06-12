@@ -52,10 +52,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
 
-  pages: {
-    signIn: "/login",
-    error: "/login",
-  },
+  // pages 不配置，使用 NextAuth 默认登录页 /api/auth/signin
+  // pages: {
+  //   signIn: "/login",
+  //   error: "/login",
+  // },
 
   providers: [
     Google({

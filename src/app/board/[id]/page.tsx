@@ -1,44 +1,74 @@
 import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
 import ExcalidrawEditor from "@/components/ExcalidrawEditorWrapper"
-import { getBoard } from "@/lib/boards"
+import { getBoard, createBoard } from "@/lib/boards"
 
 export const dynamic = "force-dynamic"
 
-export default async function BoardPage({ params }: { params: Promise<{ id: string }> }) {
+// Test mode: hardcoded test user ID (bypasses Google OAuth)
+const TEST_USER_ID = "test-user-0000-0000-0000-000000000001"
+
+export default async function BoardPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ test?: string }>
+}) {
   const { id } = await params
-  let session = null
-  try {
-    session = await auth()
-  } catch {
-    // JWT validation failed (cross-subdomain cookie mismatch)
-    // Redirect to signin with callbackUrl so the user comes back here
-  }
-  const user = session?.user
-  if (!user) {
-    const callbackUrl = encodeURIComponent("/board/" + id)
-    return redirect("/api/auth/signin?callbackUrl=" + callbackUrl)
+  const { test } = await searchParams
+  const isTest = test === "1"
+
+  // In test mode, skip auth and use test user
+  let userId: string
+  if (isTest) {
+    userId = TEST_USER_ID
+  } else {
+    let session = null
+    try {
+      session = await auth()
+    } catch {
+      // JWT validation failed
+    }
+    const user = session?.user
+    if (!user) {
+      const callbackUrl = encodeURIComponent("/board/" + id)
+      return redirect("/api/auth/signin?callbackUrl=" + callbackUrl)
+    }
+    userId = user!.id!
   }
 
-  const userId = user!.id!
-  const board = await getBoard(id, userId)
-  if (!board) notFound()
+  let board = await getBoard(id, userId)
+  if (!board) {
+    if (isTest) {
+      // Auto-create a test board (title defaults to "Untitled Board")
+      board = await createBoard(userId)
+    }
+    if (!board) notFound()
+  }
+
+  const boardId = board.id  // always use the actual board ID
+  const isTestMode = isTest
 
   return (
     <ExcalidrawEditor
-      boardId={id}
+      boardId={boardId}
       initialData={{
         elements: board.elements as any[],
         appState: board.appState as any,
       }}
       readOnly={false}
-      onSave={async (elements: any[], appState: any) => {
-        await fetch(`/api/boards/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ elements, appState }),
-        })
-      }}
+      onSave={
+        isTestMode
+          ? undefined  // disable auto-save in test mode
+          : async (elements: any[], appState: any) => {
+              await fetch(`/api/boards/${boardId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ elements, appState }),
+              })
+            }
+      }
     />
   )
 }

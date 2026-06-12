@@ -37,7 +37,7 @@ model sessions {
 }
 
 model users {
-  id                        String     @id
+  id                        String     @id @default(cuid())
   name                      String?
   email                     String?    @unique
   image                     String?

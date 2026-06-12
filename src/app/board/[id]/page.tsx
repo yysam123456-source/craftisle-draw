@@ -38,24 +38,23 @@ export default async function BoardPage({
     userId = user!.id!
   }
 
-  let board = await getBoard(id, userId)
-  if (!board) {
-    if (isTest) {
-      // Auto-create a test board (title defaults to "Untitled Board")
-      try {
-        board = await createBoard(userId)
-      } catch (err: any) {
-        // Test user may not exist in DB — show helpful error
-        return (
-          <div className="h-screen flex flex-col items-center justify-center p-8">
-            <h2 className="text-xl font-bold text-red-600 mb-4">Test Mode Error</h2>
-            <p className="mb-2">Failed to create test board. Test user may not exist in database.</p>
-            <pre className="bg-gray-100 p-4 rounded text-sm max-w-2xl overflow-auto">
-              {String(err)}
-            </pre>
-          </div>
-        )
-      }
+  // In test mode, skip DB entirely and return mock data
+  let board: any
+  if (isTest) {
+    board = {
+      id: id,                     // use the id from URL
+      elements: [],
+      appState: { viewBackgroundColor: "#ffffff" },
+      title: "Test Board",
+      userId: TEST_USER_ID,
+      isPublic: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  } else {
+    let board = await getBoard(id, userId)
+    if (!board) {
+      board = await createBoard(userId)
     }
     if (!board) notFound()
   }

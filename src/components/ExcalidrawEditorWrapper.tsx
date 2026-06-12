@@ -1,7 +1,32 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Component, ReactNode } from "react"
 import dynamic from "next/dynamic"
+
+/**
+ * Error boundary to catch Excalidraw rendering errors
+ */
+class ExcalidrawErrorBoundary extends Component<
+  { children: ReactNode; fallback: (error: Error) => ReactNode },
+  { error: Error | null }
+> {
+  constructor(props: any) {
+    super(props)
+    this.state = { error: null }
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { error }
+  }
+  componentDidCatch(error: Error, info: any) {
+    console.error("[Excalidraw] Render error:", error, info)
+  }
+  render() {
+    if (this.state.error) {
+      return this.props.fallback(this.state.error)
+    }
+    return this.props.children
+  }
+}
 
 /**
  * Loads the Excalidraw subset worker from our API route,
@@ -65,5 +90,20 @@ export default function ExcalidrawEditorWrapper(props: any) {
     )
   }
 
-  return <ExcalidrawEditor {...props} />
+  return (
+    <ExcalidrawErrorBoundary
+      fallback={(error) => (
+        <div className="h-screen flex flex-col items-center justify-center p-8">
+          <h2 className="text-xl font-bold text-red-600 mb-4">Editor Render Error</h2>
+          <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm">
+            {error.message}
+            {"\n"}
+            {error.stack}
+          </pre>
+        </div>
+      )}
+    >
+      <ExcalidrawEditor {...props} />
+    </ExcalidrawErrorBoundary>
+  )
 }

@@ -9,7 +9,7 @@ export default async function BoardPage({ params }: { params: Promise<{ id: stri
   const { id } = await params
   const session = await auth()
   const user = session?.user
-  if (!user) redirect("/login")
+  if (!user) redirect("/api/auth/signin")
 
   const userId = user!.id!
   const board = await getBoard(id, userId)

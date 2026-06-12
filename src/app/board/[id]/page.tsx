@@ -32,7 +32,7 @@ export default async function BoardPage({ params }: { params: Promise<{ id: stri
         appState: board.appState as any,
       }}
       readOnly={false}
-      onSave={async (elements, appState) => {
+      onSave={async (elements: any[], appState: any) => {
         await fetch(`/api/boards/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

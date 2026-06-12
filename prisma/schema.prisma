@@ -66,14 +66,14 @@ model verification_tokens {
 model Board {
   id         String   @id @default(cuid())
   title      String   @default("Untitled Board")
-  elements   Json     // ExcalidrawElement[]
-  app_state  Json?    // AppState（可选）
-  is_public  Boolean  @default(false) @map("is_public")
-  user_id    String   @map("user_id")
-  created_at DateTime  @default(now()) @map("created_at")
-  updated_at DateTime  @updatedAt @map("updated_at")
+  elements   Json
+  appState   Json?    @map("app_state")
+  isPublic   Boolean  @default(false) @map("is_public")
+  userId    String   @map("user_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
 
-  user       users    @relation("BoardToUser", fields: [user_id], references: [id], onDelete: Cascade)
+  user       users    @relation("BoardToUser", fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("boards")
 }

@@ -76,9 +76,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return { id: "local-" + email, email, name: email.split("@")[0] }
         }
         try {
-          let user = await prisma.user.findUnique({ where: { email } })
+          let user = await prisma.users.findUnique({ where: { email } })
           if (!user) {
-            user = await prisma.user.create({
+            user = await prisma.users.create({
               data: { email, name: email.split("@")[0] },
             })
           }

@@ -4,35 +4,31 @@ import BoardList from "@/components/BoardList"
 import { auth } from "@/auth"
 
 export const metadata: Metadata = {
-  title: "我的白板",
+  title: "My Boards",
 }
 
 export default async function HomePage() {
-  const session = await auth()
+  let session = null
+  try {
+    session = await auth()
+  } catch {
+    // JWT validation failed (e.g. cross-subdomain cookie mismatch)
+    // Silently show logged-out state
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">我的白板</h1>
-        {session?.user && (
-          <a
-            href="/board/new"
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          >
-            + 新建白板
-          </a>
-        )}
-      </div>
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">My Boards</h1>
 
       {session?.user ? (
-        <Suspense fallback={<div className="text-center py-12">加载中...</div>}>
+        <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
           <BoardList userId={session.user.id!} />
         </Suspense>
       ) : (
         <div className="text-center py-24 text-gray-500">
-          <p className="text-xl mb-4">请先登录以查看你的白板</p>
+          <p className="text-xl mb-4">Please sign in to view your boards</p>
           <a href="/api/auth/signin" className="text-blue-600 hover:underline">
-            前往登录
+            Sign In
           </a>
         </div>
       )}

@@ -13,9 +13,9 @@ export default async function SharePage({ params }: { params: Promise<{ id: stri
   return (
     <div className="h-screen">
       <div className="bg-gray-100 px-4 py-2 text-sm text-gray-600 flex items-center gap-2">
-        <span>只读预览</span>
+        <span>Read-only preview</span>
         <a href="/" className="text-blue-600 hover:underline ml-auto">
-          返回首页
+          Back to Home
         </a>
       </div>
       <ExcalidrawEditor

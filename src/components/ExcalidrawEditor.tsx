@@ -25,12 +25,12 @@ export default function ExcalidrawEditor({
   const excalidrawRef = useRef<any>(null)
   const saveTimerRef = useRef<any>(null)
 
-  // 初始化 API ref
+  // Initialize API ref
   const onExcalidrawAPIReady = useCallback((api: any) => {
     excalidrawRef.current = api
   }, [])
 
-  // 防抖自动保存
+  // Debounced auto-save
   const debouncedSave = useCallback(
     (elements: any[], appState: any) => {
       if (!onSave) return
@@ -42,7 +42,7 @@ export default function ExcalidrawEditor({
     [onSave]
   )
 
-  // 监听画布变化
+  // Listen for canvas changes
   const onChange = useCallback(
     (elements: readonly any[], appState: any) => {
       debouncedSave([...elements], { ...appState })
@@ -50,7 +50,7 @@ export default function ExcalidrawEditor({
     [debouncedSave]
   )
 
-  // 导出为 PNG（客户端）
+  // Export as PNG (client-side)
   const exportPNG = useCallback(() => {
     if (!excalidrawRef.current) return null
     return excalidrawRef.current.exportToBlob({

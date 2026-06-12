@@ -7,9 +7,18 @@ export const dynamic = "force-dynamic"
 
 export default async function BoardPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const session = await auth()
+  let session = null
+  try {
+    session = await auth()
+  } catch {
+    // JWT validation failed (cross-subdomain cookie mismatch)
+    // Redirect to signin with callbackUrl so the user comes back here
+  }
   const user = session?.user
-  if (!user) redirect("/api/auth/signin")
+  if (!user) {
+    const callbackUrl = encodeURIComponent("/board/" + id)
+    return redirect("/api/auth/signin?callbackUrl=" + callbackUrl)
+  }
 
   const userId = user!.id!
   const board = await getBoard(id, userId)

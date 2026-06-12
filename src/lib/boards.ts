@@ -16,7 +16,7 @@ export async function getPublicBoard(id: string): Promise<Board | null> {
 export async function createBoard(userId: string, title?: string): Promise<Board> {
   return await prisma.board.create({
     data: {
-      title: title ?? "未命名白板",
+      title: title ?? "Untitled Board",
       userId,
       elements: [],
       appState: {},

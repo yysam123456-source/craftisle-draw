@@ -21,7 +21,7 @@ export default function Navbar() {
         {session?.user ? (
           <>
             <Link href="/\" className="text-sm text-gray-600 hover:text-gray-900">
-              我的白板
+              My Boards
             </Link>
             <div className="relative">
               <button
@@ -43,7 +43,7 @@ export default function Navbar() {
                       await signOut({ callbackUrl: "/" })
                     }}
                   >
-                    退出登录
+                    Sign Out
                   </a>
                 </div>
               )}
@@ -54,7 +54,7 @@ export default function Navbar() {
             href="/api/auth/signin"
             className="text-sm px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
-            登录
+            Sign In
           </a>
         )}
       </div>

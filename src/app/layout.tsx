@@ -9,8 +9,8 @@ export const dynamic = "force-dynamic"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Craftisle Draw — 在线白板",
-  description: "基于 Excalidraw 的在线手绘白板工具",
+  title: "Craftisle Draw — Online Whiteboard",
+  description: "Online hand-drawn whiteboard tool powered by Excalidraw",
 }
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-CN">
+    <html lang="en">
       <body className={inter.className}>
         <SessionProvider>
           <Navbar />

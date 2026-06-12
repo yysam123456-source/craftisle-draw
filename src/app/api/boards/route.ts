@@ -3,7 +3,12 @@ import { auth } from "@/auth"
 import { createBoard, getUserBoards } from "@/lib/boards"
 
 export async function GET() {
-  const session = await auth()
+  let session = null
+  try {
+    session = await auth()
+  } catch {
+    // JWT validation failed
+  }
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
@@ -13,7 +18,12 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const session = await auth()
+  let session = null
+  try {
+    session = await auth()
+  } catch {
+    // JWT validation failed
+  }
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }

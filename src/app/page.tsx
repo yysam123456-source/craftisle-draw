@@ -31,7 +31,7 @@ export default async function HomePage() {
       ) : (
         <div className="text-center py-24 text-gray-500">
           <p className="text-xl mb-4">请先登录以查看你的白板</p>
-          <a href="/login" className="text-blue-600 hover:underline">
+          <a href="/api/auth/signin" className="text-blue-600 hover:underline">
             前往登录
           </a>
         </div>

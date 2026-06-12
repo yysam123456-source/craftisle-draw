@@ -11,7 +11,9 @@ export async function GET(request: Request) {
   }
   if (!session?.user?.id) {
     const url = new URL(request.url)
-    return NextResponse.redirect(new URL("/api/auth/signin", url.origin))
+    const signInUrl = new URL("/api/auth/signin", url.origin)
+    signInUrl.searchParams.set("callbackUrl", url.href)
+    return NextResponse.redirect(signInUrl)
   }
 
   const board = await createBoard(session.user.id)

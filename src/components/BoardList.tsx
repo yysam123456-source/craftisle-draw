@@ -39,10 +39,9 @@ export default function BoardList({ userId }: { userId: string }) {
     setBoards(boards.filter(b => b.id !== id))
   }
 
-  const handleNew = async () => {
-    const res = await fetch("/api/boards", { method: "POST" })
-    const board = await res.json()
-    router.push(`/board/${board.id}`)
+  const handleNew = () => {
+    // Use server-side route that creates board and redirects with proper auth handling
+    router.push("/board/new")
   }
 
   if (loading) return <div className="text-center py-12 text-gray-500">Loading...</div>

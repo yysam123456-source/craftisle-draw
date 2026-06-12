@@ -42,7 +42,20 @@ export default async function BoardPage({
   if (!board) {
     if (isTest) {
       // Auto-create a test board (title defaults to "Untitled Board")
-      board = await createBoard(userId)
+      try {
+        board = await createBoard(userId)
+      } catch (err: any) {
+        // Test user may not exist in DB — show helpful error
+        return (
+          <div className="h-screen flex flex-col items-center justify-center p-8">
+            <h2 className="text-xl font-bold text-red-600 mb-4">Test Mode Error</h2>
+            <p className="mb-2">Failed to create test board. Test user may not exist in database.</p>
+            <pre className="bg-gray-100 p-4 rounded text-sm max-w-2xl overflow-auto">
+              {String(err)}
+            </pre>
+          </div>
+        )
+      }
     }
     if (!board) notFound()
   }

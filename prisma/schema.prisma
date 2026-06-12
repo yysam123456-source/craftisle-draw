@@ -51,7 +51,7 @@ model users {
   email_verified            DateTime?
   accounts                  accounts[]
   sessions                  sessions[]
-  boards                   boards[]   @relation("BoardToUser")
+  boards                   Board[]   @relation("BoardToUser")
 }
 
 model verification_tokens {
@@ -63,7 +63,7 @@ model verification_tokens {
 }
 
 // ── 白板（craftisle-draw 新增）─────────────────
-model boards {
+model Board {
   id         String   @id @default(cuid())
   title      String   @default("Untitled Board")
   elements   Json     // ExcalidrawElement[]

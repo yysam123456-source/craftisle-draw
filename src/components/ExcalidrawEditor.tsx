@@ -67,6 +67,20 @@ function injectExcalidrawStyles() {
       opacity: 1 !important;
       visibility: visible !important;
     }
+
+    /* Keep Excalidraw inside its container, don't overflow into top bar */
+    .excalidraw-wrapper,
+    .excalidraw-container {
+      position: relative !important;
+      height: 100% !important;
+      overflow: hidden !important;
+    }
+
+    /* Ensure layer-ui doesn't escape bounds */
+    .layer-ui__wrapper {
+      position: absolute !important;
+      z-index: 1 !important;
+    }
   `
   document.head.appendChild(style)
 }
@@ -94,7 +108,7 @@ export default function ExcalidrawEditor({
     if (typeof window !== "undefined") (window as any).__excalidrawAPI = api
   }, [])
 
-  // Generate thumbnail: export PNG with fixed dimensions → base64
+  // Generate thumbnail: export PNG → resize to 240x180 → base64
   const generateThumbnail = useCallback(async (): Promise<string | null> => {
     if (!excalidrawRef.current) {
       console.error("[thumb] no excalidrawRef")
@@ -107,21 +121,38 @@ export default function ExcalidrawEditor({
         console.log("[thumb] no elements, skipping")
         return null
       }
-      console.log("[thumb] starting exportToBlob with fixed dimensions...")
-      // Export at a fixed size so content is visible even if drawing is small
-      const blob: Blob = await excalidrawRef.current.exportToBlob({
-        elements,
-        appState: excalidrawRef.current.getAppState(),
-        files: excalidrawRef.current.getFiles(),
-        exportPadding: 20,
-        dimensions: { width: 800, height: 600 },
-      })
-      console.log("[thumb] exportToBlob success, blob size:", blob.size)
-      if (blob.size < 100) {
-        console.log("[thumb] blob too small, likely blank")
+      const appState = excalidrawRef.current.getAppState()
+      const files = excalidrawRef.current.getFiles()
+      console.log("[thumb] starting exportToBlob, elements:", elements.length)
+
+      // Try with fixed dimensions first, fallback to auto
+      let blob: Blob | null = null
+      try {
+        blob = await excalidrawRef.current.exportToBlob({
+          elements,
+          appState,
+          files,
+          exportPadding: 20,
+          dimensions: { width: 800, height: 600 },
+        })
+      } catch (dimErr: any) {
+        console.warn("[thumb] dimensions export failed, trying auto:", dimErr?.message || dimErr)
+        blob = await excalidrawRef.current.exportToBlob({
+          elements,
+          appState,
+          files,
+          exportPadding: 20,
+        })
+      }
+
+      if (!blob) {
+        console.warn("[thumb] blob is null")
         return null
       }
-      // Resize to 240x180 for compact thumbnail storage
+
+      console.log("[thumb] exportToBlob success, blob size:", blob.size, "type:", blob.type)
+
+      // Resize to 240x180 using Canvas
       const img = new Image()
       const url = URL.createObjectURL(blob)
       await new Promise<void>((resolve, reject) => {
@@ -130,6 +161,12 @@ export default function ExcalidrawEditor({
         img.src = url
       })
       URL.revokeObjectURL(url)
+
+      if (img.width === 0 || img.height === 0) {
+        console.warn("[thumb] image has zero dimensions")
+        return null
+      }
+
       const canvas = document.createElement("canvas")
       canvas.width = 240
       canvas.height = 180
@@ -137,13 +174,14 @@ export default function ExcalidrawEditor({
       // Fill white background
       ctx!.fillStyle = "#ffffff"
       ctx!.fillRect(0, 0, 240, 180)
-      // Draw image covering entire canvas (contain fit)
+      // Draw image centered with contain fit
       const scale = Math.min(240 / img.width, 180 / img.height)
       const w = img.width * scale
       const h = img.height * scale
       const x = (240 - w) / 2
       const y = (180 - h) / 2
       ctx!.drawImage(img, x, y, w, h)
+
       const resizedBlob: Blob = await new Promise((resolve, reject) => {
         canvas.toBlob(
           (b: Blob | null) => b ? resolve(b) : reject(new Error("toBlob returned null")),
@@ -152,6 +190,7 @@ export default function ExcalidrawEditor({
         )
       })
       console.log("[thumb] resized blob size:", resizedBlob.size)
+
       // Convert to base64
       const reader = new FileReader()
       const base64: string = await new Promise((resolve, reject) => {
@@ -278,7 +317,7 @@ export default function ExcalidrawEditor({
   }, [boardId, exporting])
 
   return (
-    <div className="w-full h-screen flex flex-col relative">
+    <div className="w-full h-full flex flex-col relative overflow-hidden">
       <div className="flex-1 min-h-0">
         <Excalidraw
           excalidrawAPI={onExcalidrawAPIReady}

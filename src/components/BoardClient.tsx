@@ -121,9 +121,9 @@ export default function BoardClient({
   }
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }} className="flex flex-col">
-      {/* Top bar */}
-      <div className="h-12 border-b border-gray-200 flex items-center px-4 bg-white shrink-0 z-50">
+    <div style={{ width: "100vw", height: "100vh" }} className="flex flex-col overflow-hidden">
+      {/* Top bar - sticky, always visible above Excalidraw */}
+      <div className="h-12 border-b border-gray-200 flex items-center px-4 bg-white shrink-0 z-[9999] relative">
         {/* Back button */}
         <button
           onClick={() => router.push("/")}

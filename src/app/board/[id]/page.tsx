@@ -34,11 +34,12 @@ export default async function BoardPage({ params, searchParams }: {
         redirect("/api/auth/signin?callbackUrl=" + encodeURIComponent("/board/" + id))
       }
       userId = user.id!
-      console.error("[BoardPage] userId from session:", userId)
+      const userInfo = user.email ? { email: user.email, name: user.name, image: user.image } : undefined
+      console.error("[BoardPage] userId from session:", userId, "email:", user.email)
     }
 
-    console.error("[BoardPage] calling resolveUserId with:", userId)
-    const resolvedUserId = await resolveUserId(userId).catch((e: any) => {
+    console.error("[BoardPage] calling resolveUserId with:", userId, "userInfo:", userInfo || "(none)")
+    const resolvedUserId = await resolveUserId(userId, userInfo).catch((e: any) => {
       console.error("[BoardPage] resolveUserId FAILED:", e?.message, e?.stack?.substring(0,500))
       throw e
     })
@@ -46,7 +47,7 @@ export default async function BoardPage({ params, searchParams }: {
 
     if (!isTest && id === "new") {
       console.error("[BoardPage] /board/new: calling createBoard...")
-      const newBoard = await createBoard(resolvedUserId).catch((e: any) => {
+      const newBoard = await createBoard(resolvedUserId, undefined, userInfo).catch((e: any) => {
         console.error("[BoardPage] createBoard FAILED:", e?.message, e?.stack?.substring(0,500))
         throw e
       })

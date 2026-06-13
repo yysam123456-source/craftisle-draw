@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "libraries": [
+    {
+      "file": "architecture.excalidrawlib",
+      "name": "Architecture Components",
+      "desc": "软件架构常用组件：微服务、数据库、缓存、消息队列等",
+      "category": "architecture"
+    },
+    {
+      "file": "UML-ER-library.excalidrawlib",
+      "name": "UML & ER 图表",
+      "desc": "UML 活动图、ER 图常用形状",
+      "category": "diagram"
+    },
+    {
+      "file": "random-figure-drawings.excalidrawlib",
+      "name": "手绘人物",
+      "desc": "各种手绘风格的人物形象",
+      "category": "figure"
+    },
+    {
+      "file": "3d-shapes.excalidrawlib",
+      "name": "3D 形状",
+      "desc": "立体感的 3D 几何形状",
+      "category": "shape"
+    },
+    {
+      "file": "architecture-diagram-components.excalidrawlib",
+      "name": "架构图组件",
+      "desc": "架构图专用组件集合",
+      "category": "architecture"
+    },
+    {
+      "file": "systems-design-components.excalidrawlib",
+      "name": "系统设计组件",
+      "desc": "系统设计常用组件",
+      "category": "architecture"
+    },
+    {
+      "file": "decision-flow-control.excalidrawlib",
+      "name": "流程判断控件",
+      "desc": "Yes/No 条件判断框，适用于流程图",
+      "category": "flowchart"
+    },
+    {
+      "file": "customer-journey-map.excalidrawlib",
+      "name": "用户旅程地图",
+      "desc": "客户旅程地图模板",
+      "category": "template"
+    },
+    {
+      "file": "hexagonal-architecture.excalidrawlib",
+      "name": "六边形架构",
+      "desc": "Hexagonal/Ports & Adapters 架构图组件",
+      "category": "architecture"
+    },
+    {
+      "file": "c4-architecture.excalidrawlib",
+      "name": "C4 架构图",
+      "desc": "Simon Brown 的 C4 模型架构图元素",
+      "category": "architecture"
+    },
+    {
+      "file": "mobile-kit.excalidrawlib",
+      "name": "移动端 UI Kit",
+      "desc": "常用移动端界面组件",
+      "category": "ui"
+    },
+    {
+      "file": "web-kit.excalidrawlib",
+      "name": "Web UI Kit",
+      "desc": "常用 Web 界面组件",
+      "category": "ui"
+    },
+    {
+      "file": "post-it.excalidrawlib",
+      "name": "便利贴",
+      "desc": "各种颜色的便利贴，适用于设计思考",
+      "category": "general"
+    },
+    {
+      "file": "gantt.excalidrawlib",
+      "name": "甘特图",
+      "desc": "项目规划甘特图模板",
+      "category": "template"
+    },
+    {
+      "file": "basic-ux-wireframing-elements.excalidrawlib",
+      "name": "UX 线框图元素",
+      "desc": "按钮、输入框、下拉菜单等 UX 线框图基础元素",
+      "category": "ui"
+    }
+  ]
+}

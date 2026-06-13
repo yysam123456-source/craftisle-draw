@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react"
 import ExcalidrawEditor from "@/components/ExcalidrawEditor"
+import LibrariesModal from "@/components/LibrariesModal"
 import { useRouter } from "next/navigation"
 
 interface BoardClientProps {
@@ -42,6 +43,7 @@ export default function BoardClient({
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [isPublic, setIsPublic] = useState(false)
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
+  const [showLibrariesModal, setShowLibrariesModal] = useState(false)
 
   // Fetch current board info (for isPublic)
   useEffect(() => {
@@ -229,6 +231,15 @@ export default function BoardClient({
         <div className="relative mr-2">
           <ExportDropdown boardId={boardId} />
         </div>
+
+        {/* Libraries button */}
+        <button
+          onClick={() => setShowLibrariesModal(true)}
+          className="text-xs px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 mr-2"
+          title="Browse public libraries"
+        >
+          📚 Libraries
+        </button>
       </div>
 
         {/* Excalidraw editor - pt-12 = 48px to offset fixed top bar */}
@@ -243,6 +254,12 @@ export default function BoardClient({
           onSave={(elements, appState, opts) => handleSave(elements, appState, opts)}
         />
       </div>
+
+      {/* Public Libraries modal */}
+      <LibrariesModal
+        open={showLibrariesModal}
+        onClose={() => setShowLibrariesModal(false)}
+      />
     </div>
   )
 }

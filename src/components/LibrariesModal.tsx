@@ -39,11 +39,14 @@ export default function LibrariesModal({
     try {
       const res = await fetch(`/libraries/${lib.file}`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const items = await res.json()
-      if (!Array.isArray(items)) throw new Error("Invalid library format")
+      const data = await res.json()
+      // .excalidrawlib format: { type, version, source, library: [[elem], [elem]] }
+      const rawItems: any[] = Array.isArray(data) ? data : (data.library || [])
+      const items: any[] = rawItems.flat().filter((e: any) => e && e.type)
+      if (items.length === 0) throw new Error("No valid elements found")
 
       // Read existing library from localStorage
-      const key = "excalidraw-library"
+      const key = "excalidraw_libraries"
       let store: any[] = []
       try {
         const raw = localStorage.getItem(key)
@@ -68,7 +71,12 @@ export default function LibrariesModal({
       }
 
       localStorage.setItem(key, JSON.stringify(store))
-      setDoneMsg(`✅ 「${lib.name}」已导入，在左侧 Library 面板查看`)
+      setDoneMsg(`✅ 「${lib.name}」已导入！点击按钮刷新页面后在 Library 面板查看。`)
+      setTimeout(() => {
+        if (confirm(`「${lib.name}」已导入！是否立即刷新页面查看？`)) {
+          window.location.reload()
+        }
+      }, 500)
     } catch (err: any) {
       setDoneMsg(`❌ 导入失败: ${err?.message || err}`)
     } finally {

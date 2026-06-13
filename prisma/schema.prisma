@@ -27,7 +27,7 @@ model accounts {
 }
 
 model boards {
-  id         String   @id
+  id         String   @id @default(cuid())
   title      String   @default("Untitled Board")
   elements   Json
   app_state  Json?

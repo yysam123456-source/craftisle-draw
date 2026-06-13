@@ -1,5 +1,12 @@
 import { prisma } from "./db"
 
+function genId(): string {
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+  let id = ""
+  for (let i = 0; i < 25; i++) id += chars[Math.floor(Math.random() * chars.length)]
+  return id
+}
+
 export async function getBoard(id: string, userId: string): Promise<any> {
   return await prisma.boards.findFirst({
     where: { id, userId },
@@ -12,27 +19,19 @@ export async function getPublicBoard(id: string): Promise<any> {
   })
 }
 
-/**
- * Ensure a user record exists in the database.
- * Returns the actual database user ID (cuid).
- */
 export async function resolveUserId(
   userId: string,
   userInfo?: { email?: string | null; name?: string | null; image?: string | null }
 ): Promise<string> {
-  // 1. Check if userId already exists as a valid user
   const existing = await prisma.users.findUnique({ where: { id: userId } })
   if (existing) return existing.id
 
-  // 2. If not found by id, try to find or create by email
   if (userInfo?.email) {
     const byEmail = await prisma.users.findUnique({ where: { email: userInfo.email } })
     if (byEmail) {
       console.log(`[resolveUserId] Found user by email: ${byEmail.id} (${userInfo.email})`)
       return byEmail.id
     }
-
-    // Create new user with email
     const created = await prisma.users.create({
       data: {
         email: userInfo.email,
@@ -44,7 +43,6 @@ export async function resolveUserId(
     return created.id
   }
 
-  // 3. Cannot resolve — return original userId and let DB error surface clearly
   console.warn(`[resolveUserId] Cannot resolve userId "${userId}" — no email provided. Letting DB error surface.`)
   return userId
 }
@@ -58,6 +56,7 @@ export async function createBoard(
 
   return await prisma.boards.create({
     data: {
+      id: genId(),
       title: title ?? "Untitled Board",
       userId: resolvedUserId,
       elements: [],

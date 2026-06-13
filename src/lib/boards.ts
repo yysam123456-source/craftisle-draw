@@ -29,7 +29,6 @@ export async function resolveUserId(
   if (userInfo?.email) {
     const byEmail = await prisma.users.findUnique({ where: { email: userInfo.email } })
     if (byEmail) {
-      console.log(`[resolveUserId] Found user by email: ${byEmail.id} (${userInfo.email})`)
       return byEmail.id
     }
     const created = await prisma.users.create({
@@ -39,11 +38,9 @@ export async function resolveUserId(
         image: userInfo.image ?? undefined,
       },
     })
-    console.log(`[resolveUserId] Auto-created user: ${created.id} (${userInfo.email})`)
     return created.id
   }
 
-  console.warn(`[resolveUserId] Cannot resolve userId "${userId}" — no email provided. Letting DB error surface.`)
   return userId
 }
 

@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
 import ExcalidrawEditor from "@/components/ExcalidrawEditorWrapper"
-import { getBoard, createBoard, resolveUserId, getOrCreateDebugLog } from "@/lib/boards"
+import { getBoard, createBoard, resolveUserId } from "@/lib/boards"
 
 export const dynamic = "force-dynamic"
 

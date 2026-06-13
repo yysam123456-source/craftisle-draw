@@ -9,13 +9,13 @@ function genId(): string {
 
 export async function getBoard(id: string, userId: string): Promise<any> {
   return await prisma.boards.findFirst({
-    where: { id, userId },
+    where: { id, user_id: userId },
   })
 }
 
 export async function getPublicBoard(id: string): Promise<any> {
   return await prisma.boards.findFirst({
-    where: { id, isPublic: true },
+    where: { id, is_public: true },
   })
 }
 
@@ -58,10 +58,10 @@ export async function createBoard(
     data: {
       id: genId(),
       title: title ?? "Untitled Board",
+      user_id: resolvedUserId,
       elements: [],
-      appState: {},
-      updatedAt: new Date(),
-      users: { connect: { id: resolvedUserId } },
+      app_state: {},
+      updated_at: new Date(),
     },
   })
 }
@@ -71,23 +71,23 @@ export async function updateBoard(
   userId: string,
   data: { elements?: any[]; appState?: any; title?: string; isPublic?: boolean }
 ): Promise<any> {
-  const board = await prisma.boards.findFirst({ where: { id, userId } })
+  const board = await prisma.boards.findFirst({ where: { id, user_id: userId } })
   if (!board) return null
 
   return await prisma.boards.update({
     where: { id },
     data: {
       ...(data.elements !== undefined && { elements: data.elements }),
-      ...(data.appState !== undefined && { appState: data.appState }),
+      ...(data.appState !== undefined && { app_state: data.appState }),
       ...(data.title !== undefined && { title: data.title }),
-      ...(data.isPublic !== undefined && { isPublic: data.isPublic }),
-      updatedAt: new Date(),
+      ...(data.isPublic !== undefined && { is_public: data.isPublic }),
+      updated_at: new Date(),
     },
   })
 }
 
 export async function deleteBoard(id: string, userId: string): Promise<boolean> {
-  const board = await prisma.boards.findFirst({ where: { id, userId } })
+  const board = await prisma.boards.findFirst({ where: { id, user_id: userId } })
   if (!board) return false
 
   await prisma.boards.delete({ where: { id } })
@@ -96,7 +96,7 @@ export async function deleteBoard(id: string, userId: string): Promise<boolean> 
 
 export async function getUserBoards(userId: string): Promise<any[]> {
   return await prisma.boards.findMany({
-    where: { userId },
-    orderBy: { updatedAt: "desc" },
+    where: { user_id: userId },
+    orderBy: { updated_at: "desc" },
   })
 }

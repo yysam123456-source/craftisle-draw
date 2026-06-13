@@ -44,6 +44,7 @@ export default async function BoardPage({ params, searchParams }: {
     return (
       <BoardClient
         boardId={board.id}
+        initialTitle={board.title || "Untitled Board"}
         initialElements={board.elements || []}
         initialAppState={board.appState || { viewBackgroundColor: "#ffffff" }}
       />

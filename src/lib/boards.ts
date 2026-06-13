@@ -8,15 +8,37 @@ function genId(): string {
 }
 
 export async function getBoard(id: string, userId: string): Promise<any> {
-  return await prisma.boards.findFirst({
+  const board = await prisma.boards.findFirst({
     where: { id, user_id: userId },
   })
+  if (!board) return null
+  return {
+    id: board.id,
+    title: board.title,
+    elements: board.elements,
+    appState: board.app_state,
+    userId: board.user_id,
+    isPublic: board.is_public,
+    updatedAt: board.updated_at,
+    createdAt: board.created_at,
+  }
 }
 
 export async function getPublicBoard(id: string): Promise<any> {
-  return await prisma.boards.findFirst({
+  const board = await prisma.boards.findFirst({
     where: { id, is_public: true },
   })
+  if (!board) return null
+  return {
+    id: board.id,
+    title: board.title,
+    elements: board.elements,
+    appState: board.app_state,
+    userId: board.user_id,
+    isPublic: board.is_public,
+    updatedAt: board.updated_at,
+    createdAt: board.created_at,
+  }
 }
 
 export async function resolveUserId(
@@ -92,8 +114,19 @@ export async function deleteBoard(id: string, userId: string): Promise<boolean> 
 }
 
 export async function getUserBoards(userId: string): Promise<any[]> {
-  return await prisma.boards.findMany({
+  const boards = await prisma.boards.findMany({
     where: { user_id: userId },
     orderBy: { updated_at: "desc" },
   })
+  // Map snake_case (Prisma) to camelCase (frontend)
+  return boards.map(b => ({
+    id: b.id,
+    title: b.title,
+    elements: b.elements,
+    appState: b.app_state,
+    userId: b.user_id,
+    isPublic: b.is_public,
+    updatedAt: b.updated_at,
+    createdAt: b.created_at,
+  }))
 }

@@ -113,6 +113,61 @@ export default function ExcalidrawEditor({
     [debouncedSave]
   )
 
+  // Export handler: PNG / SVG / JSON
+  useEffect(() => {
+    const handler = (e: any) => {
+      const { format, boardId } = e.detail
+      if (!excalidrawRef.current) return
+      if (format === "png") {
+        exportPNG()
+      } else if (format === "svg") {
+        exportSVG()
+      } else if (format === "json") {
+        exportJSON(boardId)
+      }
+    }
+    window.addEventListener("craftisle-export", handler as any)
+    return () => window.removeEventListener("craftisle-export", handler as any)
+  }, [exporting])
+
+  // Export as SVG (client-side)
+  const exportSVG = useCallback(async () => {
+    if (!excalidrawRef.current) return
+    try {
+      const blob: Blob = await excalidrawRef.current.exportToBlob({
+        elements: excalidrawRef.current.getSceneElements(),
+        appState: excalidrawRef.current.getAppState(),
+        files: excalidrawRef.current.getFiles(),
+        mimeType: "image/svg+xml",
+        exportPadding: 16,
+      })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `board-${boardId}.svg`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      console.error("SVG export failed:", err)
+    }
+  }, [boardId])
+
+  // Export as JSON (raw data)
+  const exportJSON = useCallback((boardId: string) => {
+    if (!excalidrawRef.current) return
+    const data = {
+      elements: excalidrawRef.current.getSceneElements(),
+      appState: excalidrawRef.current.getAppState(),
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `board-${boardId}.excalidraw`
+    a.click()
+    URL.revokeObjectURL(url)
+  }, [boardId])
+
   // Export as PNG (client-side)
   const exportPNG = useCallback(async () => {
     if (!excalidrawRef.current || exporting) return

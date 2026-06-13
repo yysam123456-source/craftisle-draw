@@ -5,7 +5,6 @@ import { getBoard, createBoard } from "@/lib/boards"
 
 export const dynamic = "force-dynamic"
 
-// Test mode: hardcoded test user ID (bypasses Google OAuth)
 const TEST_USER_ID = "test-user-0000-0000-0000-000000000001"
 
 export default async function BoardPage({
@@ -17,112 +16,82 @@ export default async function BoardPage({
 }) {
   const { id } = await params
   const sp = await searchParams
-  const test = sp?.test
-  const debug = sp?.debug
-  const dev = sp?.dev
-  const devt = sp?.devt
-  const isTest = test === "1"
-  const isDebug = debug === "1" || test === "1"
-  // dev mode: skip Google OAuth if devt matches DEV_TEST_TOKEN env var
-  const isDev = dev === "1" && devt === process.env.DEV_TEST_TOKEN
+  const isTest = sp?.test === "1"
+  const isDebug = sp?.debug === "1"
 
-  // In test/dev mode, skip auth and use test user
+  // ---- Auth ----
   let userId: string
-  let sessionDebug: any = null
-
-  if (isTest || isDev) {
+  if (isTest) {
     userId = TEST_USER_ID
   } else {
     let session: any = null
-    try {
-      session = await auth()
-      sessionDebug = {
-        hasSession: !!session,
-        hasUser: !!session?.user,
-        userId: session?.user?.id || null,
-        userEmail: session?.user?.email || null,
-        error: null,
-      }
-    } catch (err: any) {
-      sessionDebug = {
-        hasSession: false,
-        error: String(err),
-        message: "Auth check failed",
-      }
-    }
+    try { session = await auth() } catch {}
     const user = session?.user
     if (!user) {
       if (isDebug) {
-        // In debug mode, show auth error instead of redirecting
-        return (
-          <div className="h-screen flex flex-col items-center justify-center p-8">
-            <h2 className="text-xl font-bold text-red-600 mb-4">Auth Debug</h2>
-            <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm">
-              {JSON.stringify(sessionDebug, null, 2)}
-              {"\n\n"}
-              Redirecting to signin would happen here.
-              {"\n"}
-              Add ?test=1 to bypass auth.
-            </pre>
-          </div>
-        )
+        return <DebugAuthPage id={id} />
       }
-      const callbackUrl = encodeURIComponent("/board/" + id)
-      return redirect("/api/auth/signin?callbackUrl=" + callbackUrl)
+      return redirect(
+        "/api/auth/signin?callbackUrl=" + encodeURIComponent("/board/" + id)
+      )
     }
-    userId = user!.id!
-    sessionDebug.finalUserId = userId
+    userId = user.id!
   }
 
-  // Fetch board data with error handling
+  // ---- Load board data ----
   let board: any = null
-  let boardError: any = null
+  let boardError: string | null = null
 
   try {
     if (isTest) {
-      board = {
-        id: id,
-        elements: [],
-        appState: { viewBackgroundColor: "#ffffff" },
-        title: "Test Board",
-        userId: TEST_USER_ID,
-        isPublic: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+      // Try DB first (for end-to-end testing), fall back to mock
+      try {
+        let b = await getBoard(id, userId)
+        if (!b) b = await createBoard(userId)
+        if (b) board = b
+      } catch {
+        // DB not available (Prisma schema not pushed), use mock
+      }
+      if (!board) {
+        board = {
+          id,
+          elements: [],
+          appState: { viewBackgroundColor: "#ffffff" },
+          title: "Test Board",
+          userId: TEST_USER_ID,
+          isPublic: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }
       }
     } else {
       board = await getBoard(id, userId)
-      if (!board) {
-        board = await createBoard(userId)
-      }
+      if (!board) board = await createBoard(userId)
       if (!board) notFound()
     }
   } catch (err: any) {
-    boardError = {
-      message: err?.message || String(err),
-      stack: err?.stack || null,
-    }
+    boardError = err?.message || String(err)
   }
 
+  // ---- Error state ----
   if (boardError) {
     return (
       <div className="h-screen flex flex-col items-center justify-center p-8">
-        <h2 className="text-xl font-bold text-red-600 mb-4">Board Data Error</h2>
+        <h2 className="text-xl font-bold text-red-600 mb-4">Board Load Error</h2>
         <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm">
-          {JSON.stringify(boardError, null, 2)}
+          {boardError}
         </pre>
       </div>
     )
   }
 
+  // ---- Debug panel ----
   if (isDebug) {
     return (
       <div className="h-screen flex flex-col p-4">
-        <h2 className="text-lg font-bold mb-2">Debug Info</h2>
-        <pre className="bg-gray-100 p-4 rounded mb-4 text-xs overflow-auto">
-          {JSON.stringify({ sessionDebug, boardId: board.id, isTest, isDebug }, null, 2)}
-        </pre>
-        <div className="flex-1 border">
+        <h2 className="text-lg font-bold mb-2">Debug: {id}</h2>
+        <p className="mb-2 text-sm text-gray-600">User: {userId}</p>
+        <div className="flex-1 border rounded">
           <ExcalidrawEditor
             boardId={board.id}
             initialData={{
@@ -143,6 +112,7 @@ export default async function BoardPage({
     )
   }
 
+  // ---- Normal render ----
   return (
     <ExcalidrawEditor
       boardId={board.id}
@@ -163,5 +133,15 @@ export default async function BoardPage({
             }
       }
     />
+  )
+}
+
+function DebugAuthPage({ id }: { id: string }) {
+  return (
+    <div className="h-screen flex flex-col items-center justify-center p-8">
+      <h2 className="text-xl font-bold text-red-600 mb-4">Not Authenticated</h2>
+      <p>Add <code>?test=1</code> to the URL to bypass auth.</p>
+      <p className="mt-2 text-sm text-gray-500">Board ID: {id}</p>
+    </div>
   )
 }

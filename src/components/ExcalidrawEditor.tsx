@@ -69,18 +69,14 @@ function injectExcalidrawStyles() {
       visibility: visible !important;
     }
 
-    /* Keep Excalidraw inside its container, don't overflow into top bar */
-    .excalidraw-wrapper,
-    .excalidraw-container {
-      position: relative !important;
-      height: 100% !important;
-      overflow: hidden !important;
-    }
-
-    /* Ensure layer-ui doesn't escape bounds */
-    .layer-ui__wrapper {
-      position: absolute !important;
-      z-index: 1 !important;
+    /* CRITICAL: Ensure Excalidraw toolbars are always visible */
+    .layer-ui__wrapper,
+    .FixedSideContainer__toolbar,
+    .excalidraw-toolbar {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
     }
   `
   document.head.appendChild(style)
@@ -323,7 +319,7 @@ export default function ExcalidrawEditor({
   }, [boardId, exporting])
 
   return (
-    <div className="w-full h-full flex flex-col relative overflow-hidden">
+    <div className="w-full h-full flex flex-col">
       <div className="flex-1 min-h-0">
         <Excalidraw
           excalidrawAPI={onExcalidrawAPIReady}

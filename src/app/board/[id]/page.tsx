@@ -52,7 +52,7 @@ export default async function BoardPage({
       updatedAt: new Date(),
     }
   } else {
-    let board = await getBoard(id, userId)
+    board = await getBoard(id, userId)
     if (!board) {
       board = await createBoard(userId)
     }

@@ -1,13 +1,13 @@
 import { prisma } from "./db"
 
 export async function getBoard(id: string, userId: string): Promise<any> {
-  return await prisma.board.findFirst({
+  return await prisma.boards.findFirst({
     where: { id, userId },
   })
 }
 
 export async function getPublicBoard(id: string): Promise<any> {
-  return await prisma.board.findFirst({
+  return await prisma.boards.findFirst({
     where: { id, isPublic: true },
   })
 }
@@ -56,7 +56,7 @@ export async function createBoard(
 ): Promise<any> {
   const resolvedUserId = await resolveUserId(userId, userInfo)
 
-  return await prisma.board.create({
+  return await prisma.boards.create({
     data: {
       title: title ?? "Untitled Board",
       userId: resolvedUserId,
@@ -71,10 +71,10 @@ export async function updateBoard(
   userId: string,
   data: { elements?: any[]; appState?: any; title?: string; isPublic?: boolean }
 ): Promise<any> {
-  const board = await prisma.board.findFirst({ where: { id, userId } })
+  const board = await prisma.boards.findFirst({ where: { id, userId } })
   if (!board) return null
 
-  return await prisma.board.update({
+  return await prisma.boards.update({
     where: { id },
     data: {
       ...(data.elements !== undefined && { elements: data.elements }),
@@ -87,15 +87,15 @@ export async function updateBoard(
 }
 
 export async function deleteBoard(id: string, userId: string): Promise<boolean> {
-  const board = await prisma.board.findFirst({ where: { id, userId } })
+  const board = await prisma.boards.findFirst({ where: { id, userId } })
   if (!board) return false
 
-  await prisma.board.delete({ where: { id } })
+  await prisma.boards.delete({ where: { id } })
   return true
 }
 
 export async function getUserBoards(userId: string): Promise<any[]> {
-  return await prisma.board.findMany({
+  return await prisma.boards.findMany({
     where: { userId },
     orderBy: { updatedAt: "desc" },
   })

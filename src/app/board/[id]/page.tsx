@@ -13,68 +13,149 @@ export default async function BoardPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ test?: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const { id } = await params
-  const { test } = await searchParams
+  const sp = await searchParams
+  const test = sp?.test
+  const debug = sp?.debug
+  const dev = sp?.dev
+  const devt = sp?.devt
   const isTest = test === "1"
+  const isDebug = debug === "1" || test === "1"
+  // dev mode: skip Google OAuth if devt matches DEV_TEST_TOKEN env var
+  const isDev = dev === "1" && devt === process.env.DEV_TEST_TOKEN
 
-  // In test mode, skip auth and use test user
+  // In test/dev mode, skip auth and use test user
   let userId: string
-  if (isTest) {
+  let sessionDebug: any = null
+
+  if (isTest || isDev) {
     userId = TEST_USER_ID
   } else {
-    let session = null
+    let session: any = null
     try {
       session = await auth()
-    } catch {
-      // JWT validation failed
+      sessionDebug = {
+        hasSession: !!session,
+        hasUser: !!session?.user,
+        userId: session?.user?.id || null,
+        userEmail: session?.user?.email || null,
+        error: null,
+      }
+    } catch (err: any) {
+      sessionDebug = {
+        hasSession: false,
+        error: String(err),
+        message: "Auth check failed",
+      }
     }
     const user = session?.user
     if (!user) {
+      if (isDebug) {
+        // In debug mode, show auth error instead of redirecting
+        return (
+          <div className="h-screen flex flex-col items-center justify-center p-8">
+            <h2 className="text-xl font-bold text-red-600 mb-4">Auth Debug</h2>
+            <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm">
+              {JSON.stringify(sessionDebug, null, 2)}
+              {"\n\n"}
+              Redirecting to signin would happen here.
+              {"\n"}
+              Add ?test=1 to bypass auth.
+            </pre>
+          </div>
+        )
+      }
       const callbackUrl = encodeURIComponent("/board/" + id)
       return redirect("/api/auth/signin?callbackUrl=" + callbackUrl)
     }
     userId = user!.id!
+    sessionDebug.finalUserId = userId
   }
 
-  // In test mode, skip DB entirely and return mock data
-  let board: any
-  if (isTest) {
-    board = {
-      id: id,                     // use the id from URL
-      elements: [],
-      appState: { viewBackgroundColor: "#ffffff" },
-      title: "Test Board",
-      userId: TEST_USER_ID,
-      isPublic: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+  // Fetch board data with error handling
+  let board: any = null
+  let boardError: any = null
+
+  try {
+    if (isTest) {
+      board = {
+        id: id,
+        elements: [],
+        appState: { viewBackgroundColor: "#ffffff" },
+        title: "Test Board",
+        userId: TEST_USER_ID,
+        isPublic: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+    } else {
+      board = await getBoard(id, userId)
+      if (!board) {
+        board = await createBoard(userId)
+      }
+      if (!board) notFound()
     }
-  } else {
-    board = await getBoard(id, userId)
-    if (!board) {
-      board = await createBoard(userId)
+  } catch (err: any) {
+    boardError = {
+      message: err?.message || String(err),
+      stack: err?.stack || null,
     }
-    if (!board) notFound()
   }
 
-  const boardId = board.id  // always use the actual board ID
-  const isTestMode = isTest
+  if (boardError) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center p-8">
+        <h2 className="text-xl font-bold text-red-600 mb-4">Board Data Error</h2>
+        <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm">
+          {JSON.stringify(boardError, null, 2)}
+        </pre>
+      </div>
+    )
+  }
+
+  if (isDebug) {
+    return (
+      <div className="h-screen flex flex-col p-4">
+        <h2 className="text-lg font-bold mb-2">Debug Info</h2>
+        <pre className="bg-gray-100 p-4 rounded mb-4 text-xs overflow-auto">
+          {JSON.stringify({ sessionDebug, boardId: board.id, isTest, isDebug }, null, 2)}
+        </pre>
+        <div className="flex-1 border">
+          <ExcalidrawEditor
+            boardId={board.id}
+            initialData={{
+              elements: board.elements as any[],
+              appState: board.appState as any,
+            }}
+            readOnly={false}
+            onSave={isTest ? undefined : async (elements: any[], appState: any) => {
+              await fetch(`/api/boards/${board.id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ elements, appState }),
+              })
+            }}
+          />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <ExcalidrawEditor
-      boardId={boardId}
+      boardId={board.id}
       initialData={{
         elements: board.elements as any[],
         appState: board.appState as any,
       }}
       readOnly={false}
       onSave={
-        isTestMode
-          ? undefined  // disable auto-save in test mode
+        isTest
+          ? undefined
           : async (elements: any[], appState: any) => {
-              await fetch(`/api/boards/${boardId}`, {
+              await fetch(`/api/boards/${board.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ elements, appState }),

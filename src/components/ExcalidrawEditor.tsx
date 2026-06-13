@@ -82,6 +82,8 @@ export default function ExcalidrawEditor({
   // Initialize API ref
   const onExcalidrawAPIReady = useCallback((api: any) => {
     excalidrawRef.current = api
+    // Expose API to window for debugging
+    if (typeof window !== "undefined") (window as any).__excalidrawAPI = api
   }, [])
 
   // Generate thumbnail: export PNG → resize to 200x150 → base64

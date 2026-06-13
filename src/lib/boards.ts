@@ -58,7 +58,6 @@ export async function createBoard(
     data: {
       id: genId(),
       title: title ?? "Untitled Board",
-      userId: resolvedUserId,
       elements: [],
       appState: {},
       updatedAt: new Date(),

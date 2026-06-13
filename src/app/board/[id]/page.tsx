@@ -2,89 +2,74 @@ import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
 import ExcalidrawEditor from "@/components/ExcalidrawEditorWrapper"
 import { getBoard, createBoard, resolveUserId } from "@/lib/boards"
-import type { Metadata } from "next"
-
-export const dynamic = "force-dynamic"
 
 const TEST_USER_ID = "test-user-0000-0000-0000-000000000001"
 
-interface BoardPageProps {
+export default async function BoardPage({ params, searchParams }: {
   params: Promise<{ id: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}
-
-export default async function BoardPage({ params, searchParams }: BoardPageProps) {
-  // ── Top-level try/catch: NEVER throw on server component ──
+}) {
+  console.error("[BoardPage] START, NODE_ENV:", process.env.NODE_ENV)
   try {
     const { id } = await params
+    console.error("[BoardPage] id:", id)
     const sp = await searchParams
     const isTest = sp?.test === "1"
-    const isDebug = sp?.debug === "1"
+    console.error("[BoardPage] isTest:", isTest)
 
-    // ---- Auth ----
     let userId: string
     if (isTest) {
       userId = TEST_USER_ID
+      console.error("[BoardPage] test mode, userId:", userId)
     } else {
-      const session = await auth().catch(() => null)
+      console.error("[BoardPage] calling auth()...")
+      const session = await auth().catch((e: any) => {
+        console.error("[BoardPage] auth() failed:", e?.message, e?.stack?.substring(0,300))
+        return null
+      })
+      console.error("[BoardPage] auth() result - has session:", !!session, "has user:", !!session?.user)
       const user = session?.user
       if (!user) {
-        if (isDebug) {
-          return <DebugAuthPage id={id} />
-        }
-        redirect(
-          "/api/auth/signin?callbackUrl=" + encodeURIComponent("/board/" + id)
-        )
+        console.error("[BoardPage] No user, redirecting to signin")
+        redirect("/api/auth/signin?callbackUrl=" + encodeURIComponent("/board/" + id))
       }
       userId = user.id!
+      console.error("[BoardPage] userId from session:", userId)
     }
 
-    // ---- Resolve user ID (handle Google sub vs DB cuid) ----
-    let resolvedUserId: string
-    try {
-      resolvedUserId = await resolveUserId(userId)
-    } catch (resolveErr: any) {
-      // resolveUserId failed — show detailed error
-      return (
-        <ErrorDisplay
-          title="用户验证失败"
-          message={resolveErr?.message || String(resolveErr)}
-          details={`userId: ${userId}\n\nStack: ${resolveErr?.stack?.substring(0, 500) || "N/A"}`}
-        />
-      )
-    }
+    console.error("[BoardPage] calling resolveUserId with:", userId)
+    const resolvedUserId = await resolveUserId(userId).catch((e: any) => {
+      console.error("[BoardPage] resolveUserId FAILED:", e?.message, e?.stack?.substring(0,500))
+      throw e
+    })
+    console.error("[BoardPage] resolvedUserId:", resolvedUserId)
 
-    // ---- Handle /board/new ----
     if (!isTest && id === "new") {
-      try {
-        const newBoard = await createBoard(resolvedUserId)
-        if (newBoard?.id) {
-          redirect("/board/" + newBoard.id)
-        }
-        throw new Error("createBoard returned empty result")
-      } catch (createErr: any) {
-        if (createErr?.message?.includes("NEXT_REDIRECT")) throw createErr
-        return (
-          <ErrorDisplay
-            title="创建白板失败"
-            message={createErr?.message || String(createErr)}
-            details={`resolvedUserId: ${resolvedUserId}\n\nStack: ${createErr?.stack?.substring(0, 500) || "N/A"}`}
-          />
-        )
+      console.error("[BoardPage] /board/new: calling createBoard...")
+      const newBoard = await createBoard(resolvedUserId).catch((e: any) => {
+        console.error("[BoardPage] createBoard FAILED:", e?.message, e?.stack?.substring(0,500))
+        throw e
+      })
+      console.error("[BoardPage] newBoard:", newBoard?.id)
+      if (newBoard?.id) {
+        console.error("[BoardPage] redirecting to:", "/board/" + newBoard.id)
+        redirect("/board/" + newBoard.id)
       }
+      throw new Error("createBoard returned empty result")
     }
 
-    // ---- Load board data ----
     let board: any = null
     let boardError: string | null = null
 
     if (isTest) {
+      console.error("[BoardPage] test mode: loading board", id)
       try {
         let b = await getBoard(id, TEST_USER_ID)
         if (!b) b = await createBoard(TEST_USER_ID)
         if (!b) throw new Error("createBoard returned null")
         board = b
       } catch (dbErr: any) {
+        console.error("[BoardPage] test mode DB error:", dbErr?.message)
         board = {
           id,
           elements: [],
@@ -97,38 +82,43 @@ export default async function BoardPage({ params, searchParams }: BoardPageProps
         }
       }
     } else {
+      console.error("[BoardPage] loading board:", id, "for user:", resolvedUserId)
       try {
         board = await getBoard(id, resolvedUserId)
+        console.error("[BoardPage] getBoard result:", !!board)
         if (!board) {
-          boardError = `白板 "${id}" 不存在，或你没有访问权限。`
+          boardError = `Board "${id}" not found.`
         }
       } catch (loadErr: any) {
+        console.error("[BoardPage] getBoard FAILED:", loadErr?.message, loadErr?.stack?.substring(0,500))
         if (loadErr?.message?.includes("NEXT_REDIRECT")) throw loadErr
         boardError = loadErr?.message || String(loadErr)
       }
     }
 
-    // ---- Render ----
     if (boardError) {
+      console.error("[BoardPage] boardError:", boardError)
       return (
-        <ErrorDisplay
-          title="加载白板失败"
-          message={boardError}
-          details={`board id: ${id}\nresolvedUserId: ${resolvedUserId}`}
-        />
+        <div style={{ padding: 40, fontFamily: "system-ui, sans-serif" }}>
+          <h1 style={{ color: "#e53e3e" }}>加载失败</h1>
+          <pre style={{ background: "#1a202c", color: "#68d391", padding: 16, borderRadius: 8, fontSize: 13, whiteSpace: "pre-wrap" }}>
+            {boardError}
+          </pre>
+        </div>
       )
     }
 
     if (!board) {
+      console.error("[BoardPage] board is null, showing error")
       return (
-        <ErrorDisplay
-          title="白板数据为空"
-          message="board 对象为 null，无法渲染白板。"
-          details={`id: ${id}\nresolvedUserId: ${resolvedUserId}\nisTest: ${isTest}`}
-        />
+        <div style={{ padding: 40 }}>
+          <h1>board is null</h1>
+          <p>id: {id}</p>
+        </div>
       )
     }
 
+    console.error("[BoardPage] RENDERING ExcalidrawEditor for board:", board.id)
     return (
       <div style={{ width: "100vw", height: "100vh" }}>
         <ExcalidrawEditor
@@ -138,74 +128,25 @@ export default async function BoardPage({ params, searchParams }: BoardPageProps
         />
       </div>
     )
-  } catch (topLevelErr: any) {
-    // ── Catch ALL server component errors ──
-    if (topLevelErr?.message?.includes("NEXT_REDIRECT")) {
-      throw topLevelErr  // let Next.js handle redirect
+  } catch (topErr: any) {
+    console.error("[BoardPage] TOP-LEVEL CATCH:", topErr?.message, topErr?.stack?.substring(0,1000))
+    if (topErr?.message?.includes("NEXT_REDIRECT")) {
+      console.error("[BoardPage] re-throwing redirect")
+      throw topErr
     }
     return (
-      <ErrorDisplay
-        title="服务器渲染错误（顶层捕获）"
-        message={topLevelErr?.message || String(topLevelErr)}
-        details={
-          `Type: ${topLevelErr?.constructor?.name || "unknown"}\n\n` +
-          `Stack:\n${topLevelErr?.stack?.substring(0, 1000) || "N/A"}\n\n` +
-          `Digest: ${topLevelErr?.digest || "N/A"}`
-        }
-      />
+      <div style={{ padding: 40, fontFamily: "system-ui, sans-serif", maxWidth: 800, margin: "0 auto" }}>
+        <h1 style={{ color: "#e53e3e", fontSize: 24, marginBottom: 16 }}>服务器错误</h1>
+        <pre style={{ background: "#1a202c", color: "#68d391", padding: 20, borderRadius: 8, overflow: "auto", fontSize: 13, lineHeight: 1.6, fontFamily: "monospace", whiteSpace: "pre-wrap" }}>
+          {topErr?.message || String(topErr)}
+          {"\n\nStack:\n"}
+          {(topErr?.stack || "N/A").substring(0, 2000)}
+        </pre>
+        <div style={{ marginTop: 20, display: "flex", gap: 12 }}>
+          <a href="/board/new" style={{ padding: "10px 20px", background: "#4299e1", color: "white", borderRadius: 6, textDecoration: "none" }}>重试</a>
+          <a href="/" style={{ padding: "10px 20px", background: "#e2e8f0", color: "#2d3748", borderRadius: 6, textDecoration: "none" }}>首页</a>
+        </div>
+      </div>
     )
   }
-}
-
-// ── Inline error UI (no client JS needed) ──
-function ErrorDisplay({
-  title,
-  message,
-  details,
-}: {
-  title: string
-  message: string
-  details?: string
-}) {
-  return (
-    <div style={{ padding: 40, fontFamily: "system-ui, sans-serif", maxWidth: 800, margin: "0 auto" }}>
-      <h1 style={{ color: "#e53e3e", fontSize: 24, marginBottom: 16 }}>
-        {title}
-      </h1>
-      <div style={{ background: "#1a202c", color: "#68d391", padding: 20, borderRadius: 8, overflow: "auto", fontSize: 13, lineHeight: 1.6, fontFamily: "monospace", whiteSpace: "pre-wrap", marginBottom: 20 }}>
-        {message}
-        {details && (
-          <>
-            {"\n\n────────── 详情 ──────────\n"}
-            {details}
-          </>
-        )}
-      </div>
-      <div style={{ display: "flex", gap: 12 }}>
-        <a
-          href="/board/new"
-          style={{ padding: "10px 20px", background: "#4299e1", color: "white", border: "none", borderRadius: 6, textDecoration: "none", fontSize: 14 }}
-        >
-          新建白板
-        </a>
-        <a
-          href="/"
-          style={{ padding: "10px 20px", background: "#e2e8f0", color: "#2d3748", border: "none", borderRadius: 6, textDecoration: "none", fontSize: 14 }}
-        >
-          返回首页
-        </a>
-      </div>
-    </div>
-  )
-}
-
-function DebugAuthPage({ id }: { id: string }) {
-  return (
-    <div style={{ padding: 40 }}>
-      <h1>调试模式</h1>
-      <p>未登录或 session 无效。</p>
-      <p>Board ID: {id}</p>
-      <a href="/api/auth/signin">登录</a>
-    </div>
-  )
 }

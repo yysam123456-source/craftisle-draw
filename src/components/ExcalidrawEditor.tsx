@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import {
   Excalidraw,
+  exportToBlob,
 } from "@excalidraw/excalidraw"
 import "@excalidraw/excalidraw/index.css"
 
@@ -125,10 +126,10 @@ export default function ExcalidrawEditor({
       const files = excalidrawRef.current.getFiles()
       console.log("[thumb] starting exportToBlob, elements:", elements.length)
 
-      // Try with fixed dimensions first, fallback to auto
+      // exportToBlob is a standalone import from @excalidraw/excalidraw, NOT an API method
       let blob: Blob | null = null
       try {
-        blob = await excalidrawRef.current.exportToBlob({
+        blob = await exportToBlob({
           elements,
           appState,
           files,
@@ -137,12 +138,17 @@ export default function ExcalidrawEditor({
         })
       } catch (dimErr: any) {
         console.warn("[thumb] dimensions export failed, trying auto:", dimErr?.message || dimErr)
-        blob = await excalidrawRef.current.exportToBlob({
-          elements,
-          appState,
-          files,
-          exportPadding: 20,
-        })
+        try {
+          blob = await exportToBlob({
+            elements,
+            appState,
+            files,
+            exportPadding: 20,
+          })
+        } catch (autoErr: any) {
+          console.error("[thumb] auto export also failed:", autoErr?.message || autoErr)
+          return null
+        }
       }
 
       if (!blob) {
@@ -258,7 +264,7 @@ export default function ExcalidrawEditor({
   const exportSVG = useCallback(async () => {
     if (!excalidrawRef.current) return
     try {
-      const blob: Blob = await excalidrawRef.current.exportToBlob({
+      const blob: Blob = await exportToBlob({
         elements: excalidrawRef.current.getSceneElements(),
         appState: excalidrawRef.current.getAppState(),
         files: excalidrawRef.current.getFiles(),
@@ -297,7 +303,7 @@ export default function ExcalidrawEditor({
     if (!excalidrawRef.current || exporting) return
     setExporting(true)
     try {
-      const blob: Blob = await excalidrawRef.current.exportToBlob({
+      const blob: Blob = await exportToBlob({
         elements: excalidrawRef.current.getSceneElements(),
         appState: excalidrawRef.current.getAppState(),
         files: excalidrawRef.current.getFiles(),

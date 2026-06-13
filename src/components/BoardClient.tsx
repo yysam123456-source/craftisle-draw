@@ -266,16 +266,16 @@ function ExportDropdown({ boardId }: { boardId: string }) {
         Export ▾
       </button>
       {open && (
-        <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+        <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
           <button
             onClick={() => handleExport("svg")}
-            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 whitespace-nowrap"
           >
             📐 Export as SVG
           </button>
           <button
             onClick={() => handleExport("json")}
-            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 whitespace-nowrap"
           >
             📦 Export as JSON
           </button>

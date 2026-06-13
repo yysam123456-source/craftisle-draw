@@ -94,22 +94,34 @@ export default function ExcalidrawEditor({
     if (typeof window !== "undefined") (window as any).__excalidrawAPI = api
   }, [])
 
-  // Generate thumbnail: export PNG → resize to 200x150 → base64
+  // Generate thumbnail: export PNG with fixed dimensions → base64
   const generateThumbnail = useCallback(async (): Promise<string | null> => {
     if (!excalidrawRef.current) {
       console.error("[thumb] no excalidrawRef")
       return null
     }
     try {
-      console.log("[thumb] starting exportToBlob...")
+      const elements = excalidrawRef.current.getSceneElements()
+      // Don't generate thumbnail if canvas is empty
+      if (!elements || elements.length === 0) {
+        console.log("[thumb] no elements, skipping")
+        return null
+      }
+      console.log("[thumb] starting exportToBlob with fixed dimensions...")
+      // Export at a fixed size so content is visible even if drawing is small
       const blob: Blob = await excalidrawRef.current.exportToBlob({
-        elements: excalidrawRef.current.getSceneElements(),
+        elements,
         appState: excalidrawRef.current.getAppState(),
         files: excalidrawRef.current.getFiles(),
-        exportPadding: 8,
+        exportPadding: 20,
+        dimensions: { width: 800, height: 600 },
       })
       console.log("[thumb] exportToBlob success, blob size:", blob.size)
-      // Resize to 200x150 using Canvas
+      if (blob.size < 100) {
+        console.log("[thumb] blob too small, likely blank")
+        return null
+      }
+      // Resize to 240x180 for compact thumbnail storage
       const img = new Image()
       const url = URL.createObjectURL(blob)
       await new Promise<void>((resolve, reject) => {
@@ -119,18 +131,24 @@ export default function ExcalidrawEditor({
       })
       URL.revokeObjectURL(url)
       const canvas = document.createElement("canvas")
-      canvas.width = 200
-      canvas.height = 150
+      canvas.width = 240
+      canvas.height = 180
       const ctx = canvas.getContext("2d")
-      ctx?.drawImage(img, 0, 0, 200, 150)
+      // Fill white background
+      ctx!.fillStyle = "#ffffff"
+      ctx!.fillRect(0, 0, 240, 180)
+      // Draw image covering entire canvas (contain fit)
+      const scale = Math.min(240 / img.width, 180 / img.height)
+      const w = img.width * scale
+      const h = img.height * scale
+      const x = (240 - w) / 2
+      const y = (180 - h) / 2
+      ctx!.drawImage(img, x, y, w, h)
       const resizedBlob: Blob = await new Promise((resolve, reject) => {
         canvas.toBlob(
-          (blob: Blob | null) => {
-            if (blob) resolve(blob)
-            else reject(new Error("Canvas toBlob returned null"))
-          },
+          (b: Blob | null) => b ? resolve(b) : reject(new Error("toBlob returned null")),
           "image/jpeg",
-          0.6
+          0.7,
         )
       })
       console.log("[thumb] resized blob size:", resizedBlob.size)
@@ -141,7 +159,7 @@ export default function ExcalidrawEditor({
         reader.onerror = reject
         reader.readAsDataURL(resizedBlob)
       })
-      console.log("[thumb] base64 generated, length:", base64.length)
+      console.log("[thumb] done, base64 length:", base64.length)
       return base64
     } catch (err) {
       console.error("[thumb] generation failed:", err)

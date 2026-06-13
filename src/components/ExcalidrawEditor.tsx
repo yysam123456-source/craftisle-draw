@@ -13,7 +13,7 @@ interface ExcalidrawEditorProps {
     appState?: any
   }
   readOnly?: boolean
-  onSave?: (elements: any[], appState: any) => void
+  onSave?: (elements: any[], appState: any, opts?: { thumbnail?: string }) => void
 }
 
 /**
@@ -84,6 +84,54 @@ export default function ExcalidrawEditor({
     excalidrawRef.current = api
   }, [])
 
+  // Generate thumbnail: export PNG → resize to 200x150 → base64
+  const generateThumbnail = useCallback(async (): Promise<string | null> => {
+    if (!excalidrawRef.current) return null
+    try {
+      const blob: Blob = await excalidrawRef.current.exportToBlob({
+        elements: excalidrawRef.current.getSceneElements(),
+        appState: excalidrawRef.current.getAppState(),
+        files: excalidrawRef.current.getFiles(),
+        exportPadding: 8,
+      })
+      // Resize to 200x150 using Canvas
+      const img = new Image()
+      const url = URL.createObjectURL(blob)
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve()
+        img.onerror = reject
+        img.src = url
+      })
+      URL.revokeObjectURL(url)
+      const canvas = document.createElement("canvas")
+      canvas.width = 200
+      canvas.height = 150
+      const ctx = canvas.getContext("2d")
+      ctx?.drawImage(img, 0, 0, 200, 150)
+      const resizedBlob: Blob = await new Promise((resolve, reject) => {
+        canvas.toBlob(
+          (blob: Blob | null) => {
+            if (blob) resolve(blob)
+            else reject(new Error("Canvas toBlob returned null"))
+          },
+          "image/jpeg",
+          0.6
+        )
+      })
+      // Convert to base64
+      const reader = new FileReader()
+      const base64: string = await new Promise((resolve, reject) => {
+        reader.onload = () => resolve(reader.result as string)
+        reader.onerror = reject
+        reader.readAsDataURL(resizedBlob)
+      })
+      return base64 // "data:image/jpeg;base64,..."
+    } catch (err) {
+      console.error("Thumbnail generation failed:", err)
+      return null
+    }
+  }, [])
+
   // Debounced auto-save with status feedback
   const debouncedSave = useCallback(
     (elements: any[], appState: any) => {
@@ -92,7 +140,9 @@ export default function ExcalidrawEditor({
       setSaveStatus("saving")
       saveTimerRef.current = setTimeout(async () => {
         try {
-          await onSave([...elements], { ...appState })
+          // Generate thumbnail in background
+          const thumbnail = await generateThumbnail()
+          await onSave([...elements], { ...appState }, { thumbnail: thumbnail ?? undefined })
           setSaveStatus("saved")
           setTimeout(() => setSaveStatus("idle"), 2000)
         } catch (err) {
@@ -102,7 +152,7 @@ export default function ExcalidrawEditor({
         }
       }, 2000)
     },
-    [onSave]
+    [onSave, generateThumbnail]
   )
 
   // Listen for canvas changes

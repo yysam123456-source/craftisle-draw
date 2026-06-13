@@ -31,6 +31,7 @@ model boards {
   title      String   @default("Untitled Board")
   elements   Json
   app_state  Json?
+  thumbnail  String?  // base64 PNG thumbnail for board list preview
   is_public  Boolean  @default(false)
   user_id    String
   created_at DateTime @default(now())

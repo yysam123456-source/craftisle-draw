@@ -12,16 +12,7 @@ export async function getBoard(id: string, userId: string): Promise<any> {
     where: { id, user_id: userId },
   })
   if (!board) return null
-  return {
-    id: board.id,
-    title: board.title,
-    elements: board.elements,
-    appState: board.app_state,
-    userId: board.user_id,
-    isPublic: board.is_public,
-    updatedAt: board.updated_at,
-    createdAt: board.created_at,
-  }
+  return mapBoard(board)
 }
 
 export async function getPublicBoard(id: string): Promise<any> {
@@ -29,15 +20,21 @@ export async function getPublicBoard(id: string): Promise<any> {
     where: { id, is_public: true },
   })
   if (!board) return null
+  return mapBoard(board)
+}
+
+// Map snake_case (Prisma) to camelCase (frontend)
+function mapBoard(b: any) {
   return {
-    id: board.id,
-    title: board.title,
-    elements: board.elements,
-    appState: board.app_state,
-    userId: board.user_id,
-    isPublic: board.is_public,
-    updatedAt: board.updated_at,
-    createdAt: board.created_at,
+    id: b.id,
+    title: b.title,
+    elements: b.elements,
+    appState: b.app_state,
+    thumbnail: b.thumbnail,
+    userId: b.user_id,
+    isPublic: b.is_public,
+    updatedAt: b.updated_at,
+    createdAt: b.created_at,
   }
 }
 
@@ -73,7 +70,7 @@ export async function createBoard(
 ): Promise<any> {
   const resolvedUserId = await resolveUserId(userId, userInfo)
 
-  return await prisma.boards.create({
+  const board = await prisma.boards.create({
     data: {
       id: genId(),
       title: title ?? "Untitled Board",
@@ -83,26 +80,29 @@ export async function createBoard(
       updated_at: new Date(),
     },
   })
+  return mapBoard(board)
 }
 
 export async function updateBoard(
   id: string,
   userId: string,
-  data: { elements?: any[]; appState?: any; title?: string; isPublic?: boolean }
+  data: { elements?: any[]; appState?: any; title?: string; isPublic?: boolean; thumbnail?: string }
 ): Promise<any> {
   const board = await prisma.boards.findFirst({ where: { id, user_id: userId } })
   if (!board) return null
 
-  return await prisma.boards.update({
+  const updated = await prisma.boards.update({
     where: { id },
     data: {
       ...(data.elements !== undefined && { elements: data.elements }),
       ...(data.appState !== undefined && { app_state: data.appState }),
       ...(data.title !== undefined && { title: data.title }),
       ...(data.isPublic !== undefined && { is_public: data.isPublic }),
+      ...(data.thumbnail !== undefined && { thumbnail: data.thumbnail }),
       updated_at: new Date(),
     },
   })
+  return mapBoard(updated)
 }
 
 export async function deleteBoard(id: string, userId: string): Promise<boolean> {
@@ -119,14 +119,5 @@ export async function getUserBoards(userId: string): Promise<any[]> {
     orderBy: { updated_at: "desc" },
   })
   // Map snake_case (Prisma) to camelCase (frontend)
-  return boards.map(b => ({
-    id: b.id,
-    title: b.title,
-    elements: b.elements,
-    appState: b.app_state,
-    userId: b.user_id,
-    isPublic: b.is_public,
-    updatedAt: b.updated_at,
-    createdAt: b.created_at,
-  }))
+  return boards.map(b => mapBoard(b))
 }

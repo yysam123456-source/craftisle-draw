@@ -56,6 +56,7 @@ export async function PUT(
     appState: data.appState,
     title: data.title,
     isPublic: data.isPublic,
+    thumbnail: data.thumbnail,
   })
 
   if (!board) {

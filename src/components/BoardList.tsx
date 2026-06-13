@@ -9,6 +9,7 @@ interface Board {
   updatedAt: string
   createdAt: string
   isPublic: boolean
+  thumbnail?: string
 }
 
 export default function BoardList({ userId }: { userId: string }) {
@@ -153,6 +154,17 @@ export default function BoardList({ userId }: { userId: string }) {
                 }}
                 className="cursor-pointer"
               >
+                {/* Thumbnail preview */}
+                <div className="w-full h-32 bg-gray-100 rounded-t-lg overflow-hidden mb-3">
+                  {board.thumbnail ? (
+                    <img src={board.thumbnail} alt={board.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                      No preview
+                    </div>
+                  )}
+                </div>
+
                 {renamingId === board.id ? (
                   <form
                     onSubmit={(e) => { e.preventDefault(); handleRename(board.id) }}

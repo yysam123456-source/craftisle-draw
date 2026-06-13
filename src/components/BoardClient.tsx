@@ -40,8 +40,8 @@ export default function BoardClient({
   }, [boardId, readOnly])
 
   const handleSave = useCallback(
-    async (elements: any[], appState: any, newTitle?: string) => {
-      const titleToSave = newTitle !== undefined ? newTitle : title
+    async (elements: any[], appState: any, opts?: { thumbnail?: string; title?: string }) => {
+      const titleToSave = opts?.title !== undefined ? opts.title : title
       setSaveStatus("saving")
       try {
         const res = await fetch(`/api/boards/${boardId}`, {
@@ -50,7 +50,8 @@ export default function BoardClient({
           body: JSON.stringify({
             elements,
             appState,
-            ...(newTitle !== undefined && { title: newTitle }),
+            ...(opts?.title !== undefined && { title: opts.title }),
+            ...(opts?.thumbnail !== undefined && { thumbnail: opts.thumbnail }),
           }),
         })
         if (!res.ok) throw new Error(`Save failed (${res.status})`)
@@ -70,16 +71,8 @@ export default function BoardClient({
     const newTitle = editTitleValue.trim() || "Untitled Board"
     setTitle(newTitle)
     setIsEditingTitle(false)
-    // Save title to backend
-    try {
-      await fetch(`/api/boards/${boardId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: newTitle }),
-      })
-    } catch (err) {
-      console.error("Title save failed:", err)
-    }
+    // Save title to backend (pass as opts.title)
+    handleSave([] as any[], {} as any, { title: newTitle })
   }
 
   const handleTogglePublic = async () => {
@@ -222,7 +215,7 @@ export default function BoardClient({
         </div>
       </div>
 
-      {/* Excalidraw editor */}
+        {/* Excalidraw editor */}
       <div className="flex-1 min-h-0">
         <ExcalidrawEditor
           boardId={boardId}
@@ -231,7 +224,7 @@ export default function BoardClient({
             appState: initialAppState,
           }}
           readOnly={readOnly}
-          onSave={(elements, appState) => handleSave(elements, appState)}
+          onSave={(elements, appState, opts) => handleSave(elements, appState, opts)}
         />
       </div>
     </div>

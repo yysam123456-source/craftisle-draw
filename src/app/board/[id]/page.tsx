@@ -44,26 +44,11 @@ export default async function BoardPage({
 
   try {
     if (isTest) {
-      // Try DB first (for end-to-end testing), fall back to mock
-      try {
-        let b = await getBoard(id, userId)
-        if (!b) b = await createBoard(userId)
-        if (b) board = b
-      } catch {
-        // DB not available (Prisma schema not pushed), use mock
-      }
-      if (!board) {
-        board = {
-          id,
-          elements: [],
-          appState: { viewBackgroundColor: "#ffffff" },
-          title: "Test Board",
-          userId: TEST_USER_ID,
-          isPublic: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        }
-      }
+      // EXACT same logic as real auth path - for accurate end-to-end testing
+      let b = await getBoard(id, userId)
+      if (!b) b = await createBoard(userId)
+      if (!b) notFound()
+      board = b
     } else {
       board = await getBoard(id, userId)
       if (!board) board = await createBoard(userId)

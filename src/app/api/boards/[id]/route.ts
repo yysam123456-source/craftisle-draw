@@ -2,6 +2,13 @@ import { NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { getBoard, updateBoard, deleteBoard, resolveUserId } from "@/lib/boards"
 
+// Clean appState: remove runtime-only fields that break Excalidraw
+function cleanAppState(appState: any): any {
+  if (!appState || typeof appState !== "object") return appState
+  const { collaborators, activeTool, editingElement, editingLinearElement, selectedElementIds, selectedGroupIds, ...rest } = appState
+  return rest
+}
+
 async function getResolvedUserId(session: any) {
   const userInfo: { email?: string; name?: string; image?: string } = {}
   if (session.user.email) userInfo.email = session.user.email
@@ -31,6 +38,11 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 })
   }
 
+  // Clean appState before returning to client
+  if (board.appState && typeof board.appState === "object") {
+    (board as any).appState = cleanAppState(board.appState)
+  }
+
   return NextResponse.json(board)
 }
 
@@ -51,13 +63,15 @@ export async function PUT(
 
   const resolvedUserId = await getResolvedUserId(session)
   const data = await req.json().catch(() => ({}))
-  const board = await updateBoard(id, resolvedUserId, {
-    elements: data.elements,
-    appState: data.appState,
-    title: data.title,
-    isPublic: data.isPublic,
-    thumbnail: data.thumbnail,
-  })
+  // Clean appState before saving
+  const cleanData: any = {}
+  if (data.elements !== undefined) cleanData.elements = data.elements
+  if (data.appState !== undefined) cleanData.appState = cleanAppState(data.appState)
+  if (data.title !== undefined) cleanData.title = data.title
+  if (data.isPublic !== undefined) cleanData.isPublic = data.isPublic
+  if (data.thumbnail !== undefined) cleanData.thumbnail = data.thumbnail
+
+  const board = await updateBoard(id, resolvedUserId, cleanData)
 
   if (!board) {
     return NextResponse.json({ error: "Not found" }, { status: 404 })

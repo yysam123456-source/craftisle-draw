@@ -1,13 +1,12 @@
 import { prisma } from "./db"
-import type { boards } from "@prisma/client"
 
-export async function getBoard(id: string, userId: string): Promise<boards | null> {
+export async function getBoard(id: string, userId: string): Promise<any> {
   return await prisma.board.findFirst({
     where: { id, userId },
   })
 }
 
-export async function getPublicBoard(id: string): Promise<boards | null> {
+export async function getPublicBoard(id: string): Promise<any> {
   return await prisma.board.findFirst({
     where: { id, isPublic: true },
   })
@@ -16,51 +15,45 @@ export async function getPublicBoard(id: string): Promise<boards | null> {
 /**
  * Ensure a user record exists in the database.
  * Returns the actual database user ID (cuid).
- * If the given userId doesn't match any user, creates one and returns the new ID.
  */
 export async function resolveUserId(
   userId: string,
-  userInfo?: { email?: string; name?: string; image?: string }
+  userInfo?: { email?: string | null; name?: string | null; image?: string | null }
 ): Promise<string> {
-  // Check if userId already exists as a valid user
+  // 1. Check if userId already exists as a valid user
   const existing = await prisma.users.findUnique({ where: { id: userId } })
-  if (existing) return userId
+  if (existing) return existing.id
 
-  // User doesn't exist — need to create or find by email
+  // 2. If not found by id, try to find or create by email
   if (userInfo?.email) {
-    // Try finding by email (user may have been created with different ID)
     const byEmail = await prisma.users.findUnique({ where: { email: userInfo.email } })
-    if (byEmail) return byEmail.id
+    if (byEmail) {
+      console.log(`[resolveUserId] Found user by email: ${byEmail.id} (${userInfo.email})`)
+      return byEmail.id
+    }
 
-    // Create new user record with email
+    // Create new user with email
     const created = await prisma.users.create({
       data: {
         email: userInfo.email,
-        name: userInfo.name,
-        image: userInfo.image,
+        name: userInfo.name ?? undefined,
+        image: userInfo.image ?? undefined,
       },
     })
-    console.warn("[boards] Auto-created user record:", created.id, created.email)
+    console.log(`[resolveUserId] Auto-created user: ${created.id} (${userInfo.email})`)
     return created.id
   }
 
-  // No email available — create minimal user record
-  // This handles edge cases where session has no email
-  const created = await prisma.users.create({
-    data: {
-      name: userInfo?.name ?? "Unknown User",
-    },
-  })
-  console.warn("[boards] Auto-created minimal user record:", created.id)
-  return created.id
+  // 3. Cannot resolve — return original userId and let DB error surface clearly
+  console.warn(`[resolveUserId] Cannot resolve userId "${userId}" — no email provided. Letting DB error surface.`)
+  return userId
 }
 
 export async function createBoard(
   userId: string,
   title?: string,
-  userInfo?: { email?: string; name?: string; image?: string }
-): Promise<Board> {
-  // Ensure the user exists in DB before creating board (prevents FK constraint error)
+  userInfo?: { email?: string | null; name?: string | null; image?: string | null }
+): Promise<any> {
   const resolvedUserId = await resolveUserId(userId, userInfo)
 
   return await prisma.board.create({
@@ -77,7 +70,7 @@ export async function updateBoard(
   id: string,
   userId: string,
   data: { elements?: any[]; appState?: any; title?: string; isPublic?: boolean }
-): Promise<boards | null> {
+): Promise<any> {
   const board = await prisma.board.findFirst({ where: { id, userId } })
   if (!board) return null
 
@@ -101,7 +94,7 @@ export async function deleteBoard(id: string, userId: string): Promise<boolean> 
   return true
 }
 
-export async function getUserBoards(userId: string): Promise<Board[]> {
+export async function getUserBoards(userId: string): Promise<any[]> {
   return await prisma.board.findMany({
     where: { userId },
     orderBy: { updatedAt: "desc" },

@@ -122,8 +122,8 @@ export default function BoardClient({
 
   return (
     <div style={{ width: "100vw", height: "100vh" }} className="flex flex-col overflow-hidden">
-      {/* Top bar - sticky, always visible above Excalidraw */}
-      <div style={{ zIndex: 99999, position: 'relative' }} className="h-12 border-b border-gray-200 flex items-center px-4 bg-white shrink-0">
+      {/* Top bar - FIXED position, always on top, never covered by Excalidraw */}
+      <div style={{ zIndex: 99999, position: 'fixed', top: 0, left: 0, right: 0, height: 48 }} className="border-b border-gray-200 flex items-center px-4 bg-white">
         {/* Back button */}
         <button
           onClick={() => router.push("/")}
@@ -231,8 +231,8 @@ export default function BoardClient({
         </div>
       </div>
 
-        {/* Excalidraw editor */}
-      <div className="flex-1 min-h-0">
+        {/* Excalidraw editor - pt-12 = 48px to offset fixed top bar */}
+      <div className="flex-1 min-h-0 pt-12">
         <ExcalidrawEditor
           boardId={boardId}
           initialData={{

@@ -88,20 +88,25 @@ export default function ExcalidrawEditor({
 
   // Generate thumbnail: export PNG → resize to 200x150 → base64
   const generateThumbnail = useCallback(async (): Promise<string | null> => {
-    if (!excalidrawRef.current) return null
+    if (!excalidrawRef.current) {
+      console.error("[thumb] no excalidrawRef")
+      return null
+    }
     try {
+      console.log("[thumb] starting exportToBlob...")
       const blob: Blob = await excalidrawRef.current.exportToBlob({
         elements: excalidrawRef.current.getSceneElements(),
         appState: excalidrawRef.current.getAppState(),
         files: excalidrawRef.current.getFiles(),
         exportPadding: 8,
       })
+      console.log("[thumb] exportToBlob success, blob size:", blob.size)
       // Resize to 200x150 using Canvas
       const img = new Image()
       const url = URL.createObjectURL(blob)
       await new Promise<void>((resolve, reject) => {
         img.onload = () => resolve()
-        img.onerror = reject
+        img.onerror = (e) => reject(e)
         img.src = url
       })
       URL.revokeObjectURL(url)
@@ -120,6 +125,7 @@ export default function ExcalidrawEditor({
           0.6
         )
       })
+      console.log("[thumb] resized blob size:", resizedBlob.size)
       // Convert to base64
       const reader = new FileReader()
       const base64: string = await new Promise((resolve, reject) => {
@@ -127,9 +133,10 @@ export default function ExcalidrawEditor({
         reader.onerror = reject
         reader.readAsDataURL(resizedBlob)
       })
-      return base64 // "data:image/jpeg;base64,..."
+      console.log("[thumb] base64 generated, length:", base64.length)
+      return base64
     } catch (err) {
-      console.error("Thumbnail generation failed:", err)
+      console.error("[thumb] generation failed:", err)
       return null
     }
   }, [])

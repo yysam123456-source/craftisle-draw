@@ -29,7 +29,11 @@ export async function POST(req: Request) {
   }
 
   const { title } = await req.json().catch(() => ({}))
-  const board = await createBoard(session.user.id, title)
+  const userInfo: { email?: string; name?: string; image?: string } = {}
+  if (session.user.email) userInfo.email = session.user.email
+  if (session.user.name) userInfo.name = session.user.name
+  if (session.user.image) userInfo.image = session.user.image
+  const board = await createBoard(session.user.id, title, userInfo)
 
   return NextResponse.json(board, { status: 201 })
 }

@@ -36,11 +36,18 @@ export default async function BoardPage({
       )
     }
     userId = user.id!
+    // Store user info for potential DB auto-creation
+    ;(globalThis as any).__page_user_info = {
+      email: user.email,
+      name: user.name,
+      image: user.image,
+    }
   }
 
   // ---- Load board data ----
   let board: any = null
   let boardError: string | null = null
+  const userInfo = (globalThis as any).__page_user_info
 
   try {
     if (isTest) {
@@ -70,7 +77,7 @@ export default async function BoardPage({
       if (id === "new") {
         // Create a brand new board and redirect to its URL
         try {
-          const newBoard = await createBoard(userId)
+          const newBoard = await createBoard(userId, undefined, userInfo)
           if (newBoard?.id) {
             redirect("/board/" + newBoard.id)
           }

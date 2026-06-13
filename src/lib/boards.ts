@@ -13,11 +13,60 @@ export async function getPublicBoard(id: string): Promise<Board | null> {
   })
 }
 
-export async function createBoard(userId: string, title?: string): Promise<Board> {
+/**
+ * Ensure a user record exists in the database.
+ * Returns the actual database user ID (cuid).
+ * If the given userId doesn't match any user, creates one and returns the new ID.
+ */
+export async function resolveUserId(
+  userId: string,
+  userInfo?: { email?: string; name?: string; image?: string }
+): Promise<string> {
+  // Check if userId already exists as a valid user
+  const existing = await prisma.users.findUnique({ where: { id: userId } })
+  if (existing) return userId
+
+  // User doesn't exist — need to create or find by email
+  if (userInfo?.email) {
+    // Try finding by email (user may have been created with different ID)
+    const byEmail = await prisma.users.findUnique({ where: { email: userInfo.email } })
+    if (byEmail) return byEmail.id
+
+    // Create new user record with email
+    const created = await prisma.users.create({
+      data: {
+        email: userInfo.email,
+        name: userInfo.name,
+        image: userInfo.image,
+      },
+    })
+    console.warn("[boards] Auto-created user record:", created.id, created.email)
+    return created.id
+  }
+
+  // No email available — create minimal user record
+  // This handles edge cases where session has no email
+  const created = await prisma.users.create({
+    data: {
+      name: userInfo?.name ?? "Unknown User",
+    },
+  })
+  console.warn("[boards] Auto-created minimal user record:", created.id)
+  return created.id
+}
+
+export async function createBoard(
+  userId: string,
+  title?: string,
+  userInfo?: { email?: string; name?: string; image?: string }
+): Promise<Board> {
+  // Ensure the user exists in DB before creating board (prevents FK constraint error)
+  const resolvedUserId = await resolveUserId(userId, userInfo)
+
   return await prisma.board.create({
     data: {
       title: title ?? "Untitled Board",
-      userId,
+      userId: resolvedUserId,
       elements: [],
       appState: {},
     },

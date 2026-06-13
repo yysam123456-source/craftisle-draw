@@ -27,6 +27,7 @@ export default function LibrariesModal({
 
   useEffect(() => {
     if (!open) return
+    setDoneMsg("")
     fetch("/libraries/manifest.json")
       .then(res => res.json())
       .then((data: Manifest) => setLibraries(data.libraries || []))
@@ -40,30 +41,61 @@ export default function LibrariesModal({
       const res = await fetch(`/libraries/${lib.file}`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
-      // .excalidrawlib format: { type, version, source, library: [[elem], [elem]] }
-      const rawItems: any[] = Array.isArray(data) ? data : (data.library || [])
-      const items: any[] = rawItems.flat().filter((e: any) => e && e.type)
-      if (items.length === 0) throw new Error("No valid elements found")
 
-      // Read existing library from localStorage
+      // Parse .excalidrawlib format:
+      // Format 1: { library: [[elem], [elem], ...] }
+      // Format 2: [elem, elem, ...]
+      // Format 3: { elements: [...], ... }
+      let items: any[] = []
+
+      if (Array.isArray(data)) {
+        // Format 2: direct array
+        items = data.filter((e: any) => e && e.type)
+      } else if (data.library && Array.isArray(data.library)) {
+        // Format 1: { library: [...] }
+        items = data.library.flat().filter((e: any) => e && e.type)
+      } else if (data.elements && Array.isArray(data.elements)) {
+        // Format 3: { elements: [...] }
+        items = data.elements.filter((e: any) => e && e.type)
+      } else if (data.items && Array.isArray(data.items)) {
+        items = data.items.filter((e: any) => e && e.type)
+      }
+
+      if (items.length === 0) {
+        // Try: maybe the whole object is a single library entry
+        if (data.id || data.name || data.type === "excalidraw-library") {
+          items = Array.isArray(data.items) ? data.items : []
+        }
+        if (items.length === 0) throw new Error("No valid elements found in library file")
+      }
+
+      // Read existing libraries from Excalidraw localStorage
+      // Key: "excalidraw_libraries"
+      // Format: [{ id, name, items: [...elements], created, version }]
       const key = "excalidraw_libraries"
       let store: any[] = []
       try {
         const raw = localStorage.getItem(key)
-        if (raw) store = JSON.parse(raw)
+        if (raw) {
+          const parsed = JSON.parse(raw)
+          if (Array.isArray(parsed)) store = parsed
+        }
       } catch {}
 
-      // Check if already imported (by file name)
+      // Check if already imported
       const existingIdx = store.findIndex(
-        (entry: any) => entry._craftisleSource === lib.file
+        (entry: any) => entry.name === lib.name || entry._src === lib.file
       )
+
       const entry = {
         id: existingIdx >= 0 ? store[existingIdx].id : crypto.randomUUID(),
         name: lib.name,
         items,
         created: existingIdx >= 0 ? store[existingIdx].created : Date.now(),
-        _craftisleSource: lib.file,
+        version: 1,
+        _src: lib.file,
       }
+
       if (existingIdx >= 0) {
         store[existingIdx] = entry
       } else {
@@ -71,14 +103,14 @@ export default function LibrariesModal({
       }
 
       localStorage.setItem(key, JSON.stringify(store))
-      setDoneMsg(`✅ 「${lib.name}」已导入！点击按钮刷新页面后在 Library 面板查看。`)
+      setDoneMsg(`✅ "${lib.name}" imported! Refresh the page to see it in the Library panel.`)
       setTimeout(() => {
-        if (confirm(`「${lib.name}」已导入！是否立即刷新页面查看？`)) {
+        if (confirm(`"${lib.name}" has been imported! Reload now to see it in the Library panel?`)) {
           window.location.reload()
         }
       }, 500)
     } catch (err: any) {
-      setDoneMsg(`❌ 导入失败: ${err?.message || err}`)
+      setDoneMsg(`❌ Import failed: ${err?.message || "Unknown error"}`)
     } finally {
       setImporting(null)
     }
@@ -87,6 +119,26 @@ export default function LibrariesModal({
   if (!open) return null
 
   const categories = [...new Set(libraries.map(l => l.category))]
+
+  const categoryLabels: Record<string, string> = {
+    architecture: "🏗️ Architecture",
+    cloud: "☁️ Cloud",
+    diagram: "📊 Diagrams",
+    ui: "📱 UI Kit",
+    flowchart: "🔀 Flowcharts",
+    template: "📋 Templates",
+    shape: "🔷 Shapes",
+    figure: "🧑 Figures",
+    icon: "�icons",
+    chart: "📈 Charts",
+    network: "🌐 Network",
+    database: "🗄️ Database",
+    engineering: "⚙️ Engineering",
+    science: "🔬 Science",
+    education: "🎓 Education",
+    fun: "🎨 Fun",
+    general: "📌 General",
+  }
 
   return (
     <div
@@ -115,9 +167,13 @@ export default function LibrariesModal({
         onClick={e => e.stopPropagation()}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <h2 style={{ margin: 0, fontSize: 20 }}>📚 公共素材库</h2>
+          <h2 style={{ margin: 0, fontSize: 20 }}>📚 Public Libraries</h2>
           <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 22, cursor: "pointer" }}>×</button>
         </div>
+
+        <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 16 }}>
+          Import community libraries from <a href="https://libraries.excalidraw.com" target="_blank" rel="noreferrer">Excalidraw Community</a>. Click "Import" to add to your Library panel.
+        </p>
 
         {doneMsg && (
           <div style={{
@@ -132,17 +188,14 @@ export default function LibrariesModal({
           </div>
         )}
 
+        {categories.length === 0 && (
+          <p style={{ color: "#9ca3af", fontSize: 14 }}>Loading libraries...</p>
+        )}
+
         {categories.map(cat => (
           <div key={cat} style={{ marginBottom: 20 }}>
-            <h3 style={{ fontSize: 14, color: "#6b7280", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>
-              {cat === "architecture" ? "🏗️ 架构图" :
-               cat === "diagram" ? "📊 图表" :
-               cat === "ui" ? "📱 UI 组件" :
-               cat === "flowchart" ? "🔀 流程图" :
-               cat === "template" ? "📋 模板" :
-               cat === "shape" ? "🔷 形状" :
-               cat === "figure" ? "🧑 人物" :
-               cat === "general" ? "📌 通用" : cat}
+            <h3 style={{ fontSize: 13, color: "#6b7280", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8, fontWeight: 600 }}>
+              {categoryLabels[cat] || cat}
             </h3>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
               {libraries.filter(l => l.category === cat).map(lib => (
@@ -165,17 +218,13 @@ export default function LibrariesModal({
                       cursor: importing !== null ? "default" : "pointer",
                     }}
                   >
-                    {importing === lib.file ? "导入中..." : "导入到我的素材库"}
+                    {importing === lib.file ? "Importing..." : "Import to My Library"}
                   </button>
                 </div>
               ))}
             </div>
           </div>
         ))}
-
-        <p style={{ fontSize: 12, color: "#9ca3af", marginTop: 8 }}>
-          素材来源：<a href="https://libraries.excalidraw.com" target="_blank" rel="noreferrer">Excalidraw 社区</a>（MIT 协议）
-        </p>
       </div>
     </div>
   )

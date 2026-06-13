@@ -62,6 +62,7 @@ export async function createBoard(
       elements: [],
       appState: {},
       updatedAt: new Date(),
+      users: { connect: { id: resolvedUserId } },
     },
   })
 }

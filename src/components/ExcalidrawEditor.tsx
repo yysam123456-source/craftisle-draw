@@ -35,10 +35,18 @@ function injectExcalidrawStyles() {
     .excalidraw-wrapper a[href*="youtube.com"],
     .excalidraw-wrapper a[href*="docs.excalidraw"],
     .excalidraw-wrapper a[href*="blog.excalidraw"],
+    .excalidraw-wrapper a[href*="discord.gg"],
+    .excalidraw-wrapper a[href*="discord.com"],
     .HelpDialog__links,
     .help-dialog .link-list,
     .help-dialog .external-links,
-    [class*="HelpDialog"] a:not([class*="button"]):not([role="button"]) {
+    [class*="HelpDialog"] a:not([class*="button"]):not([role="button"]),
+    /* Hide entire "Excalidraw links" section in hamburger menu */
+    .dropdown-menu [class*="links"],
+    .layer-ui__wrapper .dropdown-menu > :has(> a[href*="github"]),
+    /* Hide Help dialog link sections */
+    .Modal__content [class*="link"]:not([class*="button"]),
+    .dialog__links {
       display: none !important;
     }
 
@@ -253,33 +261,6 @@ export default function ExcalidrawEditor({
 
   return (
     <div className="w-full h-screen flex flex-col relative">
-      {!readOnly && (
-        <div className="absolute top-4 right-4 z-50 flex items-center gap-3">
-          {/* Auto-save status indicator */}
-          {saveStatus !== "idle" && (
-            <span
-              className={`text-xs px-2 py-1 rounded font-medium ${
-                saveStatus === "saving"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : saveStatus === "saved"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-              }`}
-            >
-              {saveStatus === "saving" && "Saving..."}
-              {saveStatus === "saved" && "Saved"}
-              {saveStatus === "error" && "Save failed"}
-            </span>
-          )}
-          <button
-            onClick={exportPNG}
-            disabled={exporting}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition disabled:opacity-50"
-          >
-            {exporting ? "Exporting..." : "Export PNG"}
-          </button>
-        </div>
-      )}
       <div className="flex-1 min-h-0">
         <Excalidraw
           excalidrawAPI={onExcalidrawAPIReady}

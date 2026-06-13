@@ -113,7 +113,7 @@ export default function BoardClient({
     setShowShareMenu(false)
   }
 
-  const handleExport = (format: "png" | "svg" | "json") => {
+  const handleExport = (format: "svg" | "json") => {
     // Dispatch custom event to ExcalidrawEditor
     window.dispatchEvent(
       new CustomEvent("craftisle-export", { detail: { format, boardId } })
@@ -250,7 +250,7 @@ export default function BoardClient({
 function ExportDropdown({ boardId }: { boardId: string }) {
   const [open, setOpen] = useState(false)
 
-  const handleExport = (format: "png" | "svg" | "json") => {
+  const handleExport = (format: "svg" | "json") => {
     setOpen(false)
     window.dispatchEvent(
       new CustomEvent("craftisle-export", { detail: { format, boardId } })
@@ -267,12 +267,6 @@ function ExportDropdown({ boardId }: { boardId: string }) {
       </button>
       {open && (
         <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-          <button
-            onClick={() => handleExport("png")}
-            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
-          >
-            📄 Export as PNG
-          </button>
           <button
             onClick={() => handleExport("svg")}
             className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"

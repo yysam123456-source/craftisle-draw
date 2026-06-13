@@ -12,6 +12,22 @@ interface BoardClientProps {
   readOnly?: boolean
 }
 
+// Clean appState: remove runtime-only fields that break Excalidraw
+function cleanAppState(appState: any): any {
+  if (!appState || typeof appState !== "object") return appState
+  // Remove fields that are not meant to be persisted and cause errors
+  const {
+    collaborators,
+    activeTool,
+    editingElement,
+    editingLinearElement,
+    selectedElementIds,
+    selectedGroupIds,
+    ...rest
+  } = appState
+  return rest
+}
+
 export default function BoardClient({
   boardId,
   initialElements = [],
@@ -49,7 +65,7 @@ export default function BoardClient({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             elements,
-            appState,
+            appState: cleanAppState(appState),
             ...(opts?.title !== undefined && { title: opts.title }),
             ...(opts?.thumbnail !== undefined && { thumbnail: opts.thumbnail }),
           }),
@@ -221,7 +237,7 @@ export default function BoardClient({
           boardId={boardId}
           initialData={{
             elements: initialElements,
-            appState: initialAppState,
+            appState: cleanAppState(initialAppState),
           }}
           readOnly={readOnly}
           onSave={(elements, appState, opts) => handleSave(elements, appState, opts)}

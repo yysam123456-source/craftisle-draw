@@ -61,6 +61,7 @@ export async function createBoard(
       userId: resolvedUserId,
       elements: [],
       appState: {},
+      updatedAt: new Date(),
     },
   })
 }

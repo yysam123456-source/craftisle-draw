@@ -34,7 +34,7 @@ model boards {
   is_public  Boolean  @default(false)
   user_id    String
   created_at DateTime @default(now())
-  updated_at DateTime
+  updated_at DateTime @default(now()) @updatedAt
   users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 

@@ -16,6 +16,49 @@ interface ExcalidrawEditorProps {
   onSave?: (elements: any[], appState: any) => void
 }
 
+/**
+ * Custom styles injected once to:
+ * 1. Hide Help dialog links (Documentation, Blog, Submit, YouTube)
+ * 2. Force toolbar to always remain visible during operations
+ */
+function injectExcalidrawStyles() {
+  if (typeof document === "undefined") return
+  const styleId = "craftisle-excalidraw-overrides"
+  if (document.getElementById(styleId)) return
+  const style = document.createElement("style")
+  style.id = styleId
+  style.textContent = `
+    /* Hide Help section external links (Documentation, Blog, Submit, YouTube) */
+    .HelpDialog__links,
+    .help-dialog .link-list,
+    .excalidraw-wrapper a[href*="docs.excalidraw"],
+    .excalidraw-wrapper a[href*="blog.excalidraw"],
+    .excalidraw-wrapper a[href*="github.com/issues"],
+    .excalidraw-wrapper a[href*="youtube.com"] {
+      display: none !important;
+    }
+
+    /* Force fixed toolbar (tools + shapes row) to never hide or fade */
+    .excalidraw-toolbar,
+    .FixedSideContainer__toolbar {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      visibility: visible !important;
+      transition: none !important;
+    }
+
+    /* Prevent toolbar from fading during drag/resize/draw operations */
+    .is-dragging .excalidraw-toolbar,
+    .is-resizing .excalidraw-toolbar,
+    .is-drawing .excalidraw-toolbar,
+    .is-binding-elements .excalidraw-toolbar {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+  `
+  document.head.appendChild(style)
+}
+
 export default function ExcalidrawEditor({
   boardId,
   initialData,
@@ -25,6 +68,11 @@ export default function ExcalidrawEditor({
   const excalidrawRef = useRef<any>(null)
   const saveTimerRef = useRef<any>(null)
   const [exporting, setExporting] = useState(false)
+
+  // Inject custom styles on mount
+  useEffect(() => {
+    injectExcalidrawStyles()
+  }, [])
 
   // Initialize API ref
   const onExcalidrawAPIReady = useCallback((api: any) => {
@@ -37,7 +85,7 @@ export default function ExcalidrawEditor({
       if (!onSave) return
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
       saveTimerRef.current = setTimeout(() => {
-        onSave(elements, appState)
+        onSave([...elements], { ...appState })
       }, 3000)
     },
     [onSave]
@@ -97,6 +145,20 @@ export default function ExcalidrawEditor({
           zenModeEnabled={false}
           gridModeEnabled={true}
           theme="light"
+          UIOptions={{
+            canvasActions: {
+              changeViewBackgroundColor: true,
+              clearCanvas: true,
+              export: { saveFileToDisk: true },
+              loadScene: false,
+              saveToActiveFile: false,
+              toggleTheme: null,
+              saveAsImage: false,
+            },
+            tools: {
+              image: true,
+            },
+          }}
         />
       </div>
     </div>

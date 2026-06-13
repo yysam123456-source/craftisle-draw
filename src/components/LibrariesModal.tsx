@@ -40,77 +40,21 @@ export default function LibrariesModal({
     try {
       const res = await fetch(`/libraries/${lib.file}`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = await res.json()
-
-      // Parse .excalidrawlib format:
-      // Format 1: { library: [[elem], [elem], ...] }
-      // Format 2: [elem, elem, ...]
-      // Format 3: { elements: [...], ... }
-      let items: any[] = []
-
-      if (Array.isArray(data)) {
-        // Format 2: direct array
-        items = data.filter((e: any) => e && e.type)
-      } else if (data.library && Array.isArray(data.library)) {
-        // Format 1: { library: [...] }
-        items = data.library.flat().filter((e: any) => e && e.type)
-      } else if (data.elements && Array.isArray(data.elements)) {
-        // Format 3: { elements: [...] }
-        items = data.elements.filter((e: any) => e && e.type)
-      } else if (data.items && Array.isArray(data.items)) {
-        items = data.items.filter((e: any) => e && e.type)
-      }
-
-      if (items.length === 0) {
-        // Try: maybe the whole object is a single library entry
-        if (data.id || data.name || data.type === "excalidraw-library") {
-          items = Array.isArray(data.items) ? data.items : []
-        }
-        if (items.length === 0) throw new Error("No valid elements found in library file")
-      }
-
-      // Read existing libraries from Excalidraw localStorage
-      // Key: "excalidraw_libraries"
-      // Format: [{ id, name, items: [...elements], created, version }]
-      const key = "excalidraw_libraries"
-      let store: any[] = []
-      try {
-        const raw = localStorage.getItem(key)
-        if (raw) {
-          const parsed = JSON.parse(raw)
-          if (Array.isArray(parsed)) store = parsed
-        }
-      } catch {}
-
-      // Check if already imported
-      const existingIdx = store.findIndex(
-        (entry: any) => entry.name === lib.name || entry._src === lib.file
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = lib.file
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      setDoneMsg(
+        `✅ "${lib.name}" downloaded! ` +
+        `In Excalidraw, open the Library panel (📚 icon on the left) → click "Import to library" → select the downloaded file.`
       )
-
-      const entry = {
-        id: existingIdx >= 0 ? store[existingIdx].id : crypto.randomUUID(),
-        name: lib.name,
-        items,
-        created: existingIdx >= 0 ? store[existingIdx].created : Date.now(),
-        version: 1,
-        _src: lib.file,
-      }
-
-      if (existingIdx >= 0) {
-        store[existingIdx] = entry
-      } else {
-        store.push(entry)
-      }
-
-      localStorage.setItem(key, JSON.stringify(store))
-      setDoneMsg(`✅ "${lib.name}" imported! Refresh the page to see it in the Library panel.`)
-      setTimeout(() => {
-        if (confirm(`"${lib.name}" has been imported! Reload now to see it in the Library panel?`)) {
-          window.location.reload()
-        }
-      }, 500)
     } catch (err: any) {
-      setDoneMsg(`❌ Import failed: ${err?.message || "Unknown error"}`)
+      setDoneMsg(`❌ Download failed: ${err?.message || "Unknown error"}`)
     } finally {
       setImporting(null)
     }

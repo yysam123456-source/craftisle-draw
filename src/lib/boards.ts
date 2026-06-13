@@ -1,13 +1,13 @@
 import { prisma } from "./db"
-import type { Board } from "@prisma/client"
+import type { boards } from "@prisma/client"
 
-export async function getBoard(id: string, userId: string): Promise<Board | null> {
+export async function getBoard(id: string, userId: string): Promise<boards | null> {
   return await prisma.board.findFirst({
     where: { id, userId },
   })
 }
 
-export async function getPublicBoard(id: string): Promise<Board | null> {
+export async function getPublicBoard(id: string): Promise<boards | null> {
   return await prisma.board.findFirst({
     where: { id, isPublic: true },
   })
@@ -77,7 +77,7 @@ export async function updateBoard(
   id: string,
   userId: string,
   data: { elements?: any[]; appState?: any; title?: string; isPublic?: boolean }
-): Promise<Board | null> {
+): Promise<boards | null> {
   const board = await prisma.board.findFirst({ where: { id, userId } })
   if (!board) return null
 

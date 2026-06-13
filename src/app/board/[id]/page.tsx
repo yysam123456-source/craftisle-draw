@@ -2,100 +2,89 @@ import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
 import ExcalidrawEditor from "@/components/ExcalidrawEditorWrapper"
 import { getBoard, createBoard, resolveUserId } from "@/lib/boards"
+import type { Metadata } from "next"
 
 export const dynamic = "force-dynamic"
 
 const TEST_USER_ID = "test-user-0000-0000-0000-000000000001"
 
-export default async function BoardPage({
-  params,
-  searchParams,
-}: {
+interface BoardPageProps {
   params: Promise<{ id: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}) {
-  const { id } = await params
-  const sp = await searchParams
-  const isTest = sp?.test === "1"
-  const isDebug = sp?.debug === "1"
+}
 
-  // ---- Auth ----
-  let userId: string
-  let userInfo: { email?: string; name?: string; image?: string } | undefined
-
-  if (isTest) {
-    userId = TEST_USER_ID
-  } else {
-    let session: any = null
-    try {
-      session = await auth()
-    } catch (authErr: any) {
-      console.error("[board] auth() failed:", authErr?.message || authErr)
-      // auth() failure — show error instead of crashing
-      return (
-        <div className="h-screen flex flex-col items-center justify-center p-8">
-          <h2 className="text-xl font-bold text-red-600 mb-4">Authentication Error</h2>
-          <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm">
-            {authErr?.message || String(authErr)}
-          </pre>
-        </div>
-      )
-    }
-    const user = session?.user
-    if (!user) {
-      if (isDebug) {
-        return <DebugAuthPage id={id} />
-      }
-      return redirect(
-        "/api/auth/signin?callbackUrl=" + encodeURIComponent("/board/" + id)
-      )
-    }
-    userId = user.id!
-    userInfo = {}
-    if (user.email) userInfo.email = user.email
-    if (user.name) userInfo.name = user.name
-    if (user.image) userInfo.image = user.image
-  }
-
-  // ── Resolve userId to a valid DB user ID (cuid) ──
-  // This handles the case where session.user.id is a Google sub
-  // but the DB uses cuid format — ensures consistency.
-  let resolvedUserId: string
+export default async function BoardPage({ params, searchParams }: BoardPageProps) {
+  // ── Top-level try/catch: NEVER throw on server component ──
   try {
-    resolvedUserId = isTest ? userId : await resolveUserId(userId, userInfo)
-  } catch (resolveErr: any) {
-    console.error("[board] resolveUserId failed:", resolveErr?.message || resolveErr)
-    return (
-      <div className="h-screen flex flex-col items-center justify-center p-8">
-        <h2 className="text-xl font-bold text-red-600 mb-4">User Resolution Error</h2>
-        <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm whitespace-pre-wrap">
-          Failed to resolve your user account in the database.
-          {"\n\n"}
-          {resolveErr?.message || String(resolveErr)}
-          {"\n\n"}
-          Original User ID: {userId}
-        </pre>
-        <p className="mt-4 text-sm text-gray-500">
-          Try <a href="/api/auth/signout" className="text-blue-600 underline">signing out</a> and back in.
-        </p>
-      </div>
-    )
-  }
+    const { id } = await params
+    const sp = await searchParams
+    const isTest = sp?.test === "1"
+    const isDebug = sp?.debug === "1"
 
-  // ---- Load board data ----
-  let board: any = null
-  let boardError: string | null = null
-
-  try {
+    // ---- Auth ----
+    let userId: string
     if (isTest) {
-      // Try DB first (for end-to-end testing with real DB)
+      userId = TEST_USER_ID
+    } else {
+      const session = await auth().catch(() => null)
+      const user = session?.user
+      if (!user) {
+        if (isDebug) {
+          return <DebugAuthPage id={id} />
+        }
+        redirect(
+          "/api/auth/signin?callbackUrl=" + encodeURIComponent("/board/" + id)
+        )
+      }
+      userId = user.id!
+    }
+
+    // ---- Resolve user ID (handle Google sub vs DB cuid) ----
+    let resolvedUserId: string
+    try {
+      resolvedUserId = await resolveUserId(userId)
+    } catch (resolveErr: any) {
+      // resolveUserId failed — show detailed error
+      return (
+        <ErrorDisplay
+          title="用户验证失败"
+          message={resolveErr?.message || String(resolveErr)}
+          details={`userId: ${userId}\n\nStack: ${resolveErr?.stack?.substring(0, 500) || "N/A"}`}
+        />
+      )
+    }
+
+    // ---- Handle /board/new ----
+    if (!isTest && id === "new") {
       try {
-        let b = await getBoard(id, resolvedUserId)
-        if (!b) b = await createBoard(resolvedUserId, undefined, userInfo)
+        const newBoard = await createBoard(resolvedUserId)
+        if (newBoard?.id) {
+          redirect("/board/" + newBoard.id)
+        }
+        throw new Error("createBoard returned empty result")
+      } catch (createErr: any) {
+        if (createErr?.message?.includes("NEXT_REDIRECT")) throw createErr
+        return (
+          <ErrorDisplay
+            title="创建白板失败"
+            message={createErr?.message || String(createErr)}
+            details={`resolvedUserId: ${resolvedUserId}\n\nStack: ${createErr?.stack?.substring(0, 500) || "N/A"}`}
+          />
+        )
+      }
+    }
+
+    // ---- Load board data ----
+    let board: any = null
+    let boardError: string | null = null
+
+    if (isTest) {
+      try {
+        let b = await getBoard(id, TEST_USER_ID)
+        if (!b) b = await createBoard(TEST_USER_ID)
         if (!b) throw new Error("createBoard returned null")
         board = b
       } catch (dbErr: any) {
-        console.warn("[board/test] DB failed, using mock data:", dbErr?.message || dbErr)
         board = {
           id,
           elements: [],
@@ -108,129 +97,115 @@ export default async function BoardPage({
         }
       }
     } else {
-      // ── Real authenticated user path ──
-      if (id === "new") {
-        // Create a brand new board and redirect to its URL
-        try {
-          const newBoard = await createBoard(resolvedUserId, undefined, userInfo)
-          if (newBoard?.id) {
-            redirect("/board/" + newBoard.id)
-          }
-          throw new Error("createBoard returned empty result")
-        } catch (createErr: any) {
-          // Don't swallow NEXT_REDIRECT — re-throw it
-          if (createErr?.digest?.startsWith("NEXT_REDIRECT")) {
-            throw createErr
-          }
-          console.error("[board/new] createBoard failed:", createErr?.message || createErr)
-          boardError = `Failed to create board: ${createErr?.message || String(createErr)}\n\nResolved User ID: ${resolvedUserId}\nOriginal User ID: ${userId}`
+      try {
+        board = await getBoard(id, resolvedUserId)
+        if (!board) {
+          boardError = `白板 "${id}" 不存在，或你没有访问权限。`
         }
-      } else {
-        // Existing board — load by ID using RESOLVED user ID
-        try {
-          board = await getBoard(id, resolvedUserId)
-        } catch (getErr: any) {
-          console.error("[board] getBoard failed:", getErr?.message || getErr)
-          boardError = `Failed to load board "${id}": ${getErr?.message || String(getErr)}\n\nResolved User ID: ${resolvedUserId}\nOriginal User ID: ${userId}`
-        }
-        if (!board && !boardError) {
-          boardError = `Board "${id}" not found or you don't have access.\n\nResolved User ID: ${resolvedUserId}\nOriginal User ID: ${userId}`
-        }
+      } catch (loadErr: any) {
+        if (loadErr?.message?.includes("NEXT_REDIRECT")) throw loadErr
+        boardError = loadErr?.message || String(loadErr)
       }
     }
-  } catch (err: any) {
-    // Re-throw Next.js internal errors (redirect, not-found, etc.)
-    if (err?.digest?.startsWith("NEXT_")) {
-      throw err
-    }
-    boardError = err?.message || String(err)
-  }
 
-  // ---- Error state ----
-  if (boardError) {
+    // ---- Render ----
+    if (boardError) {
+      return (
+        <ErrorDisplay
+          title="加载白板失败"
+          message={boardError}
+          details={`board id: ${id}\nresolvedUserId: ${resolvedUserId}`}
+        />
+      )
+    }
+
+    if (!board) {
+      return (
+        <ErrorDisplay
+          title="白板数据为空"
+          message="board 对象为 null，无法渲染白板。"
+          details={`id: ${id}\nresolvedUserId: ${resolvedUserId}\nisTest: ${isTest}`}
+        />
+      )
+    }
+
     return (
-      <div className="h-screen flex flex-col items-center justify-center p-8">
-        <h2 className="text-xl font-bold text-red-600 mb-4">Board Load Error</h2>
-        <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm whitespace-pre-wrap">
-          {boardError}
-        </pre>
-        {!isTest && (
-          <p className="mt-4 text-sm text-gray-500">
-            Tip: Try <a href="/api/auth/signout" className="text-blue-600 underline">signing out</a> and back in to sync your account.
-          </p>
+      <div style={{ width: "100vw", height: "100vh" }}>
+        <ExcalidrawEditor
+          boardId={board.id}
+          initialElements={board.elements || []}
+          initialAppState={board.appState || { viewBackgroundColor: "#ffffff" }}
+        />
+      </div>
+    )
+  } catch (topLevelErr: any) {
+    // ── Catch ALL server component errors ──
+    if (topLevelErr?.message?.includes("NEXT_REDIRECT")) {
+      throw topLevelErr  // let Next.js handle redirect
+    }
+    return (
+      <ErrorDisplay
+        title="服务器渲染错误（顶层捕获）"
+        message={topLevelErr?.message || String(topLevelErr)}
+        details={
+          `Type: ${topLevelErr?.constructor?.name || "unknown"}\n\n` +
+          `Stack:\n${topLevelErr?.stack?.substring(0, 1000) || "N/A"}\n\n` +
+          `Digest: ${topLevelErr?.digest || "N/A"}`
+        }
+      />
+    )
+  }
+}
+
+// ── Inline error UI (no client JS needed) ──
+function ErrorDisplay({
+  title,
+  message,
+  details,
+}: {
+  title: string
+  message: string
+  details?: string
+}) {
+  return (
+    <div style={{ padding: 40, fontFamily: "system-ui, sans-serif", maxWidth: 800, margin: "0 auto" }}>
+      <h1 style={{ color: "#e53e3e", fontSize: 24, marginBottom: 16 }}>
+        {title}
+      </h1>
+      <div style={{ background: "#1a202c", color: "#68d391", padding: 20, borderRadius: 8, overflow: "auto", fontSize: 13, lineHeight: 1.6, fontFamily: "monospace", whiteSpace: "pre-wrap", marginBottom: 20 }}>
+        {message}
+        {details && (
+          <>
+            {"\n\n────────── 详情 ──────────\n"}
+            {details}
+          </>
         )}
       </div>
-    )
-  }
-
-  // Safety guard — should never reach here with null board, but just in case
-  if (!board) {
-    return (
-      <div className="h-screen flex flex-col items-center justify-center p-8">
-        <h2 className="text-xl font-bold text-yellow-600 mb-4">Unexpected State</h2>
-        <p className="text-sm">Board data is empty but no error was raised.</p>
-        <p className="text-xs text-gray-400 mt-2">ID: {id} | User: {resolvedUserId}</p>
+      <div style={{ display: "flex", gap: 12 }}>
+        <a
+          href="/board/new"
+          style={{ padding: "10px 20px", background: "#4299e1", color: "white", border: "none", borderRadius: 6, textDecoration: "none", fontSize: 14 }}
+        >
+          新建白板
+        </a>
+        <a
+          href="/"
+          style={{ padding: "10px 20px", background: "#e2e8f0", color: "#2d3748", border: "none", borderRadius: 6, textDecoration: "none", fontSize: 14 }}
+        >
+          返回首页
+        </a>
       </div>
-    )
-  }
-
-  // ---- Debug panel ----
-  if (isDebug) {
-    return (
-      <div className="h-screen flex flex-col p-4">
-        <h2 className="text-lg font-bold mb-2">Debug: {id}</h2>
-        <p className="mb-2 text-sm text-gray-600">User: {resolvedUserId} (original: {userId})</p>
-        <div className="flex-1 border rounded">
-          <ExcalidrawEditor
-            boardId={board.id}
-            initialData={{
-              elements: board.elements as any[],
-              appState: board.appState as any,
-            }}
-            readOnly={false}
-            onSave={isTest ? undefined : async (elements: any[], appState: any) => {
-              await fetch(`/api/boards/${board.id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ elements, appState }),
-              })
-            }}
-          />
-        </div>
-      </div>
-    )
-  }
-
-  // ---- Normal render ----
-  return (
-    <ExcalidrawEditor
-      boardId={board.id}
-      initialData={{
-        elements: board.elements as any[],
-        appState: board.appState as any,
-      }}
-      readOnly={false}
-      onSave={
-        isTest
-          ? undefined
-          : async (elements: any[], appState: any) => {
-              await fetch(`/api/boards/${board.id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ elements, appState }),
-              })
-            }
-      }
-    />
+    </div>
   )
 }
 
 function DebugAuthPage({ id }: { id: string }) {
   return (
-    <div className="h-screen flex flex-col items-center justify-center p-8">
-      <h2 className="text-xl font-bold text-red-600 mb-4">Not Authenticated</h2>
-      <p>Add <code>?test=1</code> to the URL to bypass auth.</p>
-      <p className="mt-2 text-sm text-gray-500">Board ID: {id}</p>
+    <div style={{ padding: 40 }}>
+      <h1>调试模式</h1>
+      <p>未登录或 session 无效。</p>
+      <p>Board ID: {id}</p>
+      <a href="/api/auth/signin">登录</a>
     </div>
   )
 }

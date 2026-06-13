@@ -26,6 +26,18 @@ model accounts {
   @@index([userId])
 }
 
+model boards {
+  id         String   @id
+  title      String   @default("Untitled Board")
+  elements   Json
+  app_state  Json?
+  is_public  Boolean  @default(false)
+  user_id    String
+  created_at DateTime @default(now())
+  updated_at DateTime
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
 model sessions {
   id           String   @id
   sessionToken String   @unique
@@ -37,7 +49,7 @@ model sessions {
 }
 
 model users {
-  id                        String     @id @default(cuid())
+  id                        String     @id
   name                      String?
   email                     String?    @unique
   image                     String?
@@ -50,8 +62,8 @@ model users {
   stripe_current_period_end DateTime?
   email_verified            DateTime?
   accounts                  accounts[]
+  boards                    boards[]
   sessions                  sessions[]
-  boards                   Board[]   @relation("BoardToUser")
 }
 
 model verification_tokens {
@@ -60,20 +72,4 @@ model verification_tokens {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-// ── 白板（craftisle-draw 新增）─────────────────
-model Board {
-  id         String   @id @default(cuid())
-  title      String   @default("Untitled Board")
-  elements   Json
-  appState   Json?    @map("app_state")
-  isPublic   Boolean  @default(false) @map("is_public")
-  userId    String   @map("user_id")
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime  @updatedAt @map("updated_at")
-
-  user       users    @relation("BoardToUser", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("boards")
 }

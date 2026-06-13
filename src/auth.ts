@@ -44,12 +44,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               name: profile.name ?? undefined,
               image: (profile as any)?.picture ?? undefined,
               updated_at: new Date(),
-            },
+            } as any,
             create: {
               email: profile.email,
               name: profile.name ?? undefined,
               image: (profile as any)?.picture ?? undefined,
-            },
+            } as any,
           })
           // Store the DB user id (cuid) on the token for later use
           ;(globalThis as any).__auth_db_user_id = dbUser.id

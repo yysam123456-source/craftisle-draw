@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/auth"
-import { getBoard, updateBoard, deleteBoard } from "@/lib/boards"
+import { getBoard, updateBoard, deleteBoard, resolveUserId } from "@/lib/boards"
+
+async function getResolvedUserId(session: any) {
+  const userInfo: { email?: string; name?: string; image?: string } = {}
+  if (session.user.email) userInfo.email = session.user.email
+  if (session.user.name) userInfo.name = session.user.name
+  if (session.user.image) userInfo.image = session.user.image
+  return await resolveUserId(session.user.id, userInfo)
+}
 
 export async function GET(
   _req: Request,
@@ -17,7 +25,8 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const board = await getBoard(id, session.user.id)
+  const resolvedUserId = await getResolvedUserId(session)
+  const board = await getBoard(id, resolvedUserId)
   if (!board) {
     return NextResponse.json({ error: "Not found" }, { status: 404 })
   }
@@ -40,8 +49,9 @@ export async function PUT(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
+  const resolvedUserId = await getResolvedUserId(session)
   const data = await req.json().catch(() => ({}))
-  const board = await updateBoard(id, session.user.id, {
+  const board = await updateBoard(id, resolvedUserId, {
     elements: data.elements,
     appState: data.appState,
     title: data.title,
@@ -70,7 +80,8 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const ok = await deleteBoard(id, session.user.id)
+  const resolvedUserId = await getResolvedUserId(session)
+  const ok = await deleteBoard(id, resolvedUserId)
   if (!ok) {
     return NextResponse.json({ error: "Not found" }, { status: 404 })
   }

@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
 import ExcalidrawEditor from "@/components/ExcalidrawEditorWrapper"
-import { getBoard, createBoard } from "@/lib/boards"
+import { getBoard, createBoard, resolveUserId } from "@/lib/boards"
 
 export const dynamic = "force-dynamic"
 
@@ -21,11 +21,26 @@ export default async function BoardPage({
 
   // ---- Auth ----
   let userId: string
+  let userInfo: { email?: string; name?: string; image?: string } | undefined
+
   if (isTest) {
     userId = TEST_USER_ID
   } else {
     let session: any = null
-    try { session = await auth() } catch {}
+    try {
+      session = await auth()
+    } catch (authErr: any) {
+      console.error("[board] auth() failed:", authErr?.message || authErr)
+      // auth() failure — show error instead of crashing
+      return (
+        <div className="h-screen flex flex-col items-center justify-center p-8">
+          <h2 className="text-xl font-bold text-red-600 mb-4">Authentication Error</h2>
+          <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm">
+            {authErr?.message || String(authErr)}
+          </pre>
+        </div>
+      )
+    }
     const user = session?.user
     if (!user) {
       if (isDebug) {
@@ -36,30 +51,50 @@ export default async function BoardPage({
       )
     }
     userId = user.id!
-    // Store user info for potential DB auto-creation
-    ;(globalThis as any).__page_user_info = {
-      email: user.email,
-      name: user.name,
-      image: user.image,
-    }
+    userInfo = {}
+    if (user.email) userInfo.email = user.email
+    if (user.name) userInfo.name = user.name
+    if (user.image) userInfo.image = user.image
+  }
+
+  // ── Resolve userId to a valid DB user ID (cuid) ──
+  // This handles the case where session.user.id is a Google sub
+  // but the DB uses cuid format — ensures consistency.
+  let resolvedUserId: string
+  try {
+    resolvedUserId = isTest ? userId : await resolveUserId(userId, userInfo)
+  } catch (resolveErr: any) {
+    console.error("[board] resolveUserId failed:", resolveErr?.message || resolveErr)
+    return (
+      <div className="h-screen flex flex-col items-center justify-center p-8">
+        <h2 className="text-xl font-bold text-red-600 mb-4">User Resolution Error</h2>
+        <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm whitespace-pre-wrap">
+          Failed to resolve your user account in the database.
+          {"\n\n"}
+          {resolveErr?.message || String(resolveErr)}
+          {"\n\n"}
+          Original User ID: {userId}
+        </pre>
+        <p className="mt-4 text-sm text-gray-500">
+          Try <a href="/api/auth/signout" className="text-blue-600 underline">signing out</a> and back in.
+        </p>
+      </div>
+    )
   }
 
   // ---- Load board data ----
   let board: any = null
   let boardError: string | null = null
-  const userInfo = (globalThis as any).__page_user_info
 
   try {
     if (isTest) {
       // Try DB first (for end-to-end testing with real DB)
       try {
-        let b = await getBoard(id, userId)
-        if (!b) b = await createBoard(userId)
+        let b = await getBoard(id, resolvedUserId)
+        if (!b) b = await createBoard(resolvedUserId, undefined, userInfo)
         if (!b) throw new Error("createBoard returned null")
         board = b
       } catch (dbErr: any) {
-        // DB not available (test user doesn't exist, or Prisma schema not pushed)
-        // Fall back to mock data so the page renders
         console.warn("[board/test] DB failed, using mock data:", dbErr?.message || dbErr)
         board = {
           id,
@@ -77,24 +112,37 @@ export default async function BoardPage({
       if (id === "new") {
         // Create a brand new board and redirect to its URL
         try {
-          const newBoard = await createBoard(userId, undefined, userInfo)
+          const newBoard = await createBoard(resolvedUserId, undefined, userInfo)
           if (newBoard?.id) {
             redirect("/board/" + newBoard.id)
           }
           throw new Error("createBoard returned empty result")
         } catch (createErr: any) {
+          // Don't swallow NEXT_REDIRECT — re-throw it
+          if (createErr?.digest?.startsWith("NEXT_REDIRECT")) {
+            throw createErr
+          }
           console.error("[board/new] createBoard failed:", createErr?.message || createErr)
-          boardError = `Failed to create board: ${createErr?.message || String(createErr)}\n\nUser ID: ${userId}\n\nThis usually means the user record does not exist in the database. Try signing out and signing back in.`
+          boardError = `Failed to create board: ${createErr?.message || String(createErr)}\n\nResolved User ID: ${resolvedUserId}\nOriginal User ID: ${userId}`
         }
       } else {
-        // Existing board — load by ID
-        board = await getBoard(id, userId)
-        if (!board) {
-          boardError = `Board "${id}" not found or you don't have access.\n\nUser ID: ${userId}`
+        // Existing board — load by ID using RESOLVED user ID
+        try {
+          board = await getBoard(id, resolvedUserId)
+        } catch (getErr: any) {
+          console.error("[board] getBoard failed:", getErr?.message || getErr)
+          boardError = `Failed to load board "${id}": ${getErr?.message || String(getErr)}\n\nResolved User ID: ${resolvedUserId}\nOriginal User ID: ${userId}`
+        }
+        if (!board && !boardError) {
+          boardError = `Board "${id}" not found or you don't have access.\n\nResolved User ID: ${resolvedUserId}\nOriginal User ID: ${userId}`
         }
       }
     }
   } catch (err: any) {
+    // Re-throw Next.js internal errors (redirect, not-found, etc.)
+    if (err?.digest?.startsWith("NEXT_")) {
+      throw err
+    }
     boardError = err?.message || String(err)
   }
 
@@ -106,11 +154,22 @@ export default async function BoardPage({
         <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm whitespace-pre-wrap">
           {boardError}
         </pre>
-        { !isTest && (
+        {!isTest && (
           <p className="mt-4 text-sm text-gray-500">
             Tip: Try <a href="/api/auth/signout" className="text-blue-600 underline">signing out</a> and back in to sync your account.
           </p>
         )}
+      </div>
+    )
+  }
+
+  // Safety guard — should never reach here with null board, but just in case
+  if (!board) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center p-8">
+        <h2 className="text-xl font-bold text-yellow-600 mb-4">Unexpected State</h2>
+        <p className="text-sm">Board data is empty but no error was raised.</p>
+        <p className="text-xs text-gray-400 mt-2">ID: {id} | User: {resolvedUserId}</p>
       </div>
     )
   }
@@ -120,7 +179,7 @@ export default async function BoardPage({
     return (
       <div className="h-screen flex flex-col p-4">
         <h2 className="text-lg font-bold mb-2">Debug: {id}</h2>
-        <p className="mb-2 text-sm text-gray-600">User: {userId}</p>
+        <p className="mb-2 text-sm text-gray-600">User: {resolvedUserId} (original: {userId})</p>
         <div className="flex-1 border rounded">
           <ExcalidrawEditor
             boardId={board.id}

@@ -18,9 +18,9 @@ interface ExcalidrawEditorProps {
 }
 
 /**
- * Custom styles injected once to:
- * 1. Hide ALL external/branding links (GitHub, X/Twitter, Docs, Blog, YouTube, etc.)
- * 2. Force toolbar to always remain visible during operations
+ * Custom styles injected once: ONLY hide external/branding links.
+ * DO NOT touch layout, position, overflow, visibility, opacity, or pointer-events
+ * on any Excalidraw element — it breaks mouse event handling.
  */
 function injectExcalidrawStyles() {
   if (typeof document === "undefined") return
@@ -42,41 +42,11 @@ function injectExcalidrawStyles() {
     .help-dialog .link-list,
     .help-dialog .external-links,
     [class*="HelpDialog"] a:not([class*="button"]):not([role="button"]),
-    /* Hide entire "Excalidraw links" section in hamburger menu */
     .dropdown-menu [class*="links"],
     .layer-ui__wrapper .dropdown-menu > :has(> a[href*="github"]),
-    /* Hide Help dialog link sections */
     .Modal__content [class*="link"]:not([class*="button"]),
     .dialog__links {
       display: none !important;
-    }
-
-    /* Force fixed toolbar (tools + shapes row) to never hide or fade */
-    .excalidraw-toolbar,
-    .FixedSideContainer__toolbar {
-      opacity: 1 !important;
-      pointer-events: auto !important;
-      visibility: visible !important;
-      transition: none !important;
-    }
-
-    /* Prevent toolbar from fading during drag/resize/draw operations */
-    .is-dragging .excalidraw-toolbar,
-    .is-resizing .excalidraw-toolbar,
-    .is-drawing .excalidraw-toolbar,
-    .is-binding-elements .excalidraw-toolbar {
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-
-    /* CRITICAL: Ensure Excalidraw toolbars are always visible */
-    .layer-ui__wrapper,
-    .FixedSideContainer__toolbar,
-    .excalidraw-toolbar {
-      display: flex !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      pointer-events: auto !important;
     }
   `
   document.head.appendChild(style)

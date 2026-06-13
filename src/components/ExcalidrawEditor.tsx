@@ -18,7 +18,7 @@ interface ExcalidrawEditorProps {
 
 /**
  * Custom styles injected once to:
- * 1. Hide Help dialog links (Documentation, Blog, Submit, YouTube)
+ * 1. Hide ALL external/branding links (GitHub, X/Twitter, Docs, Blog, YouTube, etc.)
  * 2. Force toolbar to always remain visible during operations
  */
 function injectExcalidrawStyles() {
@@ -28,13 +28,17 @@ function injectExcalidrawStyles() {
   const style = document.createElement("style")
   style.id = styleId
   style.textContent = `
-    /* Hide Help section external links (Documentation, Blog, Submit, YouTube) */
-    .HelpDialog__links,
-    .help-dialog .link-list,
+    /* Hide ALL external/branding links in Excalidraw UI */
+    .excalidraw-wrapper a[href*="github.com"],
+    .excalidraw-wrapper a[href*="x.com"],
+    .excalidraw-wrapper a[href*="twitter.com"],
+    .excalidraw-wrapper a[href*="youtube.com"],
     .excalidraw-wrapper a[href*="docs.excalidraw"],
     .excalidraw-wrapper a[href*="blog.excalidraw"],
-    .excalidraw-wrapper a[href*="github.com/issues"],
-    .excalidraw-wrapper a[href*="youtube.com"] {
+    .HelpDialog__links,
+    .help-dialog .link-list,
+    .help-dialog .external-links,
+    [class*="HelpDialog"] a:not([class*="button"]):not([role="button"]) {
       display: none !important;
     }
 
@@ -68,6 +72,7 @@ export default function ExcalidrawEditor({
   const excalidrawRef = useRef<any>(null)
   const saveTimerRef = useRef<any>(null)
   const [exporting, setExporting] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
 
   // Inject custom styles on mount
   useEffect(() => {
@@ -79,14 +84,23 @@ export default function ExcalidrawEditor({
     excalidrawRef.current = api
   }, [])
 
-  // Debounced auto-save
+  // Debounced auto-save with status feedback
   const debouncedSave = useCallback(
     (elements: any[], appState: any) => {
       if (!onSave) return
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
-      saveTimerRef.current = setTimeout(() => {
-        onSave([...elements], { ...appState })
-      }, 3000)
+      setSaveStatus("saving")
+      saveTimerRef.current = setTimeout(async () => {
+        try {
+          await onSave([...elements], { ...appState })
+          setSaveStatus("saved")
+          setTimeout(() => setSaveStatus("idle"), 2000)
+        } catch (err) {
+          console.error("Auto-save failed:", err)
+          setSaveStatus("error")
+          setTimeout(() => setSaveStatus("idle"), 3000)
+        }
+      }, 2000)
     },
     [onSave]
   )
@@ -126,7 +140,23 @@ export default function ExcalidrawEditor({
   return (
     <div className="w-full h-screen flex flex-col relative">
       {!readOnly && (
-        <div className="absolute top-4 right-4 z-50">
+        <div className="absolute top-4 right-4 z-50 flex items-center gap-3">
+          {/* Auto-save status indicator */}
+          {saveStatus !== "idle" && (
+            <span
+              className={`text-xs px-2 py-1 rounded font-medium ${
+                saveStatus === "saving"
+                  ? "bg-yellow-100 text-yellow-700"
+                  : saveStatus === "saved"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {saveStatus === "saving" && "Saving..."}
+              {saveStatus === "saved" && "Saved"}
+              {saveStatus === "error" && "Save failed"}
+            </span>
+          )}
           <button
             onClick={exportPNG}
             disabled={exporting}

@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
-import ExcalidrawEditor from "@/components/ExcalidrawEditorWrapper"
+import BoardClient from "@/components/BoardClient"
 import { getBoard, createBoard, resolveUserId } from "@/lib/boards"
 
 export const dynamic = "force-dynamic"
@@ -42,13 +42,11 @@ export default async function BoardPage({ params, searchParams }: {
     }
 
     return (
-      <div style={{ width: "100vw", height: "100vh" }}>
-        <ExcalidrawEditor
-          boardId={board.id}
-          initialElements={board.elements || []}
-          initialAppState={board.appState || { viewBackgroundColor: "#ffffff" }}
-        />
-      </div>
+      <BoardClient
+        boardId={board.id}
+        initialElements={board.elements || []}
+        initialAppState={board.appState || { viewBackgroundColor: "#ffffff" }}
+      />
     )
   } catch (topErr: any) {
     if (topErr?.message?.includes("NEXT_REDIRECT")) {

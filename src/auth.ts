@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
+import { prisma } from "./lib/db"
 
 // Global error storage (in memory, accessible within the same serverless instance)
 declare global {
@@ -33,9 +34,64 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 
   callbacks: {
+    // ── Sync user to DB on sign-in ──────────────────
+    async signIn({ account, profile }) {
+      if (account?.provider === "google" && profile?.email) {
+        try {
+          const dbUser = await prisma.users.upsert({
+            where: { email: profile.email },
+            update: {
+              name: profile.name ?? undefined,
+              image: (profile as any)?.picture ?? undefined,
+              updated_at: new Date(),
+            },
+            create: {
+              email: profile.email,
+              name: profile.name ?? undefined,
+              image: (profile as any)?.picture ?? undefined,
+            },
+          })
+          // Store the DB user id (cuid) on the token for later use
+          ;(globalThis as any).__auth_db_user_id = dbUser.id
+          console.log("[NextAuth] Synced user to DB:", dbUser.id, dbUser.email)
+        } catch (err) {
+          console.error("[NextAuth] Failed to sync user to DB:", err)
+          // Don't block login — continue without DB record
+        }
+      }
+      return true
+    },
+
+    async jwt({ token, account, profile }) {
+      // If this is a fresh sign-in, look up the DB user id we just stored (or find by email)
+      if (account?.provider === "google" && profile?.email) {
+        try {
+          const dbUser = await prisma.users.findUnique({ where: { email: profile.email } })
+          if (dbUser) {
+            token.dbUserId = dbUser.id
+          }
+        } catch {}
+      }
+      // Preserve dbUserId across subsequent token refreshes
+      if (!token.dbUserId && token.email) {
+        try {
+          const dbUser = await prisma.users.findUnique({ where: { email: token.email } })
+          if (dbUser) {
+            token.dbUserId = dbUser.id
+          }
+        } catch {}
+      }
+      return token
+    },
+
     async session({ token, session }) {
       if (session.user) {
-        if (token.sub) session.user.id = token.sub
+        // Use the DB user id (cuid) as the primary identifier — this matches the users table
+        if ((token as any).dbUserId) {
+          session.user.id = (token as any).dbUserId
+        } else if (token.sub) {
+          session.user.id = token.sub
+        }
         if (token.email) session.user.email = token.email
         session.user.name = token.name
         session.user.image = token.picture

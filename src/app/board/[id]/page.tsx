@@ -66,9 +66,26 @@ export default async function BoardPage({
         }
       }
     } else {
-      board = await getBoard(id, userId)
-      if (!board) board = await createBoard(userId)
-      if (!board) notFound()
+      // ── Real authenticated user path ──
+      if (id === "new") {
+        // Create a brand new board and redirect to its URL
+        try {
+          const newBoard = await createBoard(userId)
+          if (newBoard?.id) {
+            redirect("/board/" + newBoard.id)
+          }
+          throw new Error("createBoard returned empty result")
+        } catch (createErr: any) {
+          console.error("[board/new] createBoard failed:", createErr?.message || createErr)
+          boardError = `Failed to create board: ${createErr?.message || String(createErr)}\n\nUser ID: ${userId}\n\nThis usually means the user record does not exist in the database. Try signing out and signing back in.`
+        }
+      } else {
+        // Existing board — load by ID
+        board = await getBoard(id, userId)
+        if (!board) {
+          boardError = `Board "${id}" not found or you don't have access.\n\nUser ID: ${userId}`
+        }
+      }
     }
   } catch (err: any) {
     boardError = err?.message || String(err)
@@ -79,9 +96,14 @@ export default async function BoardPage({
     return (
       <div className="h-screen flex flex-col items-center justify-center p-8">
         <h2 className="text-xl font-bold text-red-600 mb-4">Board Load Error</h2>
-        <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm">
+        <pre className="bg-gray-100 p-4 rounded max-w-2xl overflow-auto text-sm whitespace-pre-wrap">
           {boardError}
         </pre>
+        { !isTest && (
+          <p className="mt-4 text-sm text-gray-500">
+            Tip: Try <a href="/api/auth/signout" className="text-blue-600 underline">signing out</a> and back in to sync your account.
+          </p>
+        )}
       </div>
     )
   }

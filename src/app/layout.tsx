@@ -4,6 +4,7 @@ import "./globals.css"
 import Navbar from "@/components/Navbar"
 import { SessionProvider } from "next-auth/react"
 import Script from "next/script"
+import GoogleAnalytics from "@/components/GoogleAnalytics"
 
 export const dynamic = "force-dynamic"
 
@@ -79,6 +80,8 @@ export const metadata: Metadata = {
   },
   other: {
     "google-site-verification": "PLACEHOLDER_VERIFICATION_CODE",
+    "msvalidate.01": "BING_VERIFICATION_CODE",
+    "yandex-verification": "YANDEX_VERIFICATION_CODE",
   },
 }
 
@@ -112,7 +115,50 @@ const jsonLd = {
       name: "Craftisle",
       url: "https://draw.craftisle.com",
       logo: "https://draw.craftisle.com/logo.png",
-      sameAs: ["https://craftisle.com"],
+      sameAs: [
+        "https://craftisle.com",
+        "https://twitter.com/craftisle",
+        "https://github.com/craftisle",
+      ],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer service",
+        url: "https://craftisle.com/contact",
+      },
+    },
+    {
+      "@type": "WebSite",
+      url: "https://draw.craftisle.com",
+      name: "Craftisle Draw",
+      description:
+        "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+      publisher: {
+        "@type": "Organization",
+        name: "Craftisle",
+        logo: "https://draw.craftisle.com/logo.png",
+      },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: "https://draw.craftisle.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://draw.craftisle.com",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Create Board",
+          item: "https://draw.craftisle.com/board/new",
+        },
+      ],
     },
   ],
 }
@@ -142,12 +188,32 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <link rel="manifest" href="/manifest.json" />
+        
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* DNS prefetch */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        
+        {/* Apple meta tags */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Craftisle Draw" />
+        
+        {/* Windows meta tags */}
+        <meta name="msapplication-TileColor" content="#667eea" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
       </head>
       <body className={inter.className}>
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded">
           Skip to main content
         </a>
         <SessionProvider>
+          {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+            <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+          )}
           <Navbar />
           <main id="main-content" className="min-h-screen bg-gray-50">
             {children}
@@ -166,7 +232,7 @@ export default function RootLayout({
                   <ul className="space-y-2 text-sm">
                     <li><a href="/" className="text-gray-300 hover:text-white">Home</a></li>
                     <li><a href="/board/new" className="text-gray-300 hover:text-white">Create New Board</a></li>
-                    <li><a href="https://craftisle.com" className="text-gray-300 hover:text-white">Craftisle</a></li>
+                    <li><a href="https://craftisle.com" className="text-gray-300 hover:text-white" rel="noopener noreferrer" target="_blank">Craftisle</a></li>
                   </ul>
                 </div>
                 <div>

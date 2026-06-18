@@ -83,12 +83,8 @@ const nextConfig = {
         destination: '/board/new',
         permanent: true,
       },
-      // Trailing slash redirect
-      {
-        source: '/:path*/',
-        destination: '/:path*',
-        permanent: true,
-      },
+      // Note: Removed trailing slash redirect (caused infinite redirect loop)
+      // Next.js handles trailing slashes natively via 'trailingSlash' config
     ]
   },
 }

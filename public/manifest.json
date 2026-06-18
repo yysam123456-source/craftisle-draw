@@ -1,0 +1,23 @@
+{
+  "name": "Craftisle Draw - Free Online Whiteboard",
+  "short_name": "Craftisle Draw",
+  "description": "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#667eea",
+  "background_color": "#ffffff",
+  "orientation": "any",
+  "categories": ["productivity", "utilities"]
+}

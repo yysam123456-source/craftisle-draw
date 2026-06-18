@@ -2,13 +2,31 @@ import { MetadataRoute } from "next"
 import { prisma } from "@/lib/db"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Static pages
+  // Static pages - expanded with all public pages
   const staticUrls = [
     {
       url: "https://draw.craftisle.com",
       lastModified: new Date(),
       changeFrequency: "daily" as const,
       priority: 1.0,
+    },
+    {
+      url: "https://draw.craftisle.com/use-cases",
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    {
+      url: "https://draw.craftisle.com/privacy",
+      lastModified: new Date("2026-06-18"),
+      changeFrequency: "monthly" as const,
+      priority: 0.3,
+    },
+    {
+      url: "https://draw.craftisle.com/terms",
+      lastModified: new Date("2026-06-18"),
+      changeFrequency: "monthly" as const,
+      priority: 0.3,
     },
   ]
 

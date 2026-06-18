@@ -16,8 +16,9 @@ export const metadata: Metadata = {
     template: "%s | Craftisle Draw",
   },
   description:
-    "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards. No signup required for testing. Real-time collaboration, infinite canvas, and export to PNG/SVG.",
+    "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards. No signup required for testing. Real-time collaboration, infinite canvas, and export to PNG/SVG. Perfect for teaching, brainstorming, and team collaboration.",
   keywords: [
+    // Core keywords
     "online whiteboard",
     "collaborative drawing",
     "excalidraw",
@@ -28,6 +29,45 @@ export const metadata: Metadata = {
     "digital whiteboard",
     "virtual whiteboard",
     "team collaboration tool",
+    // Long-tail keywords (English)
+    "free online whiteboard no sign up",
+    "online whiteboard for teaching",
+    "collaborative whiteboard real time free",
+    "hand drawn diagram tool online",
+    "flowchart maker online free",
+    "mind map online free",
+    "virtual whiteboard for remote teams",
+    "sketch board online free",
+    "brainstorming tool online free",
+    "draw diagrams online free no download",
+    "excalidraw alternative free",
+    "online drawing board for teams",
+    "free digital whiteboard",
+    "interactive whiteboard online",
+    "whiteboard for online meetings",
+    "online whiteboard with drawing tools",
+    "free whiteboard for teachers",
+    "real time collaborative whiteboard",
+    "whiteboard app for remote work",
+    "online canvas for drawing",
+    "free diagram tool online",
+    "whiteboard software free online",
+    "create whiteboard online free",
+    "shared whiteboard online free",
+    "whiteboard for agile teams",
+    "online retrospective whiteboard",
+    "free whiteboard for students",
+    // Additional long-tail
+    "best free online whiteboard",
+    "whiteboard tool for presentations",
+    "online whiteboard no registration",
+    "free whiteboard unlimited collaborators",
+    "whiteboard with templates free",
+    "online whiteboard export png svg",
+    "hand drawn style whiteboard",
+    "whiteboard for design thinking",
+    "visual collaboration tool free",
+    "online whiteboard for workshops",
   ],
   authors: [{ name: "Craftisle" }],
   creator: "Craftisle",
@@ -79,12 +119,17 @@ export const metadata: Metadata = {
     },
   },
   other: {
-    "google-site-verification": process.env.GOOGLE_SITE_VERIFICATION || "PLACEHOLDER_VERIFICATION_CODE",
-    "msvalidate.01": process.env.BING_SITE_VERIFICATION || "BING_VERIFICATION_CODE",
-    "yandex-verification": process.env.YANDEX_SITE_VERIFICATION || "YANDEX_VERIFICATION_CODE",
+    ...(process.env.GOOGLE_SITE_VERIFICATION && process.env.GOOGLE_SITE_VERIFICATION !== "PLACEHOLDER_VERIFICATION_CODE"
+      ? { "google-site-verification": process.env.GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.BING_SITE_VERIFICATION && process.env.BING_SITE_VERIFICATION !== "BING_VERIFICATION_CODE"
+      ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION }
+      : {}),
   },
   verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION || "PLACEHOLDER_VERIFICATION_CODE",
+    ...(process.env.GOOGLE_SITE_VERIFICATION && process.env.GOOGLE_SITE_VERIFICATION !== "PLACEHOLDER_VERIFICATION_CODE"
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : {}),
   },
 }
 

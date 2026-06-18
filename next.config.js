@@ -41,6 +41,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // SEO-friendly redirects
       {
         source: '/home',
         destination: '/',
@@ -49,6 +50,43 @@ const nextConfig = {
       {
         source: '/index',
         destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/home.html',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/index.html',
+        destination: '/',
+        permanent: true,
+      },
+      // Common URL patterns users might try
+      {
+        source: '/whiteboard',
+        destination: '/board/new',
+        permanent: true,
+      },
+      {
+        source: '/draw',
+        destination: '/board/new',
+        permanent: true,
+      },
+      {
+        source: '/create',
+        destination: '/board/new',
+        permanent: true,
+      },
+      {
+        source: '/new',
+        destination: '/board/new',
+        permanent: true,
+      },
+      // Trailing slash redirect
+      {
+        source: '/:path*/',
+        destination: '/:path*',
         permanent: true,
       },
     ]

@@ -1,18 +1,24 @@
 import type { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | Craftisle Draw",
-  description: "Privacy Policy for Craftisle Draw - Free Online Whiteboard Tool",
-  robots: { index: true, follow: true },
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({ locale: params.locale, namespace: 'privacy' })
+  
+  return {
+    title: t('title'),
+    description: t('description'),
+  }
 }
 
 export default function PrivacyPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
+      <p className="text-sm text-gray-500 mb-8">Last updated: June 18, 2026</p>
+      
       <div className="prose prose-lg max-w-none text-gray-700 space-y-6">
-        <p>Last updated: June 18, 2026</p>
-
+        <p>This is the English version of our Privacy Policy. For translations in other languages, please use the language switcher in the navigation.</p>
+        
         <section>
           <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">1. Information We Collect</h2>
           <p>
@@ -25,6 +31,7 @@ export default function PrivacyPage() {
           </ul>
         </section>
 
+        {/* Rest of the privacy policy content... */}
         <section>
           <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">2. How We Use Your Information</h2>
           <ul className="list-disc pl-6 space-y-2">

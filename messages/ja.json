@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "boards": "マイボード",
+    "newBoard": "新規ボード",
+    "signIn": "サインイン",
+    "signOut": "サインアウト"
+  },
+  "home": {
+    "title": "無料オンライン白板",
+    "description": "Craftisle Drawで手描き図解、フローチャート、コラボレーティブボードを作成。Excalidraw搭載の無料オンライン白板ツール。",
+    "or": "or",
+    "learnMore": "learn more about Craftisle",
+    "pleaseSignIn": "Please sign in to view your boards",
+    "faqTitle": "Frequently Asked Questions",
+    "faq": {
+      "free": "Is Craftisle Draw free to use?",
+      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
+      "collaborate": "Can I collaborate with others in real-time?",
+      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
+      "export": "Can I export my drawings?",
+      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
+      "account": "Do I need to create an account?",
+      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
+      "secure": "Is my data secure?",
+      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+    }
+  },
+  "seo": {
+    "title": "無料オンライン白板 | Craftisle Draw",
+    "description": "手描き図解、フローチャート、コラボレーティブボードを作成。登録不要。リアルタイムコラボレーション、無限キャンバス、PNG/SVGエクスポート。",
+    "keywords": "無料オンライン白板 登録不要, オンライン白板 教育, リアルタイムコラボレーティブ白板 無料, 手描き図解ツール オンライン, フローチャート作成 オンライン 無料, マインドマップ オンライン 無料, リモートチーム用仮想白板, ブレインストーミングツール オンライン 無料, excalidraw 代替 無料, アジャイルチーム用白板"
+  },
+  "useCases": {
+    "teaching": "Online Whiteboard for Teaching",
+    "teachingDesc": "Use Craftisle Draw as a free online whiteboard for teaching. Create interactive lessons, explain concepts with hand-drawn diagrams, and share whiteboards with students.",
+    "remoteTeams": "Virtual Whiteboard for Remote Teams",
+    "remoteTeamsDesc": "Real-time collaborative whiteboard for remote teams. Brainstorm, plan sprints, and collaborate visually with your team.",
+    "brainstorming": "Brainstorming Tool Online Free",
+    "brainstormingDesc": "Free brainstorming tool online. Generate ideas with your team on an infinite canvas. Use sticky notes, draw connections, and export your brainstorming session.",
+    "flowchart": "Flowchart Maker Online Free",
+    "flowchartDesc": "Create flowcharts online for free. Use our flowchart maker to visualize processes, workflows, and algorithms.",
+    "mindMap": "Mind Map Online Free",
+    "mindMapDesc": "Free mind map tool online. Organize your thoughts, plan projects, and visualize concepts with mind maps.",
+    "agile": "Whiteboard for Agile Teams",
+    "agileDesc": "Whiteboard for agile teams. Run retrospectives, sprint planning, and stand-ups on a free online whiteboard.",
+    "designThinking": "Design Thinking Whiteboard",
+    "designThinkingDesc": "Design thinking whiteboard for innovation. Use our free online whiteboard to run design thinking workshops.",
+    "meetings": "Meeting Presentation Whiteboard",
+    "meetingsDesc": "Meeting presentation whiteboard. Create visual presentations, annotate in real-time, and share with stakeholders.",
+    "title": "Use Cases | Craftisle Draw",
+    "description": "Discover how to use Craftisle Draw for teaching, remote teams, brainstorming, and more."
+  },
+  "footer": {
+    "description": "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+    "quickLinks": "Quick Links",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© 2026 Craftisle. All rights reserved."
+  },
+  "privacy": {
+    "title": "Privacy Policy | Craftisle Draw",
+    "description": "Privacy Policy for Craftisle Draw - Free Online Whiteboard Tool"
+  },
+  "terms": {
+    "title": "Terms of Service | Craftisle Draw",
+    "description": "Terms of Service for Craftisle Draw - Free Online Whiteboard Tool"
+  }
+}

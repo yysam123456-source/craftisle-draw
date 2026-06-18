@@ -1,17 +1,19 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { signOut, useSession } from "next-auth/react"
-import Link from "next/link"
+import { useState } from "react";
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-export default function Navbar() {
-  const { data: session } = useSession()
-  const [menuOpen, setMenuOpen] = useState(false)
+export default function Navbar({ locale = "en" }: { locale?: string }) {
+  const { data: session } = useSession();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const t = useTranslations("nav");
 
   return (
     <nav className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between sticky top-0 z-50">
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-2">
+      <Link href={`/${locale}`} className="flex items-center gap-2">
         <span className="text-xl font-bold text-blue-600">Craftisle</span>
         <span className="text-sm text-gray-400">Draw</span>
       </Link>
@@ -20,8 +22,8 @@ export default function Navbar() {
       <div className="flex items-center gap-4">
         {session?.user ? (
           <>
-            <Link href="/\" className="text-sm text-gray-600 hover:text-gray-900">
-              My Boards
+            <Link href={`/${locale}`} className="text-sm text-gray-600 hover:text-gray-900">
+              {t("boards")}
             </Link>
             <div className="relative">
               <button
@@ -36,14 +38,14 @@ export default function Navbar() {
                     {session.user.email}
                   </div>
                   <a
-                    href="/api/auth/signout"
+                    href={`/${locale}/api/auth/signout`}
                     className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
                     onClick={async (e) => {
-                      e.preventDefault()
-                      await signOut({ callbackUrl: "/" })
+                      e.preventDefault();
+                      await signOut({ callbackUrl: `/${locale}` });
                     }}
                   >
-                    Sign Out
+                    {t("signOut")}
                   </a>
                 </div>
               )}
@@ -51,13 +53,13 @@ export default function Navbar() {
           </>
         ) : (
           <a
-            href="/api/auth/signin"
+            href={`/${locale}/api/auth/signin`}
             className="text-sm px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
-            Sign In
+            {t("signIn")}
           </a>
         )}
       </div>
     </nav>
-  )
+  );
 }

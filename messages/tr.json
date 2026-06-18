@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "boards": "Tahtalarım",
+    "newBoard": "Yeni Tahta",
+    "signIn": "Giriş Yap",
+    "signOut": "Çıkış Yap"
+  },
+  "home": {
+    "title": "Ücretsiz Online Beyaz Tahta",
+    "description": "Craftisle Draw ile el ile çizilmiş diyagramlar, akış şemaları ve iş birlikçi tahtalar oluşturun. Excalidraw tabanlı ücretsiz online beyaz tahta aracı.",
+    "or": "or",
+    "learnMore": "learn more about Craftisle",
+    "pleaseSignIn": "Please sign in to view your boards",
+    "faqTitle": "Frequently Asked Questions",
+    "faq": {
+      "free": "Is Craftisle Draw free to use?",
+      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
+      "collaborate": "Can I collaborate with others in real-time?",
+      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
+      "export": "Can I export my drawings?",
+      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
+      "account": "Do I need to create an account?",
+      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
+      "secure": "Is my data secure?",
+      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+    }
+  },
+  "seo": {
+    "title": "Ücretsiz Online Beyaz Tahta | Craftisle Draw",
+    "description": "El ile çizilmiş diyagramlar, akış şemaları ve iş birlikçi tahtalar oluşturun. Kayit gerekmez. Gerçek zamanlı iş birliği, sonsuz tuval, PNG/SVG'ye dışa aktar.",
+    "keywords": "ücretsiz online beyaz tahta kayit gerekmez, online beyaz tahta eğitim için, gerçek zamanlı iş birlikçi tahta ücretsiz, el ile çizilmiş diyagram aracı online, akış şeması oluşturucu online ücretsiz, zihin haritası online ücretsiz, uzaktan takımlar için sanal tahta, beyin fırtınası aracı online ücretsiz, excalidraw alternatifi ücretsiz, çevik takımlar için tahta"
+  },
+  "useCases": {
+    "teaching": "Online Whiteboard for Teaching",
+    "teachingDesc": "Use Craftisle Draw as a free online whiteboard for teaching. Create interactive lessons, explain concepts with hand-drawn diagrams, and share whiteboards with students.",
+    "remoteTeams": "Virtual Whiteboard for Remote Teams",
+    "remoteTeamsDesc": "Real-time collaborative whiteboard for remote teams. Brainstorm, plan sprints, and collaborate visually with your team.",
+    "brainstorming": "Brainstorming Tool Online Free",
+    "brainstormingDesc": "Free brainstorming tool online. Generate ideas with your team on an infinite canvas. Use sticky notes, draw connections, and export your brainstorming session.",
+    "flowchart": "Flowchart Maker Online Free",
+    "flowchartDesc": "Create flowcharts online for free. Use our flowchart maker to visualize processes, workflows, and algorithms.",
+    "mindMap": "Mind Map Online Free",
+    "mindMapDesc": "Free mind map tool online. Organize your thoughts, plan projects, and visualize concepts with mind maps.",
+    "agile": "Whiteboard for Agile Teams",
+    "agileDesc": "Whiteboard for agile teams. Run retrospectives, sprint planning, and stand-ups on a free online whiteboard.",
+    "designThinking": "Design Thinking Whiteboard",
+    "designThinkingDesc": "Design thinking whiteboard for innovation. Use our free online whiteboard to run design thinking workshops.",
+    "meetings": "Meeting Presentation Whiteboard",
+    "meetingsDesc": "Meeting presentation whiteboard. Create visual presentations, annotate in real-time, and share with stakeholders.",
+    "title": "Use Cases | Craftisle Draw",
+    "description": "Discover how to use Craftisle Draw for teaching, remote teams, brainstorming, and more."
+  },
+  "footer": {
+    "description": "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+    "quickLinks": "Quick Links",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© 2026 Craftisle. All rights reserved."
+  },
+  "privacy": {
+    "title": "Privacy Policy | Craftisle Draw",
+    "description": "Privacy Policy for Craftisle Draw - Free Online Whiteboard Tool"
+  },
+  "terms": {
+    "title": "Terms of Service | Craftisle Draw",
+    "description": "Terms of Service for Craftisle Draw - Free Online Whiteboard Tool"
+  }
+}

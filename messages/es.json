@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "boards": "Mis Pizarras",
+    "newBoard": "Nueva Pizarra",
+    "signIn": "Iniciar Sesión",
+    "signOut": "Cerrar Sesión"
+  },
+  "home": {
+    "title": "Pizarra Online Gratis",
+    "description": "Crea diagramas dibujados a mano, diagramas de flujo y pizarras colaborativas con Craftisle Draw. Herramienta de pizarra online gratuita.",
+    "or": "or",
+    "learnMore": "learn more about Craftisle",
+    "pleaseSignIn": "Please sign in to view your boards",
+    "faqTitle": "Frequently Asked Questions",
+    "faq": {
+      "free": "Is Craftisle Draw free to use?",
+      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
+      "collaborate": "Can I collaborate with others in real-time?",
+      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
+      "export": "Can I export my drawings?",
+      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
+      "account": "Do I need to create an account?",
+      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
+      "secure": "Is my data secure?",
+      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+    }
+  },
+  "seo": {
+    "title": "Pizarra Online Gratis | Craftisle Draw",
+    "description": "Crea diagramas, flujogramas y pizarras colaborativas. Sin registro. Colaboración en tiempo real, lienzo infinito, exportar a PNG/SVG.",
+    "keywords": "pizarra online gratis sin registro, pizarra online para enseñanza, pizarra colaborativa tiempo real gratis, herramienta diagramas dibujados mano online, creador flujogramas online gratis, mapa mental online gratis, pizarra virtual para equipos remotos, herramienta lluvia ideas online gratis, alternativa excalidraw gratis, pizarra para equipos agiles"
+  },
+  "useCases": {
+    "teaching": "Pizarra Online para Enseñanza",
+    "teachingDesc": "Use Craftisle Draw como pizarra online gratis para enseñanza. Crea lecciones interactivas y comparte pizarras con estudiantes.",
+    "remoteTeams": "Pizarra Virtual para Equipos Remotos",
+    "remoteTeamsDesc": "Pizarra colaborativa en tiempo real para equipos remotos. Brainstorm, planifica sprints y colabora visualmente.",
+    "brainstorming": "Herramienta de Lluvia de Ideas Online Gratis",
+    "brainstormingDesc": "Herramienta de lluvia de ideas online gratis. Genera ideas con tu equipo en un lienzo infinito.",
+    "flowchart": "Creador de Flujogramas Online Gratis",
+    "flowchartDesc": "Crea flujogramas online gratis. Visualiza procesos, flujos de trabajo y algoritmos.",
+    "mindMap": "Mapa Mental Online Gratis",
+    "mindMapDesc": "Herramienta de mapa mental online gratis. Organiza tus pensamientos y visualiza conceptos.",
+    "agile": "Pizarra para Equipos Agile",
+    "agileDesc": "Pizarra para equipos agile. Ejecuta retrospectives, planificación de sprints y stand-ups.",
+    "designThinking": "Pizarra de Design Thinking",
+    "designThinkingDesc": "Pizarra de design thinking para innovación. Ejecuta talleres de design thinking.",
+    "meetings": "Pizarra para Presentaciones de Reuniones",
+    "meetingsDesc": "Pizarra para presentaciones de reuniones. Crea presentaciones visuales y comparte con stakeholders.",
+    "title": "Use Cases | Craftisle Draw",
+    "description": "Discover how to use Craftisle Draw for teaching, remote teams, brainstorming, and more."
+  },
+  "footer": {
+    "description": "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+    "quickLinks": "Quick Links",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© 2026 Craftisle. All rights reserved."
+  },
+  "privacy": {
+    "title": "Privacy Policy | Craftisle Draw",
+    "description": "Privacy Policy for Craftisle Draw - Free Online Whiteboard Tool"
+  },
+  "terms": {
+    "title": "Terms of Service | Craftisle Draw",
+    "description": "Terms of Service for Craftisle Draw - Free Online Whiteboard Tool"
+  }
+}

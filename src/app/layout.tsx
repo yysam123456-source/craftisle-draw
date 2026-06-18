@@ -1,14 +1,9 @@
 import type { Metadata, Viewport } from "next"
-import { Inter } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/Navbar"
 import { SessionProvider } from "next-auth/react"
 import Script from "next/script"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
-
-export const dynamic = "force-dynamic"
-
-const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: {
@@ -237,14 +232,6 @@ export default function RootLayout({
         />
         <link rel="manifest" href="/manifest.json" />
         
-        {/* Preconnect to external domains */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
-        {/* DNS prefetch */}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-        
         {/* Apple meta tags */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -254,7 +241,7 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#667eea" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
       </head>
-      <body className={inter.className}>
+      <body className="font-sans">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded">
           Skip to main content
         </a>
@@ -262,40 +249,9 @@ export default function RootLayout({
           {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID !== 'G-XXXXXXXX' && (
             <GoogleAnalytics />
           )}
-          <Navbar />
           <main id="main-content" className="min-h-screen bg-gray-50">
             {children}
           </main>
-          <footer className="bg-gray-800 text-white py-8">
-            <div className="max-w-6xl mx-auto px-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Craftisle Draw</h3>
-                  <p className="text-sm text-gray-300">
-                    Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-                  <ul className="space-y-2 text-sm">
-                    <li><a href="/" className="text-gray-300 hover:text-white">Home</a></li>
-                    <li><a href="/board/new" className="text-gray-300 hover:text-white">Create New Board</a></li>
-                    <li><a href="https://craftisle.com" className="text-gray-300 hover:text-white" rel="noopener noreferrer" target="_blank">Craftisle</a></li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Legal</h3>
-                  <ul className="space-y-2 text-sm">
-                    <li><a href="/privacy" className="text-gray-300 hover:text-white">Privacy Policy</a></li>
-                    <li><a href="/terms" className="text-gray-300 hover:text-white">Terms of Service</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div className="mt-8 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
-                © 2026 Craftisle. All rights reserved.
-              </div>
-            </div>
-          </footer>
         </SessionProvider>
       </body>
     </html>

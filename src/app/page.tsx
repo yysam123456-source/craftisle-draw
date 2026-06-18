@@ -4,7 +4,9 @@ import BoardList from "@/components/BoardList"
 import { auth } from "@/auth"
 
 export const metadata: Metadata = {
-  title: "My Boards",
+  title: "Free Online Whiteboard | Craftisle Draw",
+  description:
+    "Create hand-drawn diagrams, flowcharts, and collaborative boards with Craftisle Draw. Free online whiteboard tool powered by Excalidraw. No signup required for testing.",
 }
 
 export default async function HomePage() {

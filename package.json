@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && node scripts/patch-excalidraw-worker.js && next build && node scripts/patch-excalidraw-worker.js",
+    "build": "prisma generate && node scripts/remove-excalidraw-links.js && node scripts/patch-excalidraw-worker.js && next build",
     "start": "next start",
     "lint": "next lint",
     "db:push": "prisma db push",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
-    "@excalidraw/excalidraw": "^0.18.1",
+    "@excalidraw/excalidraw": "0.18.1",
     "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
     "next": "^16.1.0-canary.19",

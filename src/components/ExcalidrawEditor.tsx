@@ -18,38 +18,96 @@ interface ExcalidrawEditorProps {
 }
 
 /**
- * Custom styles injected once: ONLY hide external/branding links.
- * DO NOT touch layout, position, overflow, visibility, opacity, or pointer-events
- * on any Excalidraw element — it breaks mouse event handling.
+ * Remove Excalidraw branding/external links from the DOM.
+ * Runs repeatedly via MutationObserver + setInterval belt-and-suspenders.
  */
-function injectExcalidrawStyles() {
+function setupLinkRemover() {
   if (typeof document === "undefined") return
-  const styleId = "craftisle-excalidraw-overrides"
-  if (document.getElementById(styleId)) return
-  const style = document.createElement("style")
-  style.id = styleId
-  style.textContent = `
-    /* Hide ALL external/branding links in Excalidraw UI */
-    .excalidraw-wrapper a[href*="github.com"],
-    .excalidraw-wrapper a[href*="x.com"],
-    .excalidraw-wrapper a[href*="twitter.com"],
-    .excalidraw-wrapper a[href*="youtube.com"],
-    .excalidraw-wrapper a[href*="docs.excalidraw"],
-    .excalidraw-wrapper a[href*="blog.excalidraw"],
-    .excalidraw-wrapper a[href*="discord.gg"],
-    .excalidraw-wrapper a[href*="discord.com"],
-    .HelpDialog__links,
-    .help-dialog .link-list,
-    .help-dialog .external-links,
-    [class*="HelpDialog"] a:not([class*="button"]):not([role="button"]),
-    .dropdown-menu [class*="links"],
-    .layer-ui__wrapper .dropdown-menu > :has(> a[href*="github"]),
-    .Modal__content [class*="link"]:not([class*="button"]),
-    .dialog__links {
-      display: none !important;
+
+  const REMOVE_SELECTORS = [
+    // Direct link elements by text content
+    'a[href*="github.com"]',
+    'a[href*="x.com"]',
+    'a[href*="twitter.com"]',
+    'a[href*="youtube.com"]',
+    'a[href*="docs.excalidraw"]',
+    'a[href*="blog.excalidraw"]',
+    'a[href*="discord.gg"]',
+    'a[href*="discord.com"]',
+  ]
+
+  function removeLinks() {
+    // 1. Remove all external link <a> tags within Excalidraw
+    for (const sel of REMOVE_SELECTORS) {
+      document.querySelectorAll(`.excalidraw-wrapper ${sel}`).forEach(el => {
+        el.remove()
+      })
     }
-  `
-  document.head.appendChild(style)
+
+    // 2. Find and remove the entire "Excalidraw links" section
+    // It appears as an h3 "Excalidraw links" followed by sibling divs with GitHub/Follow/Discord
+    const allH3 = document.querySelectorAll('.excalidraw-wrapper h3')
+    for (const h3 of allH3) {
+      if (h3.textContent && h3.textContent.includes('Excalidraw')) {
+        // Remove the heading itself
+        h3.remove()
+      }
+    }
+
+    // 3. Also catch "Follow us", "Discord chat" text - remove their parent containers
+    const wrapper = document.querySelector('.excalidraw-wrapper')
+    if (wrapper) {
+      walker: for (const el of wrapper.querySelectorAll('*')) {
+        const text = el.textContent?.trim() || ''
+        if ((text === 'Follow us' || text === 'Discord chat' || text === 'GitHub') &&
+            el.children.length === 0) {
+          // Walk up to find the clickable row container and remove it
+          let parent = el.parentElement
+          for (let i = 0; i < 5 && parent; i++) {
+            // Look for a container that looks like a menu item row
+            if (parent.tagName === 'DIV' || parent.tagName === 'A') {
+              const pt = parent.textContent?.trim() || ''
+              if ((pt.includes('GitHub') || pt.includes('Follow us') || pt.includes('Discord')) &&
+                  !pt.includes('Save to') && !pt.includes('Find on') &&
+                  !pt.includes('Help') && !pt.includes('Reset')) {
+                parent.remove()
+                continue walker
+              }
+            }
+            parent = parent.parentElement
+          }
+        }
+      }
+    }
+
+    // 4. Clean up orphaned "Canvas background" heading separators if needed
+    // (no-op — keep Canvas background)
+  }
+
+  // Run immediately
+  removeLinks()
+
+  // Run on every DOM change (menu open/close renders new elements)
+  const observer = new MutationObserver(() => {
+    removeLinks()
+  })
+  const target = document.querySelector('.excalidraw-wrapper')
+  if (target) {
+    observer.observe(target, { childList: true, subtree: true })
+  }
+
+  // Belt-and-suspenders: run every 500ms for first 10 seconds (catches lazy-rendered menus)
+  let ticks = 0
+  const interval = setInterval(() => {
+    removeLinks()
+    ticks++
+    if (ticks > 20) clearInterval(interval)
+  }, 500)
+
+  return () => {
+    observer.disconnect()
+    clearInterval(interval)
+  }
 }
 
 export default function ExcalidrawEditor({
@@ -63,17 +121,76 @@ export default function ExcalidrawEditor({
   const [exporting, setExporting] = useState(false)
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
 
-  // Inject custom styles on mount
+  // Remove Excalidraw branding links via JS DOM removal
   useEffect(() => {
-    injectExcalidrawStyles()
+    const cleanup = setupLinkRemover()
+    return cleanup
   }, [])
 
   // Initialize API ref
   const onExcalidrawAPIReady = useCallback((api: any) => {
     excalidrawRef.current = api
-    // Expose API to window for debugging
     if (typeof window !== "undefined") (window as any).__excalidrawAPI = api
   }, [])
+
+  // ── Load & inject libraries from our own localStorage key ──
+  const injectLibraries = useCallback(async (api: any) => {
+    try {
+      const raw = localStorage.getItem("craftisle-imported-libs")
+      if (!raw) return
+      const files: string[] = JSON.parse(raw)
+      if (!files || files.length === 0) return
+
+      const allItems: any[][] = []
+      for (const file of files) {
+        try {
+          const res = await fetch(`/libraries/${file}`)
+          if (!res.ok) continue
+          const data = await res.json()
+          const items = data?.libraryItems
+          if (Array.isArray(items)) {
+            for (const item of items) {
+              if (item?.elements && Array.isArray(item.elements)) {
+                allItems.push(item.elements)
+              }
+            }
+          } else if (data?.library && Array.isArray(data.library)) {
+            allItems.push(...data.library)
+          }
+        } catch { /* skip */ }
+      }
+
+      if (allItems.length > 0 && api?.updateLibrary) {
+        console.log(`[lib] Injecting ${allItems.length} library items into Excalidraw via updateLibrary()`)
+        await api.updateLibrary({
+          libraryItems: allItems,
+          merge: true,
+          defaultStatus: "published",
+          openLibraryMenu: true,
+        })
+      }
+    } catch (err) {
+      console.error("[lib] Failed to inject libraries:", err)
+    }
+  }, [])
+
+  // When API is ready, inject libraries
+  useEffect(() => {
+    if (excalidrawRef.current) {
+      injectLibraries(excalidrawRef.current)
+    }
+  }, [excalidrawRef.current, injectLibraries])
+
+  // Also listen for custom event when user imports new lib without refresh
+  useEffect(() => {
+    const handler = () => {
+      if (excalidrawRef.current) {
+        injectLibraries(excalidrawRef.current)
+      }
+    }
+    window.addEventListener("craftisle-library-changed", handler)
+    return () => window.removeEventListener("craftisle-library-changed", handler)
+  }, [excalidrawRef.current, injectLibraries])
 
   // Generate thumbnail: export PNG → resize to 240x180 → base64
   const generateThumbnail = useCallback(async (): Promise<string | null> => {
@@ -83,7 +200,6 @@ export default function ExcalidrawEditor({
     }
     try {
       const elements = excalidrawRef.current.getSceneElements()
-      // Don't generate thumbnail if canvas is empty
       if (!elements || elements.length === 0) {
         console.log("[thumb] no elements, skipping")
         return null
@@ -92,7 +208,6 @@ export default function ExcalidrawEditor({
       const files = excalidrawRef.current.getFiles()
       console.log("[thumb] starting exportToBlob, elements:", elements.length)
 
-      // exportToBlob is a standalone import from @excalidraw/excalidraw, NOT an API method
       let blob: Blob | null = null
       try {
         blob = await exportToBlob({
@@ -124,7 +239,6 @@ export default function ExcalidrawEditor({
 
       console.log("[thumb] exportToBlob success, blob size:", blob.size, "type:", blob.type)
 
-      // Resize to 240x180 using Canvas
       const img = new Image()
       const url = URL.createObjectURL(blob)
       await new Promise<void>((resolve, reject) => {
@@ -143,10 +257,8 @@ export default function ExcalidrawEditor({
       canvas.width = 240
       canvas.height = 180
       const ctx = canvas.getContext("2d")
-      // Fill white background
       ctx!.fillStyle = "#ffffff"
       ctx!.fillRect(0, 0, 240, 180)
-      // Draw image centered with contain fit
       const scale = Math.min(240 / img.width, 180 / img.height)
       const w = img.width * scale
       const h = img.height * scale
@@ -161,16 +273,13 @@ export default function ExcalidrawEditor({
           0.7,
         )
       })
-      console.log("[thumb] resized blob size:", resizedBlob.size)
 
-      // Convert to base64
       const reader = new FileReader()
       const base64: string = await new Promise((resolve, reject) => {
         reader.onload = () => resolve(reader.result as string)
         reader.onerror = reject
         reader.readAsDataURL(resizedBlob)
       })
-      console.log("[thumb] done, base64 length:", base64.length)
       return base64
     } catch (err) {
       console.error("[thumb] generation failed:", err)
@@ -186,7 +295,6 @@ export default function ExcalidrawEditor({
       setSaveStatus("saving")
       saveTimerRef.current = setTimeout(async () => {
         try {
-          // Generate thumbnail in background
           const thumbnail = await generateThumbnail()
           await onSave([...elements], { ...appState }, { thumbnail: thumbnail ?? undefined })
           setSaveStatus("saved")
@@ -212,15 +320,11 @@ export default function ExcalidrawEditor({
   // Export handler: PNG / SVG / JSON
   useEffect(() => {
     const handler = (e: any) => {
-      const { format, boardId } = e.detail
+      const { format, boardId: bid } = e.detail
       if (!excalidrawRef.current) return
-      if (format === "png") {
-        exportPNG()
-      } else if (format === "svg") {
-        exportSVG()
-      } else if (format === "json") {
-        exportJSON(boardId)
-      }
+      if (format === "png") exportPNG()
+      else if (format === "svg") exportSVG()
+      else if (format === "json") exportJSON(bid)
     }
     window.addEventListener("craftisle-export", handler as any)
     return () => window.removeEventListener("craftisle-export", handler as any)
@@ -249,7 +353,7 @@ export default function ExcalidrawEditor({
   }, [boardId])
 
   // Export as JSON (raw data)
-  const exportJSON = useCallback((boardId: string) => {
+  const exportJSON = useCallback((bid: string) => {
     if (!excalidrawRef.current) return
     const data = {
       elements: excalidrawRef.current.getSceneElements(),
@@ -259,10 +363,10 @@ export default function ExcalidrawEditor({
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `board-${boardId}.excalidraw`
+    a.download = `board-${bid}.excalidraw`
     a.click()
     URL.revokeObjectURL(url)
-  }, [boardId])
+  }, [])
 
   // Export as PNG (client-side)
   const exportPNG = useCallback(async () => {

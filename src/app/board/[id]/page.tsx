@@ -1,9 +1,17 @@
+import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
 import BoardClient from "@/components/BoardClient"
 import { getBoard, createBoard, resolveUserId } from "@/lib/boards"
 
 export const dynamic = "force-dynamic"
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+}
 
 export default async function BoardPage({ params, searchParams }: {
   params: Promise<{ id: string }>

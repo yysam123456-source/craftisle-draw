@@ -2,94 +2,1198 @@
   "version": 1,
   "libraries": [
     {
+      "file": "azure-compute.excalidrawlib",
+      "name": "Azure Compute",
+      "desc": "Azure compute services icons",
+      "category": "cloud"
+    },
+    {
+      "file": "azure-network.excalidrawlib",
+      "name": "Azure Network",
+      "desc": "Azure network icons",
+      "category": "cloud"
+    },
+    {
+      "file": "azure-storage.excalidrawlib",
+      "name": "Azure Storage",
+      "desc": "Azure storage icons",
+      "category": "cloud"
+    },
+    {
       "file": "architecture.excalidrawlib",
       "name": "Architecture Components",
-      "desc": "软件架构常用组件：微服务、数据库、缓存、消息队列等",
+      "desc": "Software architecture components",
       "category": "architecture"
     },
     {
-      "file": "UML-ER-library.excalidrawlib",
-      "name": "UML & ER 图表",
-      "desc": "UML 活动图、ER 图常用形状",
-      "category": "diagram"
-    },
-    {
-      "file": "random-figure-drawings.excalidrawlib",
-      "name": "手绘人物",
-      "desc": "各种手绘风格的人物形象",
-      "category": "figure"
-    },
-    {
-      "file": "3d-shapes.excalidrawlib",
-      "name": "3D 形状",
-      "desc": "立体感的 3D 几何形状",
-      "category": "shape"
-    },
-    {
       "file": "architecture-diagram-components.excalidrawlib",
-      "name": "架构图组件",
-      "desc": "架构图专用组件集合",
+      "name": "Architecture Diagram Components",
+      "desc": "Architecture diagram building blocks",
       "category": "architecture"
     },
     {
       "file": "systems-design-components.excalidrawlib",
-      "name": "系统设计组件",
-      "desc": "系统设计常用组件",
-      "category": "architecture"
-    },
-    {
-      "file": "decision-flow-control.excalidrawlib",
-      "name": "流程判断控件",
-      "desc": "Yes/No 条件判断框，适用于流程图",
-      "category": "flowchart"
-    },
-    {
-      "file": "customer-journey-map.excalidrawlib",
-      "name": "用户旅程地图",
-      "desc": "客户旅程地图模板",
-      "category": "template"
-    },
-    {
-      "file": "hexagonal-architecture.excalidrawlib",
-      "name": "六边形架构",
-      "desc": "Hexagonal/Ports & Adapters 架构图组件",
+      "name": "Systems Design Components",
+      "desc": "System design building blocks",
       "category": "architecture"
     },
     {
       "file": "c4-architecture.excalidrawlib",
-      "name": "C4 架构图",
-      "desc": "Simon Brown 的 C4 模型架构图元素",
+      "name": "C4 Architecture",
+      "desc": "C4 model architecture diagrams",
       "category": "architecture"
     },
     {
+      "file": "hexagonal-architecture.excalidrawlib",
+      "name": "Hexagonal Architecture",
+      "desc": "Ports and adapters architecture",
+      "category": "architecture"
+    },
+    {
+      "file": "domain-driven-design.excalidrawlib",
+      "name": "Domain Driven Design",
+      "desc": "DDD building blocks",
+      "category": "architecture"
+    },
+    {
+      "file": "aws-architecture-icons.excalidrawlib",
+      "name": "AWS Architecture Icons",
+      "desc": "AWS service icons",
+      "category": "cloud"
+    },
+    {
+      "file": "gcp-icons.excalidrawlib",
+      "name": "GCP Icons",
+      "desc": "Google Cloud Platform icons",
+      "category": "cloud"
+    },
+    {
+      "file": "microsoft-azure-cloud-icons.excalidrawlib",
+      "name": "Azure Cloud Icons",
+      "desc": "Microsoft Azure icons",
+      "category": "cloud"
+    },
+    {
+      "file": "kubernetes-icons-set.excalidrawlib",
+      "name": "Kubernetes Icons",
+      "desc": "K8s resource icons",
+      "category": "cloud"
+    },
+    {
+      "file": "kubernetes-icons.excalidrawlib",
+      "name": "Kubernetes Icons Alt",
+      "desc": "Alternative K8s icons",
+      "category": "cloud"
+    },
+    {
+      "file": "cloud-design-patterns.excalidrawlib",
+      "name": "Cloud Design Patterns",
+      "desc": "Cloud architecture patterns",
+      "category": "architecture"
+    },
+    {
+      "file": "azure-cloud-services.excalidrawlib",
+      "name": "Azure Cloud Services",
+      "desc": "Azure service icons",
+      "category": "cloud"
+    },
+    {
+      "file": "software-architecture.excalidrawlib",
+      "name": "Software Architecture",
+      "desc": "General software architecture",
+      "category": "architecture"
+    },
+    {
+      "file": "aws-serverless.excalidrawlib",
+      "name": "AWS Serverless",
+      "desc": "AWS serverless icons",
+      "category": "cloud"
+    },
+    {
+      "file": "aws-serverless-icons-v2.excalidrawlib",
+      "name": "AWS Serverless v2",
+      "desc": "Updated AWS serverless icons",
+      "category": "cloud"
+    },
+    {
+      "file": "aws-simple-icons.excalidrawlib",
+      "name": "AWS Simple Icons",
+      "desc": "Simplified AWS icons",
+      "category": "cloud"
+    },
+    {
+      "file": "aws-architecture-icons.excalidrawlib",
+      "name": "AWS Architecture Icons v2",
+      "desc": "AWS architecture icons v2",
+      "category": "cloud"
+    },
+    {
+      "file": "microsoft-fabric-architecture-icons.excalidrawlib",
+      "name": "Fabric Architecture Icons",
+      "desc": "Microsoft Fabric icons",
+      "category": "cloud"
+    },
+    {
+      "file": "vmware-architecture-design.excalidrawlib",
+      "name": "VMware Architecture",
+      "desc": "VMware design elements",
+      "category": "cloud"
+    },
+    {
+      "file": "nsx-t-vmware.excalidrawlib",
+      "name": "NSX-T VMware",
+      "desc": "VMware NSX-T icons",
+      "category": "cloud"
+    },
+    {
+      "file": "oracle-cloud-infrastructure-icons.excalidrawlib",
+      "name": "Oracle Cloud Icons",
+      "desc": "OCI icons",
+      "category": "cloud"
+    },
+    {
+      "file": "red-hat.excalidrawlib",
+      "name": "Red Hat Icons",
+      "desc": "Red Hat product icons",
+      "category": "cloud"
+    },
+    {
       "file": "mobile-kit.excalidrawlib",
-      "name": "移动端 UI Kit",
-      "desc": "常用移动端界面组件",
+      "name": "Mobile Kit",
+      "desc": "Mobile UI components",
       "category": "ui"
     },
     {
       "file": "web-kit.excalidrawlib",
-      "name": "Web UI Kit",
-      "desc": "常用 Web 界面组件",
+      "name": "Web Kit",
+      "desc": "Web UI components",
       "category": "ui"
     },
     {
+      "file": "basic-ux-wireframing-elements.excalidrawlib",
+      "name": "UX Wireframing Elements",
+      "desc": "Basic UX wireframe elements",
+      "category": "ui"
+    },
+    {
+      "file": "universal-ui-kit.excalidrawlib",
+      "name": "Universal UI Kit",
+      "desc": "Universal UI components",
+      "category": "ui"
+    },
+    {
+      "file": "lo-fi-wireframing-kit.excalidrawlib",
+      "name": "Lo-Fi Wireframing Kit",
+      "desc": "Low fidelity wireframes",
+      "category": "ui"
+    },
+    {
+      "file": "wireframing-placeholders.excalidrawlib",
+      "name": "Wireframing Placeholders",
+      "desc": "Placeholder UI elements",
+      "category": "ui"
+    },
+    {
+      "file": "ecommerce-mobile-ui.excalidrawlib",
+      "name": "Ecommerce Mobile UI",
+      "desc": "Mobile ecommerce UI",
+      "category": "ui"
+    },
+    {
+      "file": "webpage-frames.excalidrawlib",
+      "name": "Webpage Frames",
+      "desc": "Web page layout frames",
+      "category": "ui"
+    },
+    {
+      "file": "html-input-elements.excalidrawlib",
+      "name": "HTML Input Elements",
+      "desc": "HTML form elements",
+      "category": "ui"
+    },
+    {
+      "file": "football-icons.excalidrawlib",
+      "name": "Football Icons",
+      "desc": "Football/soccer icons",
+      "category": "ui"
+    },
+    {
+      "file": "bpmn.excalidrawlib",
+      "name": "BPMN",
+      "desc": "Business Process Model notation",
+      "category": "diagram"
+    },
+    {
+      "file": "decision-flow-control.excalidrawlib",
+      "name": "Decision Flow Control",
+      "desc": "Yes/No decision elements",
+      "category": "flowchart"
+    },
+    {
+      "file": "flow-chart-symbols.excalidrawlib",
+      "name": "Flow Chart Symbols",
+      "desc": "Standard flowchart symbols",
+      "category": "flowchart"
+    },
+    {
+      "file": "UML-ER-library.excalidrawlib",
+      "name": "UML & ER Library",
+      "desc": "UML and ER diagram elements",
+      "category": "diagram"
+    },
+    {
+      "file": "scrum-board.excalidrawlib",
+      "name": "Scrum Board",
+      "desc": "Scrum board elements",
+      "category": "template"
+    },
+    {
+      "file": "enterprise-integration-patterns.excalidrawlib",
+      "name": "Integration Patterns",
+      "desc": "Enterprise integration patterns",
+      "category": "diagram"
+    },
+    {
+      "file": "event-storming.excalidrawlib",
+      "name": "Event Storming",
+      "desc": "Event storming notation",
+      "category": "diagram"
+    },
+    {
+      "file": "team-topologies.excalidrawlib",
+      "name": "Team Topologies",
+      "desc": "Team topology mapping",
+      "category": "diagram"
+    },
+    {
+      "file": "wardley-mapping-canvas.excalidrawlib",
+      "name": "Wardley Mapping",
+      "desc": "Wardley map canvas",
+      "category": "diagram"
+    },
+    {
+      "file": "wardley-maps-symbols.excalidrawlib",
+      "name": "Wardley Map Symbols",
+      "desc": "Wardley map symbols",
+      "category": "diagram"
+    },
+    {
+      "file": "basic-shapes.excalidrawlib",
+      "name": "Basic Shapes",
+      "desc": "Essential geometric shapes",
+      "category": "shape"
+    },
+    {
+      "file": "3d-shapes.excalidrawlib",
+      "name": "3D Shapes",
+      "desc": "3D geometric shapes",
+      "category": "shape"
+    },
+    {
+      "file": "polygons.excalidrawlib",
+      "name": "Polygons",
+      "desc": "Polygon shapes",
+      "category": "shape"
+    },
+    {
+      "file": "stars.excalidrawlib",
+      "name": "Stars",
+      "desc": "Star shapes",
+      "category": "shape"
+    },
+    {
+      "file": "bubbles.excalidrawlib",
+      "name": "Bubbles",
+      "desc": "Speech and thought bubbles",
+      "category": "shape"
+    },
+    {
+      "file": "banners.excalidrawlib",
+      "name": "Banners",
+      "desc": "Decorative banners",
+      "category": "shape"
+    },
+    {
+      "file": "an-adjustable-arrow-shape-that-can-be-modified-in-a-number-of-ways-to-suit-different-use-cases.excalidrawlib",
+      "name": "Adjustable Arrow",
+      "desc": "Customizable arrow shape",
+      "category": "shape"
+    },
+    {
       "file": "post-it.excalidrawlib",
-      "name": "便利贴",
-      "desc": "各种颜色的便利贴，适用于设计思考",
+      "name": "Post-it Notes",
+      "desc": "Sticky notes in colors",
+      "category": "general"
+    },
+    {
+      "file": "simple-sticky-notes.excalidrawlib",
+      "name": "Simple Sticky Notes",
+      "desc": "Minimal sticky notes",
       "category": "general"
     },
     {
       "file": "gantt.excalidrawlib",
-      "name": "甘特图",
-      "desc": "项目规划甘特图模板",
+      "name": "Gantt Chart",
+      "desc": "Project Gantt chart",
       "category": "template"
     },
     {
-      "file": "basic-ux-wireframing-elements.excalidrawlib",
-      "name": "UX 线框图元素",
-      "desc": "按钮、输入框、下拉菜单等 UX 线框图基础元素",
+      "file": "customer-journey-map.excalidrawlib",
+      "name": "Customer Journey Map",
+      "desc": "Customer journey mapping",
+      "category": "template"
+    },
+    {
+      "file": "presentation-templates.excalidrawlib",
+      "name": "Presentation Templates",
+      "desc": "Slide presentation templates",
+      "category": "template"
+    },
+    {
+      "file": "data-viz.excalidrawlib",
+      "name": "Data Viz",
+      "desc": "Data visualization elements",
+      "category": "chart"
+    },
+    {
+      "file": "2022-gantt.excalidrawlib",
+      "name": "Gantt 2022",
+      "desc": "Updated Gantt chart",
+      "category": "template"
+    },
+    {
+      "file": "technology-logos.excalidrawlib",
+      "name": "Technology Logos",
+      "desc": "Tech company logos",
+      "category": "icon"
+    },
+    {
+      "file": "it-logos.excalidrawlib",
+      "name": "IT Logos",
+      "desc": "IT company logos",
+      "category": "icon"
+    },
+    {
+      "file": "it-logos.excalidrawlib",
+      "name": "IT Logos Alt",
+      "desc": "Alternative IT logos",
+      "category": "icon"
+    },
+    {
+      "file": "it-tools-logos.excalidrawlib",
+      "name": "IT Tools Logos",
+      "desc": "IT tool logos",
+      "category": "icon"
+    },
+    {
+      "file": "google-icons.excalidrawlib",
+      "name": "Google Icons",
+      "desc": "Google product icons",
+      "category": "icon"
+    },
+    {
+      "file": "github-icons.excalidrawlib",
+      "name": "GitHub Icons",
+      "desc": "GitHub related icons",
+      "category": "icon"
+    },
+    {
+      "file": "github-actions.excalidrawlib",
+      "name": "GitHub Actions",
+      "desc": "GitHub Actions icons",
+      "category": "icon"
+    },
+    {
+      "file": "it-icons.excalidrawlib",
+      "name": "IT Icons",
+      "desc": "IT infrastructure icons",
+      "category": "icon"
+    },
+    {
+      "file": "icons.excalidrawlib",
+      "name": "Generic Icons",
+      "desc": "General purpose icons",
+      "category": "icon"
+    },
+    {
+      "file": "system-icons.excalidrawlib",
+      "name": "System Icons",
+      "desc": "System UI icons",
+      "category": "icon"
+    },
+    {
+      "file": "code-essentials.excalidrawlib",
+      "name": "Code Essentials",
+      "desc": "Code notation elements",
+      "category": "icon"
+    },
+    {
+      "file": "go-icons.excalidrawlib",
+      "name": "Go Icons",
+      "desc": "Go programming icons",
+      "category": "icon"
+    },
+    {
+      "file": "hashicorp.excalidrawlib",
+      "name": "HashiCorp",
+      "desc": "HashiCorp product icons",
+      "category": "icon"
+    },
+    {
+      "file": "elixir.excalidrawlib",
+      "name": "Elixir",
+      "desc": "Elixir language icons",
+      "category": "icon"
+    },
+    {
+      "file": "stick-figures.excalidrawlib",
+      "name": "Stick Figures",
+      "desc": "Hand-drawn stick figures",
+      "category": "figure"
+    },
+    {
+      "file": "random-figure-drawings.excalidrawlib",
+      "name": "Random Figure Drawings",
+      "desc": "Hand-drawn characters",
+      "category": "figure"
+    },
+    {
+      "file": "stick-people.excalidrawlib",
+      "name": "Stick People",
+      "desc": "Stick figure people",
+      "category": "figure"
+    },
+    {
+      "file": "stick-figures-collaboration.excalidrawlib",
+      "name": "Stick Figures Collaboration",
+      "desc": "Collaboration stick figures",
+      "category": "figure"
+    },
+    {
+      "file": "character-kit-1.excalidrawlib",
+      "name": "Character Kit 1",
+      "desc": "Character design elements",
+      "category": "figure"
+    },
+    {
+      "file": "female-heads-diverse.excalidrawlib",
+      "name": "Female Heads Diverse",
+      "desc": "Diverse female portraits",
+      "category": "figure"
+    },
+    {
+      "file": "male-heads-diverse-1.excalidrawlib",
+      "name": "Male Heads Diverse",
+      "desc": "Diverse male portraits",
+      "category": "figure"
+    },
+    {
+      "file": "simple-characters.excalidrawlib",
+      "name": "Simple Characters",
+      "desc": "Simple character drawings",
+      "category": "figure"
+    },
+    {
+      "file": "charts.excalidrawlib",
+      "name": "Charts",
+      "desc": "Chart elements",
+      "category": "chart"
+    },
+    {
+      "file": "graphs.excalidrawlib",
+      "name": "Graphs",
+      "desc": "Graph diagram elements",
+      "category": "chart"
+    },
+    {
+      "file": "macroeconomics.excalidrawlib",
+      "name": "Macroeconomics",
+      "desc": "Economics diagram elements",
+      "category": "chart"
+    },
+    {
+      "file": "data-vault.excalidrawlib",
+      "name": "Data Vault",
+      "desc": "Data vault modeling",
+      "category": "diagram"
+    },
+    {
+      "file": "data-science.excalidrawlib",
+      "name": "Data Science",
+      "desc": "Data science elements",
+      "category": "chart"
+    },
+    {
+      "file": "data-processing.excalidrawlib",
+      "name": "Data Processing",
+      "desc": "Data pipeline elements",
+      "category": "diagram"
+    },
+    {
+      "file": "network-elements.excalidrawlib",
+      "name": "Network Elements",
+      "desc": "Network diagram elements",
+      "category": "network"
+    },
+    {
+      "file": "network-topology-icons.excalidrawlib",
+      "name": "Network Topology Icons",
+      "desc": "Network topology icons",
+      "category": "network"
+    },
+    {
+      "file": "network-locations.excalidrawlib",
+      "name": "Network Locations",
+      "desc": "Network location icons",
+      "category": "network"
+    },
+    {
+      "file": "db-eng.excalidrawlib",
+      "name": "DB Engineering",
+      "desc": "Database engineering elements",
+      "category": "database"
+    },
+    {
+      "file": "some-common-cloud-apps.excalidrawlib",
+      "name": "Common Cloud Apps",
+      "desc": "Popular cloud app icons",
+      "category": "cloud"
+    },
+    {
+      "file": "internet-service-providers.excalidrawlib",
+      "name": "ISP Icons",
+      "desc": "Internet provider icons",
+      "category": "network"
+    },
+    {
+      "file": "fair-web-icons.excalidrawlib",
+      "name": "Fair Web Icons",
+      "desc": "Web service icons",
+      "category": "icon"
+    },
+    {
+      "file": "front-end-tech-and-tools.excalidrawlib",
+      "name": "Frontend Tech",
+      "desc": "Frontend tools icons",
+      "category": "icon"
+    },
+    {
+      "file": "html-css-js-icons.excalidrawlib",
+      "name": "HTML CSS JS Icons",
+      "desc": "Web dev icons",
+      "category": "icon"
+    },
+    {
+      "file": "dart-and-flutter-icons.excalidrawlib",
+      "name": "Dart & Flutter Icons",
+      "desc": "Flutter/Dart icons",
+      "category": "icon"
+    },
+    {
+      "file": "comms-platform-icons.excalidrawlib",
+      "name": "Comms Platform Icons",
+      "desc": "Communication platform icons",
+      "category": "icon"
+    },
+    {
+      "file": "emojis.excalidrawlib",
+      "name": "Emojis",
+      "desc": "Hand-drawn emojis",
+      "category": "fun"
+    },
+    {
+      "file": "chess-set.excalidrawlib",
+      "name": "Chess Set",
+      "desc": "Chess pieces",
+      "category": "fun"
+    },
+    {
+      "file": "playing-cards.excalidrawlib",
+      "name": "Playing Cards",
+      "desc": "Playing card suits",
+      "category": "fun"
+    },
+    {
+      "file": "music-instruments.excalidrawlib",
+      "name": "Music Instruments",
+      "desc": "Musical instruments",
+      "category": "fun"
+    },
+    {
+      "file": "synths-and-fx.excalidrawlib",
+      "name": "Synths & FX",
+      "desc": "Synthesizer and FX icons",
+      "category": "fun"
+    },
+    {
+      "file": "artem-s-icons.excalidrawlib",
+      "name": "Artem's Icons",
+      "desc": "Custom icon set",
+      "category": "icon"
+    },
+    {
+      "file": "apple-devices-frames.excalidrawlib",
+      "name": "Apple Devices Frames",
+      "desc": "iPhone/iPad frames",
       "category": "ui"
+    },
+    {
+      "file": "common-screen-resolutions.excalidrawlib",
+      "name": "Screen Resolutions",
+      "desc": "Device screen sizes",
+      "category": "ui"
+    },
+    {
+      "file": "desktop-resolutions.excalidrawlib",
+      "name": "Desktop Resolutions",
+      "desc": "Desktop screen resolutions",
+      "category": "ui"
+    },
+    {
+      "file": "bullet-journal-trackers.excalidrawlib",
+      "name": "Bullet Journal Trackers",
+      "desc": "Journal tracker elements",
+      "category": "template"
+    },
+    {
+      "file": "periodic-table.excalidrawlib",
+      "name": "Periodic Table",
+      "desc": "Chemical elements",
+      "category": "science"
+    },
+    {
+      "file": "tools.excalidrawlib",
+      "name": "Tools",
+      "desc": "Tool icons",
+      "category": "icon"
+    },
+    {
+      "file": "body-builder-kit-1.excalidrawlib",
+      "name": "Body Builder Kit",
+      "desc": "Body builder elements",
+      "category": "figure"
+    },
+    {
+      "file": "robots.excalidrawlib",
+      "name": "Robots",
+      "desc": "Robot drawings",
+      "category": "fun"
+    },
+    {
+      "file": "maps.excalidrawlib",
+      "name": "Maps",
+      "desc": "Map elements",
+      "category": "general"
+    },
+    {
+      "file": "clocks.excalidrawlib",
+      "name": "Clocks",
+      "desc": "Clock drawings",
+      "category": "general"
+    },
+    {
+      "file": "despair.excalidrawlib",
+      "name": "Despair",
+      "desc": "Expressive faces",
+      "category": "fun"
+    },
+    {
+      "file": "hearts.excalidrawlib",
+      "name": "Hearts",
+      "desc": "Heart shapes",
+      "category": "shape"
+    },
+    {
+      "file": "checkmarks.excalidrawlib",
+      "name": "Checkmarks",
+      "desc": "Checkmark variations",
+      "category": "general"
+    },
+    {
+      "file": "some-handdrawn-signs.excalidrawlib",
+      "name": "Handdrawn Signs",
+      "desc": "Hand-drawn sign elements",
+      "category": "fun"
+    },
+    {
+      "file": "dropdowns.excalidrawlib",
+      "name": "Dropdowns",
+      "desc": "Dropdown UI elements",
+      "category": "ui"
+    },
+    {
+      "file": "forms.excalidrawlib",
+      "name": "Forms",
+      "desc": "Form UI elements",
+      "category": "ui"
+    },
+    {
+      "file": "medias.excalidrawlib",
+      "name": "Medias",
+      "desc": "Media player elements",
+      "category": "ui"
+    },
+    {
+      "file": "micro.excalidrawlib",
+      "name": "Micro",
+      "desc": "Tiny UI elements",
+      "category": "ui"
+    },
+    {
+      "file": "logic-gates.excalidrawlib",
+      "name": "Logic Gates",
+      "desc": "Digital logic gates",
+      "category": "engineering"
+    },
+    {
+      "file": "music-notation.excalidrawlib",
+      "name": "Music Notation",
+      "desc": "Music score elements",
+      "category": "science"
+    },
+    {
+      "file": "montessori-basic-grammar-symbols.excalidrawlib",
+      "name": "Grammar Symbols",
+      "desc": "Montessori grammar symbols",
+      "category": "education"
+    },
+    {
+      "file": "3d-coordinate-systems-graphs.excalidrawlib",
+      "name": "3D Coordinate Graphs",
+      "desc": "3D coordinate system",
+      "category": "science"
+    },
+    {
+      "file": "elk-stack.excalidrawlib",
+      "name": "ELK Stack",
+      "desc": "Elastic stack icons",
+      "category": "cloud"
+    },
+    {
+      "file": "3d-shapes.excalidrawlib",
+      "name": "3D Shapes Alt",
+      "desc": "3D shapes alternative",
+      "category": "shape"
+    },
+    {
+      "file": "system-design-template.excalidrawlib",
+      "name": "System Design Template",
+      "desc": "System design templates",
+      "category": "architecture"
+    },
+    {
+      "file": "cloud.excalidrawlib",
+      "name": "Cloud",
+      "desc": "Cloud shapes",
+      "category": "shape"
+    },
+    {
+      "file": "mq.excalidrawlib",
+      "name": "MQ",
+      "desc": "Message queue icons",
+      "category": "architecture"
+    },
+    {
+      "file": "astronomical-symbols.excalidrawlib",
+      "name": "Astronomical Symbols",
+      "desc": "Space/astronomy symbols",
+      "category": "science"
+    },
+    {
+      "file": "barotrauma.excalidrawlib",
+      "name": "Barotrauma",
+      "desc": "Game-related elements",
+      "category": "fun"
+    },
+    {
+      "file": "common-screen-resolutions.excalidrawlib",
+      "name": "Common Screen Resolutions",
+      "desc": "Screen resolution references",
+      "category": "ui"
+    },
+    {
+      "file": "drwnio.excalidrawlib",
+      "name": "Drwnio",
+      "desc": "Drwnio product icons",
+      "category": "icon"
+    },
+    {
+      "file": "storytelling.excalidrawlib",
+      "name": "Storytelling",
+      "desc": "Storytelling elements",
+      "category": "template"
+    },
+    {
+      "file": "risk-based-test-strategy.excalidrawlib",
+      "name": "Risk Based Test Strategy",
+      "desc": "Testing strategy elements",
+      "category": "diagram"
+    },
+    {
+      "file": "computers.excalidrawlib",
+      "name": "Computers",
+      "desc": "Computer drawings",
+      "category": "general"
+    },
+    {
+      "file": "science-chemistry-gcse.excalidrawlib",
+      "name": "Chemistry GCSE",
+      "desc": "Chemistry diagram elements",
+      "category": "science"
+    },
+    {
+      "file": "logos.excalidrawlib",
+      "name": "Logos",
+      "desc": "Company logos",
+      "category": "icon"
+    },
+    {
+      "file": "retail-peripherals.excalidrawlib",
+      "name": "Retail Peripherals",
+      "desc": "Retail device icons",
+      "category": "icon"
+    },
+    {
+      "file": "nextflow-seqera-nf-core.excalidrawlib",
+      "name": "Nextflow & nf-core",
+      "desc": "Bioinformatics pipeline icons",
+      "category": "science"
+    },
+    {
+      "file": "data-science.excalidrawlib",
+      "name": "Data Science Alt",
+      "desc": "Data science elements alt",
+      "category": "chart"
+    },
+    {
+      "file": "fibre-network.excalidrawlib",
+      "name": "Fibre Network",
+      "desc": "Network fibre elements",
+      "category": "network"
+    },
+    {
+      "file": "stick-figures-collaboration.excalidrawlib",
+      "name": "Stick Figures Collab",
+      "desc": "Collaboration stick figures",
+      "category": "figure"
+    },
+    {
+      "file": "golang-gophers.excalidrawlib",
+      "name": "Golang Gophers",
+      "desc": "Go gopher drawings",
+      "category": "fun"
+    },
+    {
+      "file": "kafka-streams-topology-design.excalidrawlib",
+      "name": "Kafka Streams Topology",
+      "desc": "Kafka topology design",
+      "category": "architecture"
+    },
+    {
+      "file": "web3-crypto-solution-design-v1.excalidrawlib",
+      "name": "Web3 Crypto Design",
+      "desc": "Web3/crypto design elements",
+      "category": "icon"
+    },
+    {
+      "file": "cyberark.excalidrawlib",
+      "name": "CyberArk",
+      "desc": "CyberArk product icons",
+      "category": "icon"
+    },
+    {
+      "file": "algorithms-and-data-structures-arrays-matrices-trees.excalidrawlib",
+      "name": "Algorithms & Data Structures",
+      "desc": "CS algorithm elements",
+      "category": "education"
+    },
+    {
+      "file": "information-architecture.excalidrawlib",
+      "name": "Information Architecture",
+      "desc": "IA diagram elements",
+      "category": "diagram"
+    },
+    {
+      "file": "camunda-platform-icons.excalidrawlib",
+      "name": "Camunda Platform Icons",
+      "desc": "Camunda BPM icons",
+      "category": "icon"
+    },
+    {
+      "file": "arduino-micro.excalidrawlib",
+      "name": "Arduino Micro",
+      "desc": "Arduino board drawings",
+      "category": "engineering"
+    },
+    {
+      "file": "atlassian-product-suite.excalidrawlib",
+      "name": "Atlassian Product Suite",
+      "desc": "Atlassian tool icons",
+      "category": "icon"
+    },
+    {
+      "file": "veeam.excalidrawlib",
+      "name": "Veeam",
+      "desc": "Veeam product icons",
+      "category": "icon"
+    },
+    {
+      "file": "traffic-signs.excalidrawlib",
+      "name": "Traffic Signs",
+      "desc": "Road traffic signs",
+      "category": "general"
+    },
+    {
+      "file": "r.excalidrawlib",
+      "name": "R Language",
+      "desc": "R programming elements",
+      "category": "icon"
+    },
+    {
+      "file": "picasso-s-line-drawings.excalidrawlib",
+      "name": "Picasso Line Drawings",
+      "desc": "Artistic line drawings",
+      "category": "fun"
+    },
+    {
+      "file": "genealogy-essentials.excalidrawlib",
+      "name": "Genealogy Essentials",
+      "desc": "Family tree elements",
+      "category": "template"
+    },
+    {
+      "file": "piping-and-instrumentation-diagram-p-id.excalidrawlib",
+      "name": "P&ID",
+      "desc": "Piping and instrumentation",
+      "category": "engineering"
+    },
+    {
+      "file": "printers.excalidrawlib",
+      "name": "Printers",
+      "desc": "Printer drawings",
+      "category": "general"
+    },
+    {
+      "file": "data-sources.excalidrawlib",
+      "name": "Data Sources",
+      "desc": "Data source icons",
+      "category": "database"
+    },
+    {
+      "file": "secure_shell.excalidrawlib",
+      "name": "Secure Shell",
+      "desc": "SSH/terminal elements",
+      "category": "icon"
+    },
+    {
+      "file": "music-instruments.excalidrawlib",
+      "name": "Music Instruments Alt",
+      "desc": "Musical instruments alt",
+      "category": "fun"
+    },
+    {
+      "file": "office-items.excalidrawlib",
+      "name": "Office Items",
+      "desc": "Office supply drawings",
+      "category": "general"
+    },
+    {
+      "file": "front-end-tech-and-tools.excalidrawlib",
+      "name": "Frontend Tech Tools",
+      "desc": "Frontend tool icons",
+      "category": "icon"
+    },
+    {
+      "file": "raspberrypi-zero.excalidrawlib",
+      "name": "Raspberry Pi Zero",
+      "desc": "RPi Zero drawings",
+      "category": "engineering"
+    },
+    {
+      "file": "cloud-design-patterns.excalidrawlib",
+      "name": "Cloud Design Patterns Alt",
+      "desc": "Cloud architecture patterns",
+      "category": "architecture"
+    },
+    {
+      "file": "redis-grafana.excalidrawlib",
+      "name": "Redis Grafana",
+      "desc": "Redis and Grafana icons",
+      "category": "database"
+    },
+    {
+      "file": "types-and-values-in-javascript.excalidrawlib",
+      "name": "JS Types & Values",
+      "desc": "JavaScript types reference",
+      "category": "education"
+    },
+    {
+      "file": "gadgets.excalidrawlib",
+      "name": "Gadgets",
+      "desc": "Gadget drawings",
+      "category": "general"
+    },
+    {
+      "file": "circuit-components.excalidrawlib",
+      "name": "Circuit Components",
+      "desc": "Electronic circuit elements",
+      "category": "engineering"
+    },
+    {
+      "file": "dnd-ttrpg-battle-map-creature-tokens.excalidrawlib",
+      "name": "D&D Creature Tokens",
+      "desc": "D&D battle map tokens",
+      "category": "fun"
+    },
+    {
+      "file": "cryptocurrencies.excalidrawlib",
+      "name": "Cryptocurrencies",
+      "desc": "Crypto coin icons",
+      "category": "icon"
+    },
+    {
+      "file": "systemdesignicons.excalidrawlib",
+      "name": "System Design Icons",
+      "desc": "System design icons",
+      "category": "architecture"
+    },
+    {
+      "file": "bubbles.excalidrawlib",
+      "name": "Bubbles Alt",
+      "desc": "Speech bubbles alternative",
+      "category": "shape"
+    },
+    {
+      "file": "basic-system-design.excalidrawlib",
+      "name": "Basic System Design",
+      "desc": "Basic system design elements",
+      "category": "architecture"
+    },
+    {
+      "file": "raspberrypi3.excalidrawlib",
+      "name": "Raspberry Pi 3",
+      "desc": "RPi 3 drawings",
+      "category": "engineering"
+    },
+    {
+      "file": "electrical-engineering.excalidrawlib",
+      "name": "Electrical Engineering",
+      "desc": "EE diagram elements",
+      "category": "engineering"
+    },
+    {
+      "file": "arduino-boards.excalidrawlib",
+      "name": "Arduino Boards",
+      "desc": "Arduino board drawings",
+      "category": "engineering"
+    },
+    {
+      "file": "schematic-symbols.excalidrawlib",
+      "name": "Schematic Symbols",
+      "desc": "Circuit schematic symbols",
+      "category": "engineering"
+    },
+    {
+      "file": "digital-signal-processing.excalidrawlib",
+      "name": "DSP",
+      "desc": "Digital signal processing",
+      "category": "engineering"
+    },
+    {
+      "file": "computer-parts.excalidrawlib",
+      "name": "Computer Parts",
+      "desc": "Computer component drawings",
+      "category": "general"
+    },
+    {
+      "file": "system-design.excalidrawlib",
+      "name": "System Design",
+      "desc": "System design elements",
+      "category": "architecture"
+    },
+    {
+      "file": "canvases.excalidrawlib",
+      "name": "Canvases",
+      "desc": "Canvas board templates",
+      "category": "template"
+    },
+    {
+      "file": "biology.excalidrawlib",
+      "name": "Biology",
+      "desc": "Biology diagram elements",
+      "category": "science"
+    },
+    {
+      "file": "wardley-maps-symbols.excalidrawlib",
+      "name": "Wardley Map Symbols Alt",
+      "desc": "Wardley map symbols",
+      "category": "diagram"
+    },
+    {
+      "file": "pathology.excalidrawlib",
+      "name": "Pathology",
+      "desc": "Medical pathology elements",
+      "category": "science"
+    },
+    {
+      "file": "medicine.excalidrawlib",
+      "name": "Medicine",
+      "desc": "Medical elements",
+      "category": "science"
+    },
+    {
+      "file": "make-your-calendar.excalidrawlib",
+      "name": "Calendar",
+      "desc": "Calendar template",
+      "category": "template"
+    },
+    {
+      "file": "Logic-Gates.excalidrawlib",
+      "name": "Logic Gates Alt",
+      "desc": "Digital logic gates",
+      "category": "engineering"
+    },
+    {
+      "file": "snowflake.excalidrawlib",
+      "name": "Snowflake",
+      "desc": "Snowflake data cloud icons",
+      "category": "cloud"
+    },
+    {
+      "file": "organic-chemistry-basics.excalidrawlib",
+      "name": "Organic Chemistry Basics",
+      "desc": "Chemistry diagram elements",
+      "category": "science"
+    },
+    {
+      "file": "microsoft-365-icons.excalidrawlib",
+      "name": "Microsoft 365 Icons",
+      "desc": "M365 product icons",
+      "category": "icon"
+    },
+    {
+      "file": "data-flow.excalidrawlib",
+      "name": "Data Flow",
+      "desc": "Data flow diagram elements",
+      "category": "diagram"
+    },
+    {
+      "file": "icons.excalidrawlib",
+      "name": "Icons",
+      "desc": "General icons",
+      "category": "icon"
+    },
+    {
+      "file": "system-icons.excalidrawlib",
+      "name": "System Icons Alt",
+      "desc": "System icons alternative",
+      "category": "icon"
+    },
+    {
+      "file": "deep-learning.excalidrawlib",
+      "name": "Deep Learning",
+      "desc": "DL diagram elements",
+      "category": "diagram"
     }
   ]
 }

@@ -16,7 +16,6 @@ interface BoardClientProps {
 // Clean appState: remove runtime-only fields that break Excalidraw
 function cleanAppState(appState: any): any {
   if (!appState || typeof appState !== "object") return appState
-  // Remove fields that are not meant to be persisted and cause errors
   const {
     collaborators,
     activeTool,
@@ -89,7 +88,6 @@ export default function BoardClient({
     const newTitle = editTitleValue.trim() || "Untitled Board"
     setTitle(newTitle)
     setIsEditingTitle(false)
-    // Save title to backend (pass as opts.title)
     handleSave([] as any[], {} as any, { title: newTitle })
   }
 
@@ -116,7 +114,6 @@ export default function BoardClient({
   }
 
   const handleExport = (format: "svg" | "json") => {
-    // Dispatch custom event to ExcalidrawEditor
     window.dispatchEvent(
       new CustomEvent("craftisle-export", { detail: { format, boardId } })
     )

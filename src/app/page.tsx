@@ -20,7 +20,14 @@ export default async function HomePage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">My Boards</h1>
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">My Boards</h1>
+        <p className="mt-2 text-gray-600">
+          Create and manage your whiteboards. 
+          <a href="/board/new" className="text-blue-600 hover:underline">Create a new board</a> or 
+          <a href="https://craftisle.com" className="text-blue-600 hover:underline">learn more about Craftisle</a>.
+        </p>
+      </header>
 
       {session?.user ? (
         <Suspense fallback={<div className="text-center py-12">Loading...</div>}>

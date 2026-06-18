@@ -8,11 +8,11 @@ type WindowWithGtag = Window & {
   gtag: (...args: any[]) => void
 }
 
-export default function GoogleAnalytics({ measurementId }: { measurementId: string }) {
-  const pathname = usePathname()
+export default function GoogleAnalytics() {
+  const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
   useEffect(() => {
-    if (!measurementId) return
+    if (!measurementId || measurementId === 'G-XXXXXXXX') return
 
     const w = window as unknown as WindowWithGtag
 
@@ -38,6 +38,7 @@ export default function GoogleAnalytics({ measurementId }: { measurementId: stri
   // Track page views on route change
   useEffect(() => {
     const w = window as unknown as WindowWithGtag
+    const pathname = usePathname()
     if (pathname && w.gtag) {
       w.gtag('config', measurementId, {
         page_path: pathname,
@@ -45,7 +46,7 @@ export default function GoogleAnalytics({ measurementId }: { measurementId: stri
         page_location: window.location.href,
       })
     }
-  }, [pathname, measurementId])
+  }, [measurementId])
 
   return null
 }

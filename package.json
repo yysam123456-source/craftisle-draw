@@ -15,6 +15,7 @@
     "@excalidraw/excalidraw": "0.18.1",
     "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
+    "canvas": "^3.2.3",
     "next": "^16.1.0-canary.19",
     "next-auth": "^5.0.0-beta.31",
     "react": "^18.3.0",

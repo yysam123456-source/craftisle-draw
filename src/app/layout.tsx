@@ -79,9 +79,12 @@ export const metadata: Metadata = {
     },
   },
   other: {
-    "google-site-verification": "PLACEHOLDER_VERIFICATION_CODE",
-    "msvalidate.01": "BING_VERIFICATION_CODE",
-    "yandex-verification": "YANDEX_VERIFICATION_CODE",
+    "google-site-verification": process.env.GOOGLE_SITE_VERIFICATION || "PLACEHOLDER_VERIFICATION_CODE",
+    "msvalidate.01": process.env.BING_SITE_VERIFICATION || "BING_VERIFICATION_CODE",
+    "yandex-verification": process.env.YANDEX_SITE_VERIFICATION || "YANDEX_VERIFICATION_CODE",
+  },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || "PLACEHOLDER_VERIFICATION_CODE",
   },
 }
 
@@ -211,8 +214,8 @@ export default function RootLayout({
           Skip to main content
         </a>
         <SessionProvider>
-          {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-            <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+          {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID !== 'G-XXXXXXXX' && (
+            <GoogleAnalytics />
           )}
           <Navbar />
           <main id="main-content" className="min-h-screen bg-gray-50">

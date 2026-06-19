@@ -14,11 +14,13 @@ export const metadata: Metadata = {
 }
 
 export default async function BoardPage({ params, searchParams }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string; locale: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
+  let locale = "en"
   try {
-    const { id } = await params
+    const { id, locale: loc } = await params
+    locale = loc
     const sp = await searchParams
     const isTest = sp?.test === "1"
 
@@ -29,7 +31,7 @@ export default async function BoardPage({ params, searchParams }: {
       const session = await auth()
       const user = session?.user
       if (!user) {
-        redirect("/api/auth/signin?callbackUrl=" + encodeURIComponent("/board/" + id))
+        redirect(`/${locale}/api/auth/signin?callbackUrl=` + encodeURIComponent(`/${locale}/board/${id}`))
       }
       userId = user.id!
     }
@@ -39,7 +41,7 @@ export default async function BoardPage({ params, searchParams }: {
     if (!isTest && id === "new") {
       const newBoard = await createBoard(resolvedUserId)
       if (newBoard?.id) {
-        redirect("/board/" + newBoard.id)
+        redirect(`/${locale}/board/` + newBoard.id)
       }
       throw new Error("createBoard returned empty result")
     }
@@ -52,6 +54,7 @@ export default async function BoardPage({ params, searchParams }: {
     return (
       <BoardClient
         boardId={board.id}
+        locale={locale}
         initialTitle={board.title || "Untitled Board"}
         initialElements={board.elements || []}
         initialAppState={board.appState || { viewBackgroundColor: "#ffffff" }}
@@ -66,8 +69,8 @@ export default async function BoardPage({ params, searchParams }: {
         <h1 style={{ color: "#e53e3e", fontSize: 24, marginBottom: 16 }}>服务器错误</h1>
         <p style={{ color: "#a0aec0", fontSize: 14 }}>{topErr?.message || "未知错误"}</p>
         <div style={{ marginTop: 20, display: "flex", gap: 12 }}>
-          <a href="/board/new" style={{ padding: "10px 20px", background: "#4299e1", color: "white", borderRadius: 6, textDecoration: "none" }}>重试</a>
-          <a href="/" style={{ padding: "10px 20px", background: "#e2e8f0", color: "#2d3748", borderRadius: 6, textDecoration: "none" }}>首页</a>
+          <a href={`/${locale}/board/new`} style={{ padding: "10px 20px", background: "#4299e1", color: "white", borderRadius: 6, textDecoration: "none" }}>重试</a>
+          <a href={`/${locale}`} style={{ padding: "10px 20px", background: "#e2e8f0", color: "#2d3748", borderRadius: 6, textDecoration: "none" }}>首页</a>
         </div>
       </div>
     )

@@ -3,10 +3,19 @@
 import { useState, useCallback, useEffect } from "react"
 import ExcalidrawEditor from "@/components/ExcalidrawEditor"
 import LibrariesModal from "@/components/LibrariesModal"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
+import Link from "next/link"
+import { locales, type Locale } from "@/i18n/request"
+
+const languageNames: Record<string, string> = {
+  en: "EN", zh: "中", "zh-TW": "繁", es: "ES", ja: "日",
+  de: "DE", fr: "FR", pt: "PT", ru: "RU", ko: "한", ar: "ع",
+  it: "IT", tr: "TR", id: "ID", vi: "VI", ro: "RO",
+}
 
 interface BoardClientProps {
   boardId: string
+  locale?: string
   initialElements?: any[]
   initialAppState?: any
   initialTitle?: string
@@ -30,12 +39,14 @@ function cleanAppState(appState: any): any {
 
 export default function BoardClient({
   boardId,
+  locale = "en",
   initialElements = [],
   initialAppState = {},
   initialTitle = "Untitled Board",
   readOnly = false,
 }: BoardClientProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const [title, setTitle] = useState(initialTitle)
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [editTitleValue, setEditTitleValue] = useState("")
@@ -43,6 +54,10 @@ export default function BoardClient({
   const [isPublic, setIsPublic] = useState(false)
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
   const [showLibrariesModal, setShowLibrariesModal] = useState(false)
+  const [langOpen, setLangOpen] = useState(false)
+
+  // Strip locale prefix from pathname for language switching
+  const basePath = pathname.replace(`/${locale}`, "") || ""
 
   // Fetch current board info (for isPublic)
   useEffect(() => {
@@ -122,17 +137,51 @@ export default function BoardClient({
   return (
     <div style={{ width: "100vw", height: "100vh" }} className="flex flex-col overflow-hidden">
       {/* Top bar - FIXED position, always on top, never covered by Excalidraw */}
-      <div style={{ zIndex: 99999, position: 'fixed', top: 0, left: 0, right: 0, height: 48 }} className="border-b border-gray-200 flex items-center px-4 bg-white">
+      <div style={{ zIndex: 99999, position: 'fixed', top: 0, left: 0, right: 0, height: 48 }} className="border-b border-gray-200 flex items-center px-3 bg-white">
         {/* Back button */}
         <button
-          onClick={() => router.push("/")}
-          className="text-gray-500 hover:text-gray-800 mr-3"
+          onClick={() => router.push(`/${locale}`)}
+          className="text-gray-500 hover:text-gray-800 mr-1 flex-shrink-0"
           title="Back to My Boards"
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M15 10H5M5 10L10 15M5 10L10 5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
+
+        {/* Language Switcher - compact */}
+        <div className="relative mr-2 flex-shrink-0">
+          <button
+            onClick={(e) => { e.stopPropagation(); setLangOpen(!langOpen) }}
+            onBlur={() => setTimeout(() => setLangOpen(false), 200)}
+            className="flex items-center gap-1 px-1.5 py-0.5 text-[11px] font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition"
+            title={`Language: ${locale}`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/>
+            </svg>
+            <span>{languageNames[locale] || "EN"}</span>
+            <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {langOpen && (
+            <div className="absolute left-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl py-1 z-[100000] min-w-[140px] max-h-[300px] overflow-y-auto">
+              {locales.map((loc) => (
+                <Link
+                  key={loc}
+                  href={`/${loc}${basePath}`}
+                  className={`block px-3 py-1 text-xs hover:bg-blue-50 transition whitespace-nowrap ${
+                    loc === locale ? "text-blue-600 font-semibold bg-blue-50" : "text-gray-700"
+                  }`}
+                  onClick={() => setLangOpen(false)}
+                >
+                  {languageNames[loc]} — {loc}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Title */}
         <div className="flex-1 flex items-center">

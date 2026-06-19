@@ -1,31 +1,33 @@
-import type { Metadata } from "next"
-import { Suspense } from "react"
-import { getTranslations } from "next-intl/server"
-import BoardList from "@/components/BoardList"
-import { auth } from "@/auth"
-import Script from "next/script"
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
+import BoardList from "@/components/BoardList";
+import { auth } from "@/auth";
+import Script from "next/script";
 
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: 'seo' })
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'seo' });
   
   return {
     title: t('title'),
     description: t('description'),
     keywords: t('keywords').split(', '),
-  }
+  };
 }
 
-export default async function HomePage({ params }: { params: { locale: string } }) {
-  let session = null
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  let session = null;
   try {
-    session = await auth()
+    session = await auth();
   } catch {
     // JWT validation failed (e.g. cross-subdomain cookie mismatch)
     // Silently show logged-out state
   }
 
-  const t = await getTranslations({ locale: params.locale, namespace: 'home' })
-  const tNav = await getTranslations({ locale: params.locale, namespace: 'nav' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'home' });
+  const tNav = await getTranslations({ locale, namespace: 'nav' });
   
   const faqs = [
     {
@@ -48,7 +50,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
       question: t('faq.secure'),
       answer: t('faq.secureAnswer'),
     },
-  ]
+  ];
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -61,7 +63,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
         text: faq.answer,
       },
     })),
-  }
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -69,11 +71,11 @@ export default async function HomePage({ params }: { params: { locale: string } 
         <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
         <p className="mt-2 text-gray-600">
           {t('description')}{' '}
-          <a href={`/${params.locale}/board/new`} className="text-blue-600 hover:underline">{tNav('newBoard')}</a> {t('or')}{' '}
+          <a href={`/${locale}/board/new`} className="text-blue-600 hover:underline">{tNav('newBoard')}</a> {t('or')}{' '}
           <a href="https://craftisle.com" className="text-blue-600 hover:underline" rel="noopener noreferrer" target="_blank">{t('learnMore')}</a>.
         </p>
       </header>
-
+      
       {session?.user ? (
         <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
           <BoardList userId={session.user.id!} />
@@ -81,12 +83,12 @@ export default async function HomePage({ params }: { params: { locale: string } 
       ) : (
         <div className="text-center py-24 text-gray-500">
           <p className="text-xl mb-4">{t('pleaseSignIn')}</p>
-          <a href={`/${params.locale}/api/auth/signin`} className="text-blue-600 hover:underline">
+          <a href={`/${locale}/api/auth/signin`} className="text-blue-600 hover:underline">
             {tNav('signIn')}
           </a>
         </div>
       )}
-
+      
       {/* FAQ Section */}
       <section className="mt-16 pt-16 border-t border-gray-200" aria-labelledby="faq-heading">
         <h2 id="faq-heading" className="text-2xl font-bold text-gray-900 mb-8">{t('faqTitle')}</h2>
@@ -101,7 +103,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
           ))}
         </div>
       </section>
-
+      
       {/* JSON-LD for FAQ */}
       <Script
         id="faq-json-ld"
@@ -110,5 +112,5 @@ export default async function HomePage({ params }: { params: { locale: string } 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
     </div>
-  )
+  );
 }

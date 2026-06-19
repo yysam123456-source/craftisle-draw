@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SessionProvider } from "next-auth/react";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
 
@@ -48,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
-  const messages = await getMessages();
+  const messages = (await import(`../../../messages/${locale}.json`)).default;
   
   return (
     <NextIntlClientProvider messages={messages}>

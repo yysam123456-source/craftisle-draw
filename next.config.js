@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
+const withNextIntl = require('next-intl/plugin');
+
 const nextConfig = {
   transpilePackages: ["@excalidraw/excalidraw"],
   images: {
-    domains: ["craftisle.com", "localhost"],
     remotePatterns: [
       {
         protocol: 'https',
@@ -83,10 +84,8 @@ const nextConfig = {
         destination: '/board/new',
         permanent: true,
       },
-      // Note: Removed trailing slash redirect (caused infinite redirect loop)
-      // Next.js handles trailing slashes natively via 'trailingSlash' config
     ]
   },
 }
 
-module.exports = nextConfig
+module.exports = withNextIntl('./src/i18n/request.ts')(nextConfig)

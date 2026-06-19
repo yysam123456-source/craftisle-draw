@@ -7,6 +7,32 @@ import {
 } from "@excalidraw/excalidraw"
 import "@excalidraw/excalidraw/index.css"
 
+/**
+ * Map craftisle locale codes to Excalidraw's native langCode format.
+ * Excalidraw 0.18.x supports 55 built-in languages via @excalidraw/excalidraw/dist/prod/locales/
+ */
+export function toExcLangCode(locale: string): string {
+  const map: Record<string, string> = {
+    en: "en",
+    zh: "zh-CN",
+    "zh-TW": "zh-TW",
+    ja: "ja-JP",
+    es: "es-ES",
+    de: "de-DE",
+    fr: "fr-FR",
+    pt: "pt-BR",
+    ru: "ru-RU",
+    ko: "ko-KR",
+    ar: "ar-SA",
+    it: "it-IT",
+    tr: "tr-TR",
+    id: "id-ID",
+    vi: "vi-VN",
+    ro: "ro-RO",
+  }
+  return map[locale] || "en"
+}
+
 interface ExcalidrawEditorProps {
   boardId: string
   initialData?: {
@@ -14,6 +40,7 @@ interface ExcalidrawEditorProps {
     appState?: any
   }
   readOnly?: boolean
+  langCode?: string
   onSave?: (elements: any[], appState: any, opts?: { thumbnail?: string }) => void
 }
 
@@ -114,6 +141,7 @@ export default function ExcalidrawEditor({
   boardId,
   initialData,
   readOnly = false,
+  langCode = "en",
   onSave,
 }: ExcalidrawEditorProps) {
   const excalidrawRef = useRef<any>(null)
@@ -403,6 +431,7 @@ export default function ExcalidrawEditor({
           zenModeEnabled={false}
           gridModeEnabled={true}
           theme="light"
+          langCode={langCode}
           UIOptions={{
             canvasActions: {
               changeViewBackgroundColor: true,

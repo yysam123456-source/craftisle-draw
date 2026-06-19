@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useEffect } from "react"
-import ExcalidrawEditor from "@/components/ExcalidrawEditor"
+import ExcalidrawEditor, { toExcLangCode } from "@/components/ExcalidrawEditor"
 import LibrariesModal from "@/components/LibrariesModal"
 import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
@@ -73,76 +73,8 @@ export default function BoardClient({
       .catch(() => {})
   }, [boardId, readOnly])
 
-  // Excalidraw built-in UI text replacement after render
-  useEffect(() => {
-    const replaceExcalidrawText = () => {
-      const wrapper = document.querySelector('.excalidraw-wrapper')
-      if (!wrapper) return
-
-      const replacements: [string, string][] = [
-        ["Save to...", t("excSaveTo")],
-        ["Find on canvas", t("excFindOnCanvas")],
-        ["Help", t("excHelp")],
-        ["Reset the canvas", t("excResetCanvas")],
-        ["Canvas background", t("excCanvasBackground")],
-        ["Personal Library", t("excPersonalLibrary")],
-        ["Excalidraw Library", t("excExcalidrawLibrary")],
-        ["No items added yet...", t("excNoItemsAdded")],
-        ["Select an item on canvas to add it here.", t("excNoItemsDesc")],
-      ]
-
-      const walker = document.createTreeWalker(wrapper, NodeFilter.SHOW_TEXT, null)
-      const textNodes: Node[] = []
-      while (walker.nextNode()) {
-        if (walker.currentNode.textContent?.trim()) {
-          textNodes.push(walker.currentNode)
-        }
-      }
-
-      for (const node of textNodes) {
-        const text = node.textContent?.trim() || ""
-        for (const [from, to] of replacements) {
-          if (text === from && from !== to) {
-            node.textContent = to
-            break
-          }
-        }
-      }
-
-      // Also replace placeholder-like headings
-      wrapper.querySelectorAll('h3').forEach(el => {
-        for (const [from, to] of replacements) {
-          if (el.textContent?.trim() === from && from !== to) {
-            el.textContent = to
-          }
-        }
-      })
-
-      // Replace labels in the left menu
-      wrapper.querySelectorAll('.layer-ui__menu-header').forEach(el => {
-        for (const [from, to] of replacements) {
-          if (el.textContent?.includes(from) && from !== to) {
-            el.textContent = el.textContent!.replace(from, to)
-          }
-        }
-      })
-    }
-
-    // Run immediately and then after Excalidraw renders menus
-    setTimeout(replaceExcalidrawText, 1000)
-
-    // Re-run when menus open/close (MutationObserver catches new DOM)
-    const observer = new MutationObserver(() => {
-      setTimeout(replaceExcalidrawText, 200)
-    })
-
-    setTimeout(() => {
-      const target = document.querySelector('.excalidraw-wrapper')
-      if (target) observer.observe(target, { childList: true, subtree: true })
-    }, 1500)
-
-    return () => observer.disconnect()
-  }, [locale])
+  // Excalidraw native i18n: langCode is passed directly to <Excalidraw> component
+  // via toExcLangCode() mapping — no DOM hack needed.
 
   const handleSave = useCallback(
     async (elements: any[], appState: any, opts?: { thumbnail?: string; title?: string }) => {
@@ -374,6 +306,7 @@ export default function BoardClient({
             appState: cleanAppState(initialAppState),
           }}
           readOnly={readOnly}
+          langCode={toExcLangCode(locale)}
           onSave={(elements, appState, opts) => handleSave(elements, appState, opts)}
         />
       </div>

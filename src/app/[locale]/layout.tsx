@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SessionProvider } from "next-auth/react";
 import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "@/i18n/messages";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +15,9 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  
-  // Dynamically import translation file
-  const messages = await import(`../../../messages/${locale}.json`).then(m => m.default);
+
+  // Use static import map (dynamic import() breaks for hyphenated locales like zh-TW)
+  const messages = getMessages(locale);
   
   return {
     title: messages.seo.title,
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
-  const messages = (await import(`../../../messages/${locale}.json`)).default;
+  const messages = getMessages(locale);
   
   return (
     <NextIntlClientProvider messages={messages}>

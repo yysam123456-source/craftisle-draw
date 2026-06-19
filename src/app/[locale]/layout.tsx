@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { SessionProvider } from "next-auth/react";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "@/i18n/messages";
+import { AdSlot } from "@/components/ads/AdSlot";
 
 export const dynamic = "force-dynamic";
 
@@ -54,9 +55,21 @@ export default async function LocaleLayout({ children, params }: Props) {
     <NextIntlClientProvider messages={messages}>
       <SessionProvider>
         <Navbar locale={locale} />
+        {/* Top ad - below Navbar */}
+        {process.env.NEXT_PUBLIC_ADSENSE_CLIENT && (
+          <section className="flex justify-center py-2">
+            <AdSlot slotId="draw-top-banner" size="leaderboard" />
+          </section>
+        )}
         <main id="main-content" className="min-h-screen bg-gray-50">
           {children}
         </main>
+        {/* Bottom ad - above Footer */}
+        {process.env.NEXT_PUBLIC_ADSENSE_CLIENT && (
+          <section className="flex justify-center py-4">
+            <AdSlot slotId="draw-bottom-banner" size="leaderboard" />
+          </section>
+        )}
         <Footer locale={locale} />
       </SessionProvider>
     </NextIntlClientProvider>

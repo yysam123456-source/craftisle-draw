@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 
 interface LibraryItem {
   file: string
@@ -17,9 +18,11 @@ interface Manifest {
 interface LibrariesModalProps {
   open: boolean
   onClose: () => void
+  locale?: string
 }
 
-export default function LibrariesModal({ open, onClose }: LibrariesModalProps) {
+export default function LibrariesModal({ open, onClose, locale = "en" }: LibrariesModalProps) {
+  const t = useTranslations("board")
   const [libraries, setLibraries] = useState<LibraryItem[]>([])
   const [importing, setImporting] = useState<string | null>(null)
   const [doneMsg, setDoneMsg] = useState("")
@@ -58,7 +61,7 @@ export default function LibrariesModal({ open, onClose }: LibrariesModalProps) {
       }
 
       if (rawItems.length === 0) {
-        setDoneMsg(`⚠️ "${lib.name}" contains no items.`)
+        setDoneMsg(`⚠️ "${lib.name}" ${t("importNoItems")}`)
         setImporting(null)
         return
       }
@@ -79,36 +82,36 @@ export default function LibrariesModal({ open, onClose }: LibrariesModalProps) {
       // 3. Notify ExcalidrawEditor to re-inject libraries via API (no page refresh needed!)
       window.dispatchEvent(new Event("craftisle-library-changed"))
 
-      setDoneMsg(`✅ "${lib.name}" imported! ${itemCount} items. Check the Library panel on the right — items should appear immediately.`)
+      setDoneMsg(`✅ "${lib.name}" ${t("importSuccess")}`)
     } catch (err: any) {
-      setDoneMsg(`❌ Import failed: ${err?.message || "Unknown error"}`)
+      setDoneMsg(`❌ ${t("importFailed")} ${err?.message || "Unknown error"}`)
     } finally {
       setImporting(null)
     }
-  }, [])
+  }, [t])
 
   if (!open) return null
 
   const categories = [...new Set(libraries.map(l => l.category))]
 
-  const categoryLabels: Record<string, string> = {
-    architecture: "Architecture",
-    cloud: "Cloud",
-    diagram: "Diagrams",
-    ui: "UI Kit",
-    flowchart: "Flowcharts",
-    template: "Templates",
-    shape: "Shapes",
-    figure: "Figures",
-    icon: "Icons",
-    chart: "Charts",
-    network: "Network",
-    database: "Database",
-    engineering: "Engineering",
-    science: "Science",
-    education: "Education",
-    fun: "Fun",
-    general: "General",
+  // Get translated category label
+  const getCategoryLabel = (cat: string): string => {
+    // Try to get from translations first
+    const key = `categories.${cat}` as any
+    try {
+      const translated = t(key)
+      if (translated && translated !== key && translated !== cat) return translated
+    } catch {}
+    // Fallback to English defaults
+    const fallbacks: Record<string, string> = {
+      architecture: "Architecture", cloud: "Cloud", diagram: "Diagrams",
+      ui: "UI Kit", flowchart: "Flowcharts", template: "Templates",
+      shape: "Shapes", figure: "Figures", icon: "Icons",
+      chart: "Charts", network: "Network", database: "Database",
+      engineering: "Engineering", science: "Science", education: "Education",
+      fun: "Fun", general: "General",
+    }
+    return fallbacks[cat] || cat
   }
 
   return (
@@ -138,12 +141,12 @@ export default function LibrariesModal({ open, onClose }: LibrariesModalProps) {
         onClick={e => e.stopPropagation()}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <h2 style={{ margin: 0, fontSize: 20 }}>Public Libraries</h2>
+          <h2 style={{ margin: 0, fontSize: 20 }}>{t("publicLibraries")}</h2>
           <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 22, cursor: "pointer" }}>&times;</button>
         </div>
 
         <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 16 }}>
-          Community libraries from Excalidraw Community. Click Import to add to your Library panel.
+          {t("librariesDesc")}
         </p>
 
         {doneMsg && (
@@ -160,13 +163,13 @@ export default function LibrariesModal({ open, onClose }: LibrariesModalProps) {
         )}
 
         {categories.length === 0 && (
-          <p style={{ color: "#9ca3af", fontSize: 14 }}>Loading libraries...</p>
+          <p style={{ color: "#9ca3af", fontSize: 14 }}>{t("loadingLibraries")}</p>
         )}
 
         {categories.map(cat => (
           <div key={cat} style={{ marginBottom: 20 }}>
             <h3 style={{ fontSize: 13, color: "#6b7280", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8, fontWeight: 600 }}>
-              {categoryLabels[cat] || cat}
+              {getCategoryLabel(cat)}
             </h3>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
               {libraries.filter(l => l.category === cat).map(lib => {
@@ -195,7 +198,7 @@ export default function LibrariesModal({ open, onClose }: LibrariesModalProps) {
                         cursor: isImported ? "default" : importing !== null ? "default" : "pointer",
                       }}
                     >
-                      {isImported ? "Imported" : importing === lib.file ? "Importing..." : "Import"}
+                      {isImported ? t("imported") : importing === lib.file ? t("importing") : t("import")}
                     </button>
                   </div>
                 )

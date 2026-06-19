@@ -5,6 +5,7 @@ import ExcalidrawEditor from "@/components/ExcalidrawEditor"
 import LibrariesModal from "@/components/LibrariesModal"
 import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { locales, type Locale } from "@/i18n/request"
 
 const languageNames: Record<string, string> = {
@@ -47,6 +48,7 @@ export default function BoardClient({
 }: BoardClientProps) {
   const router = useRouter()
   const pathname = usePathname()
+  const t = useTranslations("board")
   const [title, setTitle] = useState(initialTitle)
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [editTitleValue, setEditTitleValue] = useState("")
@@ -70,6 +72,77 @@ export default function BoardClient({
       })
       .catch(() => {})
   }, [boardId, readOnly])
+
+  // Excalidraw built-in UI text replacement after render
+  useEffect(() => {
+    const replaceExcalidrawText = () => {
+      const wrapper = document.querySelector('.excalidraw-wrapper')
+      if (!wrapper) return
+
+      const replacements: [string, string][] = [
+        ["Save to...", t("excSaveTo")],
+        ["Find on canvas", t("excFindOnCanvas")],
+        ["Help", t("excHelp")],
+        ["Reset the canvas", t("excResetCanvas")],
+        ["Canvas background", t("excCanvasBackground")],
+        ["Personal Library", t("excPersonalLibrary")],
+        ["Excalidraw Library", t("excExcalidrawLibrary")],
+        ["No items added yet...", t("excNoItemsAdded")],
+        ["Select an item on canvas to add it here.", t("excNoItemsDesc")],
+      ]
+
+      const walker = document.createTreeWalker(wrapper, NodeFilter.SHOW_TEXT, null)
+      const textNodes: Node[] = []
+      while (walker.nextNode()) {
+        if (walker.currentNode.textContent?.trim()) {
+          textNodes.push(walker.currentNode)
+        }
+      }
+
+      for (const node of textNodes) {
+        const text = node.textContent?.trim() || ""
+        for (const [from, to] of replacements) {
+          if (text === from && from !== to) {
+            node.textContent = to
+            break
+          }
+        }
+      }
+
+      // Also replace placeholder-like headings
+      wrapper.querySelectorAll('h3').forEach(el => {
+        for (const [from, to] of replacements) {
+          if (el.textContent?.trim() === from && from !== to) {
+            el.textContent = to
+          }
+        }
+      })
+
+      // Replace labels in the left menu
+      wrapper.querySelectorAll('.layer-ui__menu-header').forEach(el => {
+        for (const [from, to] of replacements) {
+          if (el.textContent?.includes(from) && from !== to) {
+            el.textContent = el.textContent!.replace(from, to)
+          }
+        }
+      })
+    }
+
+    // Run immediately and then after Excalidraw renders menus
+    setTimeout(replaceExcalidrawText, 1000)
+
+    // Re-run when menus open/close (MutationObserver catches new DOM)
+    const observer = new MutationObserver(() => {
+      setTimeout(replaceExcalidrawText, 200)
+    })
+
+    setTimeout(() => {
+      const target = document.querySelector('.excalidraw-wrapper')
+      if (target) observer.observe(target, { childList: true, subtree: true })
+    }, 1500)
+
+    return () => observer.disconnect()
+  }, [locale])
 
   const handleSave = useCallback(
     async (elements: any[], appState: any, opts?: { thumbnail?: string; title?: string }) => {
@@ -100,7 +173,7 @@ export default function BoardClient({
   )
 
   const handleTitleSave = async () => {
-    const newTitle = editTitleValue.trim() || "Untitled Board"
+    const newTitle = editTitleValue.trim() || t("untitledBoard")
     setTitle(newTitle)
     setIsEditingTitle(false)
     handleSave([] as any[], {} as any, { title: newTitle })
@@ -124,7 +197,7 @@ export default function BoardClient({
   const handleCopyLink = () => {
     const url = `${window.location.origin}/share/${boardId}`
     navigator.clipboard.writeText(url)
-    alert("Share link copied to clipboard!")
+    alert(t("linkCopied"))
     setShowShareMenu(false)
   }
 
@@ -132,6 +205,12 @@ export default function BoardClient({
     window.dispatchEvent(
       new CustomEvent("craftisle-export", { detail: { format, boardId } })
     )
+  }
+
+  const saveLabels: Record<string, string> = {
+    saving: t("saving"),
+    saved: t("saved"),
+    error: t("saveFailed"),
   }
 
   return (
@@ -142,7 +221,7 @@ export default function BoardClient({
         <button
           onClick={() => router.push(`/${locale}`)}
           className="text-gray-500 hover:text-gray-800 mr-1 flex-shrink-0"
-          title="Back to My Boards"
+          title={t("backToBoards")}
         >
           <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M15 10H5M5 10L10 15M5 10L10 5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -222,9 +301,7 @@ export default function BoardClient({
                 : "bg-red-100 text-red-700"
             }`}
           >
-            {saveStatus === "saving" && "Saving..."}
-            {saveStatus === "saved" && "Saved"}
-            {saveStatus === "error" && "Save failed"}
+            {saveLabels[saveStatus]}
           </span>
         )}
 
@@ -234,11 +311,11 @@ export default function BoardClient({
             onClick={() => setShowShareMenu(!showShareMenu)}
             className="text-xs px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50"
           >
-            Share
+            {t("share")}
           </button>
           {showShareMenu && (
             <div className="absolute top-full right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50">
-              <p className="text-sm font-semibold mb-3">Share Settings</p>
+              <p className="text-sm font-semibold mb-3">{t("shareSettings")}</p>
               <label className="flex items-center gap-2 text-sm mb-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -246,14 +323,14 @@ export default function BoardClient({
                   onChange={handleTogglePublic}
                   className="rounded"
                 />
-                Public (anyone with the link can view)
+                {t("publicLabel")}
               </label>
               {isPublic && (
                 <button
                   onClick={handleCopyLink}
                   className="w-full text-sm bg-blue-50 text-blue-700 py-1.5 rounded hover:bg-blue-100 transition mb-2"
                 >
-                  Copy Share Link
+                  {t("copyShareLink")}
                 </button>
               )}
               <a
@@ -261,13 +338,13 @@ export default function BoardClient({
                 target="_blank"
                 className="block text-center text-sm text-blue-600 hover:underline mb-2"
               >
-                Open share page
+                {t("openSharePage")}
               </a>
               <button
                 onClick={() => setShowShareMenu(false)}
                 className="w-full text-xs text-gray-400 hover:underline"
               >
-                Close
+                {t("close")}
               </button>
             </div>
           )}
@@ -275,16 +352,16 @@ export default function BoardClient({
 
         {/* Export dropdown */}
         <div className="relative mr-2">
-          <ExportDropdown boardId={boardId} />
+          <ExportDropdown boardId={boardId} locale={locale} t={t} />
         </div>
 
         {/* Libraries button */}
         <button
           onClick={() => setShowLibrariesModal(true)}
           className="text-xs px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 mr-2"
-          title="Browse public libraries"
+          title={t("browseLibraries")}
         >
-          📚 Libraries
+          {t("libraries")}
         </button>
       </div>
 
@@ -305,12 +382,13 @@ export default function BoardClient({
       <LibrariesModal
         open={showLibrariesModal}
         onClose={() => setShowLibrariesModal(false)}
+        locale={locale}
       />
     </div>
   )
 }
 
-function ExportDropdown({ boardId }: { boardId: string }) {
+function ExportDropdown({ boardId, locale, t }: { boardId: string; locale?: string; t: (key: string) => string }) {
   const [open, setOpen] = useState(false)
 
   const handleExport = (format: "svg" | "json") => {
@@ -326,7 +404,7 @@ function ExportDropdown({ boardId }: { boardId: string }) {
         onClick={() => setOpen(!open)}
         className="text-xs px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
       >
-        Export ▾
+        {t("export")} ▾
       </button>
       {open && (
         <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
@@ -334,13 +412,13 @@ function ExportDropdown({ boardId }: { boardId: string }) {
             onClick={() => handleExport("svg")}
             className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 whitespace-nowrap"
           >
-            📐 Export as SVG
+            📐 {t("exportAsSVG")}
           </button>
           <button
             onClick={() => handleExport("json")}
             className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 whitespace-nowrap"
           >
-            📦 Export as JSON
+            📦 {t("exportAsJSON")}
           </button>
         </div>
       )}

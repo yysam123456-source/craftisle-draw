@@ -13,21 +13,21 @@
   "home": {
     "title": "Tableau Blanc En Ligne Gratuit",
     "description": "Créez des diagrammes dessinés à la main, des organigrammes et des tableaux blancs collaboratifs avec Craftisle Draw. Outil de tableau blanc en ligne gratuit alimenté par Excalidraw. Aucune inscription requise pour tester.",
-    "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "or": "ou",
+    "learnMore": "en savoir plus sur Craftisle",
+    "pleaseSignIn": "Connectez-vous pour voir vos tableaux",
+    "faqTitle": "Questions Fréquentes",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "Est-ce que Craftisle Draw est gratuit ?",
+      "freeAnswer": "Oui, Craftisle Draw est entièrement gratuit. Aucune inscription requise pour le tester.",
+      "collaborate": "Puis-je collaborer avec d'autres en temps réel ?",
+      "collaborateAnswer": "Oui, vous pouvez partager votre tableau et collaborer en temps réel.",
+      "export": "Puis-je exporter mes dessins ?",
+      "exportAnswer": "Oui, vous pouvez exporter vos dessins en fichiers PNG ou SVG.",
+      "account": "Dois-je créer un compte ?",
+      "accountAnswer": "Non, vous pouvez tester l'outil sans créer de compte. Cependant, la création d'un compte permet de sauvegarder et gérer vos tableaux.",
+      "secure": "Mes données sont-elles sécurisées ?",
+      "secureAnswer": "Oui, vos données sont stockées en toute sécurité. Vous pouvez également rendre vos tableaux privés ou publics."
     },
     "createBoard": "Créer un Nouveau Tableau",
     "myBoards": "Mes Tableaux",
@@ -92,7 +92,8 @@
     "copyright": "© 2026 Craftisle. Tous droits réservés.",
     "home": "Accueil",
     "createBoard": "Créer un Nouveau Tableau",
-    "useCases": "Cas d'Usage"
+    "useCases": "Cas d'Usage",
+    "newBoard": "Nouveau Tableau"
   },
   "privacy": {
     "title": "Politique de Confidentialité",

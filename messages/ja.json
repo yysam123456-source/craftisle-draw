@@ -13,21 +13,21 @@
   "home": {
     "title": "無料オンラインホワイトボード",
     "description": "Craftisle Drawを使って手描き図解、フローチャート、コラボレーションホワイトボードを作成しましょう。Excalidraw搭載の無料オンラインホワイトボードツール。登録不要でテスト可能。",
-    "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "or": "または",
+    "learnMore": "Craftisleの詳細についてはこちら",
+    "pleaseSignIn": "ボードを表示するにはログインしてください",
+    "faqTitle": "よくある質問",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "Craftisle Drawは無料で利用できますか？",
+      "freeAnswer": "はい、Craftisle Drawは完全に無料です。登録なしで試すことができます。",
+      "collaborate": "他の人とリアルタイムでコラボレーションできますか？",
+      "collaborateAnswer": "はい、ボードを共有してリアルタイムでコラボレーションできます。",
+      "export": "描画をエクスポートできますか？",
+      "exportAnswer": "はい、描画をPNGまたはSVGファイルとしてエクスポートできます。",
+      "account": "アカウントを作成する必要がありますか？",
+      "accountAnswer": "いいえ、アカウントなしで試すことができます。ただし、アカウントを作成するとボードを保存・管理できます。",
+      "secure": "データは安全ですか？",
+      "secureAnswer": "はい、データは安全に保存されます。ボードを非公開または公開に設定できます。"
     },
     "createBoard": "新規ホワイトボードを作成",
     "myBoards": "マイホワイトボード",
@@ -92,7 +92,8 @@
     "copyright": "© 2026 Craftisle. 無断転載を禁じます。",
     "home": "ホーム",
     "createBoard": "新規ホワイトボードを作成",
-    "useCases": "ユースケース"
+    "useCases": "ユースケース",
+    "newBoard": "新規ホワイトボード"
   },
   "privacy": {
     "title": "プライバシーポリシー",

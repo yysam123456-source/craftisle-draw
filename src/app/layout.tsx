@@ -1,7 +1,4 @@
 import type { Metadata, Viewport } from "next"
-import "./globals.css"
-import Navbar from "@/components/Navbar"
-import { SessionProvider } from "next-auth/react"
 import Script from "next/script"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
 
@@ -13,7 +10,6 @@ export const metadata: Metadata = {
   description:
     "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards. No signup required for testing. Real-time collaboration, infinite canvas, and export to PNG/SVG. Perfect for teaching, brainstorming, and team collaboration.",
   keywords: [
-    // Core keywords
     "online whiteboard",
     "collaborative drawing",
     "excalidraw",
@@ -24,7 +20,6 @@ export const metadata: Metadata = {
     "digital whiteboard",
     "virtual whiteboard",
     "team collaboration tool",
-    // Long-tail keywords (English)
     "free online whiteboard no sign up",
     "online whiteboard for teaching",
     "collaborative whiteboard real time free",
@@ -52,7 +47,6 @@ export const metadata: Metadata = {
     "whiteboard for agile teams",
     "online retrospective whiteboard",
     "free whiteboard for students",
-    // Additional long-tail
     "best free online whiteboard",
     "whiteboard tool for presentations",
     "online whiteboard no registration",
@@ -231,28 +225,17 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <link rel="manifest" href="/manifest.json" />
-        
-        {/* Apple meta tags */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Craftisle Draw" />
-        
-        {/* Windows meta tags */}
         <meta name="msapplication-TileColor" content="#667eea" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
       </head>
       <body className="font-sans">
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded">
-          Skip to main content
-        </a>
-        <SessionProvider>
-          {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID !== 'G-XXXXXXXX' && (
-            <GoogleAnalytics />
-          )}
-          <main id="main-content" className="min-h-screen bg-gray-50">
-            {children}
-          </main>
-        </SessionProvider>
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID !== 'G-XXXXXXXX' && (
+          <GoogleAnalytics />
+        )}
+        {children}
       </body>
     </html>
   )

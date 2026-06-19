@@ -13,21 +13,21 @@
   "home": {
     "title": "Bảng Trắng Online Miễn Phí",
     "description": "Tạo sơ đồ hand-drawn, lưu đồ và bảng trắng cộng tác với Craftisle Draw. Công cụ bảng trắng online miễn phí được hỗ trợ bởi Excalidraw. Không cần đăng ký để thử nghiệm.",
-    "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "or": "hoặc",
+    "learnMore": "tìm hiểu thêm về Craftisle",
+    "pleaseSignIn": "Đăng nhập để xem bảng của bạn",
+    "faqTitle": "Câu hỏi Thường gặp",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "Craftisle Draw có miễn phí không?",
+      "freeAnswer": "Có, Craftisle Draw hoàn toàn miễn phí. Không cần đăng ký để dùng thử.",
+      "collaborate": "Tôi có thể cộng tác với người khác theo thời gian thực không?",
+      "collaborateAnswer": "Có, bạn có thể chia sẻ bảng và cộng tác theo thời gian thực.",
+      "export": "Tôi có thể xuất bản vẽ của mình không?",
+      "exportAnswer": "Có, bạn có thể xuất bản vẽ dưới dạng tệp PNG hoặc SVG.",
+      "account": "Tôi có cần tạo tài khoản không?",
+      "accountAnswer": "Không, bạn có thể thử công cụ mà không cần tạo tài khoản. Tuy nhiên, việc tạo tài khoản cho phép bạn lưu và quản lý bảng của mình.",
+      "secure": "Dữ liệu của tôi có an toàn không?",
+      "secureAnswer": "Có, dữ liệu của bạn được lưu trữ an toàn. Bạn cũng có thể để bảng ở chế độ riêng tư hoặc công khai."
     },
     "createBoard": "Tạo Bảng Trắng Mới",
     "myBoards": "Bảng Trắng của Tôi",
@@ -92,7 +92,8 @@
     "copyright": "© 2026 Craftisle. Bảo lưu mọi quyền.",
     "home": "Trang Chủ",
     "createBoard": "Tạo Bảng Trắng Mới",
-    "useCases": "Trường Hợp Sử Dụng"
+    "useCases": "Trường Hợp Sử Dụng",
+    "newBoard": "Bảng Trắng Mới"
   },
   "privacy": {
     "title": "Chính Sách Quyền Riêng Tư",

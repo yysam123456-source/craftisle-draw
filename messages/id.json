@@ -14,20 +14,21 @@
     "title": "Papan Tulis Online Gratis",
     "description": "Buat diagram hand-drawn, flowchart, dan papan tulis kolaboratif dengan Craftisle Draw. Alat papan tulis online gratis yang didukung oleh Excalidraw. Tidak perlu daftar untuk mencoba.",
     "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "learnMore": "pelajari lebih lanjut tentang Craftisle",
+    "pleaseSignIn": "Masuk untuk melihat papan Anda",
+    "faqTitle": "Pertanyaan yang Sering Diajukan",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "Apakah Craftisle Draw gratis?",
+      "freeAnswer": "Ya, Craftisle Draw sepenuhnya gratis. Tidak perlu daftar untuk mencobanya.",
+      "collaborate": "Bakah saya dapat berkolaborasi dengan orang lain secara real-time?",
+      "collaborateAnswer": "Ya, Anda dapat membagikan papan dan berkolaborasi secara real-time.",
+      "export": "Bakah saya dapat mengekspor gambar saya?",
+      "exportAnswer": "Ya, Anda dapat mengekspor gambar sebagai file PNG atau SVG.",
+      "account": "Apakah saya perlu membuat akun?",
+      "accountAnswer": "Tidak, Anda dapat mencoba alat ini tanpa membuat akun. Namun, membuat akun memungkinkan Anda menyimpan dan mengelola papan Anda.",
+      "secure": "Apakah data saya aman?",
+      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public.",
+      "safeAnswer": "Ya, data Anda disimpan dengan aman. Anda juga dapat membuat papan menjadi pribadi atau publik."
     },
     "createBoard": "Buat Papan Tulis Baru",
     "myBoards": "Papan Tulis Saya",
@@ -56,7 +57,8 @@
     "readyToStart": "Siap Mulai Menggambar?",
     "readyDesc": "Bergabunglah dengan ribuan pengguna yang mempercayai Craftisle Draw untuk kolaborasi visual mereka.",
     "joinNow": "Bergabung Sekarang",
-    "noCreditCard": "Tanpa kartu kredit • Gratis selamanya • Kolaborasi waktu nyata"
+    "noCreditCard": "Tanpa kartu kredit • Gratis selamanya • Kolaborasi waktu nyata",
+    "o": "atau"
   },
   "seo": {
     "title": "Papan Tulis Online Gratis | Craftisle Draw",
@@ -92,7 +94,8 @@
     "copyright": "© 2026 Craftisle. Seluruh hak cipta dilindungi.",
     "home": "Beranda",
     "createBoard": "Buat Papan Tulis Baru",
-    "useCases": "Kasus Penggunaan"
+    "useCases": "Kasus Penggunaan",
+    "newBoard": "Papan Tulis Baru"
   },
   "privacy": {
     "title": "Kebijakan Privasi",

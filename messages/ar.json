@@ -13,21 +13,21 @@
   "home": {
     "title": "لوحة بيضاء مجانية عبر الإنترنت",
     "description": "أنشئ مخططات مرسومة باليد، مخططات تدفق، والواح بيضاء تعاونية مع Craftisle Draw. أداة لوح أبيض مجاني عبر الإنترنت مدعومة من Excalidraw. لا حاجة للتسجيل للاختبار.",
-    "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "or": "أو",
+    "learnMore": "اعرف المزيد عن Craftisle",
+    "pleaseSignIn": "سجّل الدخول لعرض لوحاتك",
+    "faqTitle": "الأسئلة المتكررة",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "هل Craftisle Draw مجاني؟",
+      "freeAnswer": "نعم، Craftisle Draw مجاني بالكامل. لا حاجة للتسجيل للتجربة.",
+      "collaborate": "هل يمكنني التعاون مع الآخرين في الوقت الفعلي؟",
+      "collaborateAnswer": "نعم، يمكنك مشاركة لوحتك والتعاون في الوقت الفعلي.",
+      "export": "هل يمكنني تصدير رسوماتي؟",
+      "exportAnswer": "نعم، يمكنك تصدير رسومك كملفات PNG أو SVG.",
+      "account": "هل أحتاج لإنشاء حساب؟",
+      "accountAnswer": "لا، يمكنك تجربة الأداة بدون إنشاء حساب. ومع ذلك، إنشاء حساب يتيح لك حفظ وإدارة لوحاتك.",
+      "secure": "هل بياناتي آمنة؟",
+      "secureAnswer": "نعم، يتم تخزين بياناتك بأمان. يمكنك أيضاً جعل لوحاتك خاصة أو عامة."
     },
     "createBoard": "إنشاء لوح جديد",
     "myBoards": "الواحي",
@@ -92,7 +92,8 @@
     "copyright": "© 2026 Craftisle. جميع الحقوق محفوظة.",
     "home": "الرئيسية",
     "createBoard": "إنشاء لوح جديد",
-    "useCases": "حالات الاستخدام"
+    "useCases": "حالات الاستخدام",
+    "newBoard": "لوح جديد"
   },
   "privacy": {
     "title": "سياسة الخصوصية",

@@ -14,20 +14,20 @@
     "title": "Tablă Albă Online Gratuită",
     "description": "Creați diagrame desenate de mână, fluxuri de lucru și table colaborative cu Craftisle Draw. Instrument de tablă albă online gratuit, alimentat de Excalidraw. Nu este necesară înregistrarea pentru a testa.",
     "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "learnMore": "aflați mai multe despre Craftisle",
+    "pleaseSignIn": "Conectați-vă pentru a vedea tabelele dumneavoastră",
+    "faqTitle": "Întrebări Frecvente",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "Este gratuit Craftisle Draw?",
+      "freeAnswer": "Da, Craftisle Draw este complet gratuit. Nu este necesară înregistrarea pentru testare.",
+      "collaborate": "Pot colabora cu alții în timp real?",
+      "collaborateAnswer": "Da, puteți partaja tabla și colabora în timp real.",
+      "export": "Pot exporta desenele mele?",
+      "exportAnswer": "Da, puteți export desenele ca fișiere PNG sau SVG.",
+      "account": "Trebuie să creez un cont?",
+      "accountAnswer": "Nu, puteți testa instrumentul fără a crea un cont. Totuși, crearea unui cont vă permite să salvați și gestionați tabelele.",
+      "secure": "Datele mele sunt în siguranță?",
+      "secureAnswer": "Da, datele sunt stocate în siguranță. Puteți face și tabelele private sau publice."
     },
     "createBoard": "Creați Tabel Nou",
     "myBoards": "Tablele Mele",
@@ -56,7 +56,8 @@
     "readyToStart": "Gata să Începeți să Desenați?",
     "readyDesc": "Alăturați-vă miilor de utilizatori care au încredere în Craftisle Draw pentru colaborarea lor vizuală.",
     "joinNow": "Alăturați-vă Acum",
-    "noCreditCard": "Fără card de credit • Gratuit pentru totdeauna • Colaborare în timp real"
+    "noCreditCard": "Fără card de credit • Gratuit pentru totdeauna • Colaborare în timp real",
+    "sau": "sau"
   },
   "seo": {
     "title": "Tablă Albă Online Gratuită | Craftisle Draw",
@@ -92,7 +93,8 @@
     "copyright": "© 2026 Craftisle. Toate drepturile rezervate.",
     "home": "Acasă",
     "createBoard": "Creați Tabel Nou",
-    "useCases": "Cazuri de Utilizare"
+    "useCases": "Cazuri de Utilizare",
+    "newBoard": "Tabel Nou"
   },
   "privacy": {
     "title": "Politică de Confidențialitate",

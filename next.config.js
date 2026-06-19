@@ -1,6 +1,6 @@
-/** @type {import('next').NextConfig} */
-const withNextIntl = require('next-intl/plugin');
+const withNextIntlPlugin = require('next-intl/plugin');
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ["@excalidraw/excalidraw"],
   images: {
@@ -88,4 +88,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withNextIntl('./src/i18n/request.ts')(nextConfig)
+module.exports = withNextIntlPlugin('./src/i18n/request.ts')(nextConfig);

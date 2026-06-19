@@ -13,21 +13,21 @@
   "home": {
     "title": "무료 온라인 화이트보드",
     "description": "Craftisle Draw로 손으로 그린 다이어그램, 순서도, 협업 화이트보드를 만드세요. Excalidraw 지원 무료 온라인 화이트보드 도구. 테스트하려면 등록 필요 없음.",
-    "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "or": "또는",
+    "learnMore": "Craftisle에 대해 자세히 알아보기",
+    "pleaseSignIn": "보드를 보려면 로그인해 주세요",
+    "faqTitle": "자주 묻는 질문",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "Craftisle Draw를 무료로 사용할 수 있나요?",
+      "freeAnswer": "네, Craftisle Draw는 완전 무료입니다. 가입 없이 테스트할 수 있습니다.",
+      "collaborate": "다른 사람과 실시간으로 협업할 수 있나요?",
+      "collaborateAnswer": "네, 보드를 공유하고 실시간으로 협업할 수 있습니다.",
+      "export": "그림을 내보낼 수 있나요?",
+      "exportAnswer": "네, 그림을 PNG 또는 SVG 파일로 내보낼 수 있습니다.",
+      "account": "계정을 만들어야 하나요?",
+      "accountAnswer": "아니요, 계정 없이도 사용해 볼 수 있습니다. 계정을 만들면 보드를 저장하고 관리할 수 있습니다.",
+      "secure": "내 데이터가 안전한가요?",
+      "secureAnswer": "네, 데이터가 안전하게 저장됩니다. 보드를 비공개 또는 공개로 설정할 수도 있습니다."
     },
     "createBoard": "새 화이트보드 만들기",
     "myBoards": "내 화이트보드",
@@ -92,7 +92,8 @@
     "copyright": "© 2026 Craftisle. 모든 권리 보유.",
     "home": "홈",
     "createBoard": "새 화이트보드 만들기",
-    "useCases": "사용 사례"
+    "useCases": "사용 사례",
+    "newBoard": "새 화이트보드"
   },
   "privacy": {
     "title": "개인정보 보호정책",

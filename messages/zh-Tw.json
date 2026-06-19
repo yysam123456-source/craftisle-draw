@@ -13,21 +13,21 @@
   "home": {
     "title": "免費在線白板",
     "description": "使用 Craftisle Draw 建立手繪圖表、流程圖和協作白板。免費在線白板工具，由 Excalidraw 提供支持。無需註冊即可測試。",
-    "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "or": "或",
+    "learnMore": "進一步瞭解 Craftisle",
+    "pleaseSignIn": "請登入以檢視您的白板",
+    "faqTitle": "常見問題",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "Craftisle Draw 免費使用嗎？",
+      "freeAnswer": "是的，Craftisle Draw 完全免費使用，無需註冊即可試用。",
+      "collaborate": "我可以與他人即時協作嗎？",
+      "collaborateAnswer": "您可以與他人共享白板並即時協作。",
+      "export": "我可以匯出我的繪圖嗎？",
+      "exportAnswer": "您可以將繪圖匯出為 PNG 或 SVG 檔案。",
+      "account": "我需要建立帳戶嗎？",
+      "accountAnswer": "不需要，您無需建立帳戶即可試用。但建立帳戶後可以儲存和管理您的白板。",
+      "secure": "我的資料安全嗎？",
+      "secureAnswer": "是的，您的資料被安全儲存。您可以將白板設為私有或公開。"
     },
     "createBoard": "建立新白板",
     "myBoards": "我的白板",
@@ -92,7 +92,8 @@
     "copyright": "© 2026 Craftisle. 保留所有權利。",
     "home": "首頁",
     "createBoard": "建立新白板",
-    "useCases": "使用場景"
+    "useCases": "使用場景",
+    "newBoard": "新增白板"
   },
   "privacy": {
     "title": "隱私政策",

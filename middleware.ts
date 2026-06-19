@@ -1,5 +1,5 @@
 import createMiddleware from "next-intl/middleware";
-import { locales, defaultLocale } from "./src/i18n";
+import { locales, defaultLocale } from "./src/i18n/request";
 
 export default createMiddleware({
   locales: locales as unknown as string[],
@@ -7,5 +7,6 @@ export default createMiddleware({
   localePrefix: "always",
 });
 
-// Note: next-intl handles the matcher automatically
-// No need for custom config export
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+};

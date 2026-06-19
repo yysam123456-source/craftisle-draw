@@ -14,20 +14,20 @@
     "title": "Quadro Online Grátis",
     "description": "Crie diagramas desenhadas à mão, fluxogramas e quadros colaborativos com Craftisle Draw. Ferramenta de quadro online grátis alimentada por Excalidraw. Não requer registro para testar.",
     "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "learnMore": "saiba mais sobre a Craftisle",
+    "pleaseSignIn": "Faça login para ver seus quadros",
+    "faqTitle": "Perguntas Frequentes",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "O Craftisle Draw é gratuito?",
+      "freeAnswer": "Sim, o Craftisle Draw é completamente gratuito. Sem cadastro necessário para testar.",
+      "collaborate": "Posso colaborar com outros em tempo real?",
+      "collaborateAnswer": "Sim, você pode compartilhar seu quadro e colaborar em tempo real.",
+      "export": "Posso exportar meus desenhos?",
+      "exportAnswer": "Sim, você pode exportar seus desenhos como arquivos PNG ou SVG.",
+      "account": "Preciso criar uma conta?",
+      "accountAnswer": "Não, você pode testar a ferramenta sem criar uma conta. No entanto, criar uma conta permite salvar e gerenciar seus quadros.",
+      "secure": "Meus dados estão seguros?",
+      "secureAnswer": "Sim, seus dados são armazenados com segurança. Você também pode tornar seus quadros privados ou públicos."
     },
     "createBoard": "Criar Novo Quadro",
     "myBoards": "Meus Quadros",
@@ -56,7 +56,8 @@
     "readyToStart": "Pronto para Começar a Desenhar?",
     "readyDesc": "Junte-se a milhares de usuários que confiam no Craftisle Draw para sua colaboração visual.",
     "joinNow": "Juntar-se Agora",
-    "noCreditCard": "Sem cartão de crédito • Grátis para sempre • Colaboração em tempo real"
+    "noCreditCard": "Sem cartão de crédito • Grátis para sempre • Colaboração em tempo real",
+    "ou": "ou"
   },
   "seo": {
     "title": "Quadro Online Grátis | Craftisle Draw",
@@ -92,7 +93,8 @@
     "copyright": "© 2026 Craftisle. Todos os direitos reservados.",
     "home": "Início",
     "createBoard": "Criar Novo Quadro",
-    "useCases": "Casos de Uso"
+    "useCases": "Casos de Uso",
+    "newBoard": "Nuevo Quadro"
   },
   "privacy": {
     "title": "Política de Privacidade",

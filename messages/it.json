@@ -14,20 +14,20 @@
     "title": "Lavagna Online Gratuita",
     "description": "Crea diagrammi hand-drawn, diagrammi di flusso e lavagne colaborative con Craftisle Draw. Strumento lavagna online gratuita alimentato da Excalidraw. Nessuna registrazione richiesta per testare.",
     "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "learnMore": "scopri di più su Craftisle",
+    "pleaseSignIn": "Accedi per vedere le tue lavagne",
+    "faqTitle": "Domande Frequenti",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "Craftisle Draw è gratuito?",
+      "freeAnswer": "Sì, Craftisle Draw è completamente gratuito. Non è richiesta la registrazione per provarlo.",
+      "collaborate": "Posso collaborare con altri in tempo reale?",
+      "collaborateAnswer": "Sì, puoi condividere la tua lavagna e collaborare in tempo reale.",
+      "export": "Posso esportare i miei disegni?",
+      "exportAnswer": "Sì, puoi esportare i disegni come file PNG o SVG.",
+      "account": "Devo creare un account?",
+      "accountAnswer": "No, puoi provare lo strumento senza creare un account. Tuttavia, la creazione di un account ti permette di salvare e gestire le tue lavagne.",
+      "secure": "I miei dati sono al sicuro?",
+      "secureAnswer": "Sì, i tuoi dati sono archiviati in sicurezza. Puoi anche rendere le tue lavagne private o pubbliche."
     },
     "createBoard": "Crea Nuova Lavagna",
     "myBoards": "Miei Lavagne",
@@ -56,7 +56,8 @@
     "readyToStart": "Pronto per Iniziare a Disegnare?",
     "readyDesc": "Unisciti a migliaia di utenti che si fidano di Craftisle Draw per la loro collaborazione visiva.",
     "joinNow": "Unisciti Ora",
-    "noCreditCard": "Senza carta di credito • Gratis per sempre • Collaborazione in tempo reale"
+    "noCreditCard": "Senza carta di credito • Gratis per sempre • Collaborazione in tempo reale",
+    "o": "o"
   },
   "seo": {
     "title": "Lavagna Online Gratuita | Craftisle Draw",
@@ -92,7 +93,8 @@
     "copyright": "© 2026 Craftisle. Tutti i diritti riservati.",
     "home": "Home",
     "createBoard": "Crea Nuova Lavagna",
-    "useCases": "Casi d'Uso"
+    "useCases": "Casi d'Uso",
+    "newBoard": "Nuova Lavagna"
   },
   "privacy": {
     "title": "Informativa sulla Privacy",

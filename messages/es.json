@@ -13,21 +13,21 @@
   "home": {
     "title": "Pizarra Online Gratuita",
     "description": "Crea diagramas hand-drawn, flujogramas y pizarras colaborativas con Craftisle Draw. Herramienta de pizarra online gratuita impulsada por Excalidraw. No requiere registro para probar.",
-    "or": "or",
-    "learnMore": "learn more about Craftisle",
-    "pleaseSignIn": "Please sign in to view your boards",
-    "faqTitle": "Frequently Asked Questions",
+    "or": "o",
+    "learnMore": "más información sobre Craftisle",
+    "pleaseSignIn": "Inicia sesión para ver tus pizarras",
+    "faqTitle": "Preguntas Frecuentes",
     "faq": {
-      "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
-      "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
-      "export": "Can I export my drawings?",
-      "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
-      "account": "Do I need to create an account?",
-      "accountAnswer": "No, you can test the tool without creating an account. However, creating an account allows you to save and manage your boards.",
-      "secure": "Is my data secure?",
-      "secureAnswer": "Yes, your data is stored securely. You can also make your boards private or public."
+      "free": "¿Es gratuito usar Craftisle Draw?",
+      "freeAnswer": "Sí, Craftisle Draw es completamente gratuito. No es necesario registrarse para probarlo.",
+      "collaborate": "¿Puedo colaborar con otros en tiempo real?",
+      "collaborateAnswer": "Sí, puedes compartir tu pizarra y colaborar en tiempo real.",
+      "export": "¿Puedo exportar mis dibujos?",
+      "exportAnswer": "Sí, puedes exportar tus dibujos como archivos PNG o SVG.",
+      "account": "¿Necesito crear una cuenta?",
+      "accountAnswer": "No, puedes probar la herramienta sin crear una cuenta. Sin embargo, crear una cuenta te permite guardar y administrar tus pizarras.",
+      "secure": "¿Mis datos están seguros?",
+      "secureAnswer": "Sí, tus datos se almacenan de forma segura. También puedes hacer que tus pizarras sean privadas o públicas."
     },
     "createBoard": "Crear Nueva Pizarra",
     "myBoards": "Mis Pizarras",
@@ -92,7 +92,8 @@
     "copyright": "© 2026 Craftisle. Todos los derechos reservados.",
     "home": "Inicio",
     "createBoard": "Crear Nueva Pizarra",
-    "useCases": "Casos de Uso"
+    "useCases": "Casos de Uso",
+    "newBoard": "Nueva Pizarra"
   },
   "privacy": {
     "title": "Política de Privacidad",

@@ -83,7 +83,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       ) : (
         <div className="text-center py-24 text-gray-500">
           <p className="text-xl mb-4">{t('pleaseSignIn')}</p>
-          <a href={`/${locale}/api/auth/signin`} className="text-blue-600 hover:underline">
+          <a href="/api/auth/signin" className="text-blue-600 hover:underline">
             {tNav('signIn')}
           </a>
         </div>

@@ -101,7 +101,7 @@ export default function Navbar({ locale = "en" }: { locale?: string }) {
                     {session.user.email}
                   </div>
                   <a
-                    href={`/${locale}/api/auth/signout`}
+                    href="/api/auth/signout"
                     className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
                     onClick={async (e) => {
                       e.preventDefault();
@@ -116,7 +116,7 @@ export default function Navbar({ locale = "en" }: { locale?: string }) {
           </>
         ) : (
           <a
-            href={`/${locale}/api/auth/signin`}
+            href="/api/auth/signin"
             className="text-sm px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
             {t("signIn")}

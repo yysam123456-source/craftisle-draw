@@ -31,7 +31,7 @@ export default async function BoardPage({ params, searchParams }: {
       const session = await auth()
       const user = session?.user
       if (!user) {
-        redirect(`/${locale}/api/auth/signin?callbackUrl=` + encodeURIComponent(`/${locale}/board/${id}`))
+        redirect(`/api/auth/signin?callbackUrl=` + encodeURIComponent(`/${locale}/board/${id}`))
       }
       userId = user.id!
     }

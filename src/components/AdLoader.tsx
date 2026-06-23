@@ -1,29 +1,34 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Script from 'next/script';
 import { isMonetagEnabled } from '@/lib/config/ads';
 
 /**
  * Client component that dynamically loads Monetag Vignette Banner
  * based on centralized config (craftisle-configs).
+ *
+ * Uses document.createElement (not next/script) so it works consistently
+ * across all deployment platforms (Vercel, Cloudflare Pages).
  */
 export function AdLoader() {
   const [enabled, setEnabled] = useState(false);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
 
   useEffect(() => {
     isMonetagEnabled().then(setEnabled);
   }, []);
 
-  if (!enabled) return null;
+  useEffect(() => {
+    if (enabled && typeof window !== 'undefined') {
+      // Don't duplicate if already loaded
+      if (document.getElementById('monetag-vignette')) return;
 
-  return (
-    <Script
-      id="monetag-vignette"
-      src="/monetag-vignette.js"
-      strategy="afterInteractive"
-      onLoad={() => setScriptLoaded(true)}
-    />
-  );
+      const script = document.createElement('script');
+      script.id = 'monetag-vignette';
+      script.src = '/monetag-vignette.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, [enabled]);
+
+  return null;
 }

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next"
+import Script from "next/script"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
 import { AdLoader } from "@/components/AdLoader"
 import { AdSenseLoader } from "@/components/AdSenseLoader"

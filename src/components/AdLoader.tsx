@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Script from 'next/script';
 import { isMonetagEnabled } from '@/lib/config/ads';
 
 /**
@@ -9,20 +10,20 @@ import { isMonetagEnabled } from '@/lib/config/ads';
  */
 export function AdLoader() {
   const [enabled, setEnabled] = useState(false);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
 
   useEffect(() => {
     isMonetagEnabled().then(setEnabled);
   }, []);
 
-  useEffect(() => {
-    if (enabled && typeof window !== 'undefined' && !document.getElementById('monetag-vignette')) {
-      const script = document.createElement('script');
-      script.id = 'monetag-vignette';
-      script.src = '/monetag-vignette.js';
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, [enabled]);
+  if (!enabled) return null;
 
-  return null;
+  return (
+    <Script
+      id="monetag-vignette"
+      src="/monetag-vignette.js"
+      strategy="afterInteractive"
+      onLoad={() => setScriptLoaded(true)}
+    />
+  );
 }

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
-import Script from "next/script"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
+import { AdLoader } from "@/components/AdLoader"
+import { AdSenseLoader } from "@/components/AdSenseLoader"
 
 export const metadata: Metadata = {
   title: {
@@ -218,14 +219,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* AdSense - only loads when NEXT_PUBLIC_ADSENSE_CLIENT is set */}
-        {process.env.NEXT_PUBLIC_ADSENSE_CLIENT && (
-          <script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT}`}
-            crossOrigin="anonymous"
-          />
-        )}
         {/* Monetag site verification */}
         <meta name="monetag" content="95c89403a193eef38bbc05e97d7c067c" />
         <Script
@@ -240,20 +233,15 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Craftisle Draw" />
         <meta name="msapplication-TileColor" content="#667eea" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
-        {/* Monetag Vignette Banner - controlled by ADVER_ENABLE */}
-        {process.env.NEXT_PUBLIC_ADVER_ENABLE === 'true' && (
-          <Script
-            id="monetag-vignette"
-            src="/monetag-vignette.js"
-            strategy="afterInteractive"
-          />
-        )}
       </head>
       <body className="font-sans">
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID !== 'G-XXXXXXXX' && (
           <GoogleAnalytics />
         )}
         {children}
+        {/* Dynamic ad loading via centralized config */}
+        <AdLoader />
+        <AdSenseLoader />
       </body>
     </html>
   )

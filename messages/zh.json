@@ -80,8 +80,17 @@
     "designThinkingDesc": "创新设计思维白板。使用我们的免费在线白板进行设计思维工作坊。",
     "meetings": "会议演示白板",
     "meetingsDesc": "会议演示白板。创建视觉演示，实时注释，并与利益相关者分享。",
-    "title": "Use Cases | Craftisle Draw",
-    "description": "Discover how to use Craftisle Draw for teaching, remote teams, brainstorming, and more."
+    "title": "Craftisle Draw 使用场景 | 免费在线白板",
+    "description": "探索 Craftisle Draw 最受欢迎的使用方式：教学、远程团队、头脑风暴、流程图、思维导图、敏捷回顾、设计思维与会议。免费，无需注册。",
+    "h1": "Craftisle Draw 使用场景",
+    "intro": "Craftisle Draw 是一款为真实工作打造的免费在线白板，远不止涂鸦。无论你是在主持远程工作坊、规划产品冲刺，还是向学生讲解难点，无限画布都能贴合团队的思考方式。下面列出人们每天使用 Craftisle Draw 最常见的场景，并附上快速上手小贴士。",
+    "howToTitle": "三步快速上手",
+    "howToStep1": "打开空白白板",
+    "howToStep1Desc": "点击“创建免费白板”——无需账户。你将进入一块无限画布，Excalidraw 手绘工具已准备就绪。",
+    "howToStep2": "选择下方使用场景",
+    "howToStep2Desc": "从匹配你目标的场景开始：会议纪要、流程图、线框图或回顾看板。每个场景用法一致——画、写、连线即可。",
+    "howToStep3": "分享或导出",
+    "howToStep3Desc": "通过链接邀请队友实时协作，或将作品导出为 PNG / SVG，直接放进文档与幻灯片。"
   },
   "footer": {
     "description": "免费在线白板工具，由 Excalidraw 提供支持。创建手绘图表、流程图和协作白板。",

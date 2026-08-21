@@ -19,6 +19,7 @@ export default function Footer({ locale }: { locale: string }) {
             <h3 className="text-lg font-semibold mb-4">{t("quickLinks")}</h3>
             <ul className="space-y-2 text-sm">
               <li><a href={`/${locale}`} className="text-gray-300 hover:text-white">Home</a></li>
+              <li><a href={`/${locale}/use-cases`} className="text-gray-300 hover:text-white">Use Cases</a></li>
               <li><a href={`/${locale}/board/new`} className="text-gray-300 hover:text-white">{t("newBoard")}</a></li>
               <li><a href="https://craftisle.com" className="text-gray-300 hover:text-white" rel="noopener noreferrer" target="_blank">Craftisle</a></li>
             </ul>

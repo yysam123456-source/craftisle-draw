@@ -81,7 +81,16 @@
     "meetings": "Tableau Blanc pour Présentations de Réunions",
     "meetingsDesc": "Tableau blanc pour présentations de réunions. Créez des présentations visuelles, annotez en temps réel et partagez avec des parties prenantes.",
     "title": "Use Cases | Craftisle Draw",
-    "description": "Discover how to use Craftisle Draw for teaching, remote teams, brainstorming, and more."
+    "description": "Discover how to use Craftisle Draw for teaching, remote teams, brainstorming, and more.",
+    "h1": "Use Cases for Craftisle Draw",
+    "intro": "Craftisle Draw is a free online whiteboard built for real work — not just doodling. Whether you are running a remote workshop, planning a product sprint, or explaining a tough concept to students, the infinite canvas adapts to the way your team thinks. Below are the most common ways people use Craftisle Draw every day, each with a quick-start tip.",
+    "howToTitle": "How to get started in three steps",
+    "howToStep1": "Open a blank board",
+    "howToStep1Desc": "Click “Create Free Whiteboard” — no account needed. You land on an infinite canvas with the Excalidraw hand-drawn toolkit ready to go.",
+    "howToStep2": "Pick a use case below",
+    "howToStep2Desc": "Start from a scenario that matches your goal: meeting notes, a flowchart, a wireframe, or a retro board. Every use case works the same way — just draw, type, and connect.",
+    "howToStep3": "Share or export",
+    "howToStep3Desc": "Invite teammates with a link for real-time collaboration, or export your work as PNG or SVG to drop straight into docs and slides."
   },
   "footer": {
     "description": "Outil de tableau blanc en ligne gratuit alimenté par Excalidraw. Créez des diagrammes dessinés à la main, des organigrammes et des tableaux blancs collaboratifs.",

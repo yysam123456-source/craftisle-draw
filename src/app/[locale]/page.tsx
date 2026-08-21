@@ -5,6 +5,26 @@ import BoardList from "@/components/BoardList";
 import { auth } from "@/auth";
 import Script from "next/script";
 
+// Hub-level structured data linking this sub-site to the craftisle.com organization
+const hubJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://craftisle.com/#organization",
+      name: "Craftisle",
+      url: "https://craftisle.com",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://draw.craftisle.com/#website",
+      url: "https://draw.craftisle.com",
+      name: "Craftisle Draw",
+      publisher: { "@id": "https://craftisle.com/#organization" },
+    },
+  ],
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'seo' });
@@ -110,6 +130,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         type="application/ld+json"
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
+      {/* JSON-LD linking this sub-site to the Craftisle organization hub */}
+      <Script
+        id="hub-json-ld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(hubJsonLd) }}
       />
     </div>
   );

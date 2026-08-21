@@ -151,6 +151,7 @@ const jsonLd = {
     },
     {
       "@type": "Organization",
+      "@id": "https://craftisle.com/#organization",
       name: "Craftisle",
       url: "https://draw.craftisle.com",
       logo: "https://draw.craftisle.com/logo.png",
@@ -172,9 +173,7 @@ const jsonLd = {
       description:
         "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
       publisher: {
-        "@type": "Organization",
-        name: "Craftisle",
-        logo: "https://draw.craftisle.com/logo.png",
+        "@id": "https://craftisle.com/#organization",
       },
       potentialAction: {
         "@type": "SearchAction",

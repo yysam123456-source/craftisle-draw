@@ -23,9 +23,17 @@ export default function BoardList({ userId }: { userId: string }) {
 
   useEffect(() => {
     fetch("/api/boards")
-      .then(res => {
-        if (!res.ok) throw new Error(`Failed to load boards (${res.status})`)
-        return res.json()
+      .then(async res => {
+        // 🔴 2026-10-16：原先只看 res.ok 就抛一个含状态码的 Error，
+        // 5xx 的真实原因（后端 detail 字段）被整个丢掉 ⇒ 页面上永远只有
+        // 「Failed to load boards (500)」，既无法自助排查，也会把「重新登录」
+        // 当成建议，而登录态其实没问题（真正的故障在服务端查库）。
+        const data = await res.json().catch(() => null)
+        if (!res.ok) {
+          const detail = data?.detail ? ` — ${data.detail}` : ""
+          throw new Error(`${data?.error ?? `Failed to load boards`} (${res.status})${detail}`)
+        }
+        return data
       })
       .then(data => {
         setBoards(data)
@@ -79,13 +87,22 @@ export default function BoardList({ userId }: { userId: string }) {
   if (loading) return <div className="text-center py-12 text-gray-500">Loading...</div>
 
   if (error) {
+    // 🔴 只有 401 才提示重新登录；5xx 是服务端故障，重新登录没有意义，
+    // 反复引导用户点「重新登录」只会掩盖真实故障。
+    const isAuth = /\b401\b/.test(error)
     return (
       <div className="text-center py-12 text-gray-500">
-        <p className="text-lg mb-2">Failed to load boards</p>
-        <p className="text-sm text-gray-400 mb-4">{error}</p>
-        <a href="/api/auth/signin" className="text-blue-600 hover:underline">
-          Try signing in again
-        </a>
+        <p className="text-lg mb-2">{isAuth ? "Please sign in again" : "Could not load your boards"}</p>
+        <p className="text-sm text-gray-400 mb-4 break-words">{error}</p>
+        {isAuth ? (
+          <a href="/api/auth/signin" className="text-blue-600 hover:underline">
+            Try signing in again
+          </a>
+        ) : (
+          <p className="text-sm text-gray-400">
+            This is a problem on our side, not with your account. Please try again in a moment.
+          </p>
+        )}
       </div>
     )
   }

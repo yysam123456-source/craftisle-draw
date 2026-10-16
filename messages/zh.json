@@ -180,6 +180,18 @@
     "excPersonalLibrary": "个人素材",
     "excExcalidrawLibrary": "素材库",
     "excNoItemsAdded": "暂无项目...",
-    "excNoItemsDesc": "在画布上选择一个项目即可添加到这里。"
+    "excNoItemsDesc": "在画布上选择一个项目即可添加到这里。",
+    "components": "🧩 组件",
+    "browseComponents": "浏览已添加的组件（支持搜索与筛选）",
+    "componentBrowser": "组件浏览器",
+    "searchComponents": "搜索组件名或库名…",
+    "searchLibraries": "搜索库名…",
+    "noComponentsFound": "没有匹配的组件",
+    "noLibrariesImported": "还没有导入任何组件库",
+    "allLibraries": "全部",
+    "componentsCount": "个组件",
+    "librariesCount": "个库",
+    "remove": "移除",
+    "removeSuccess": "已移除"
   }
 }

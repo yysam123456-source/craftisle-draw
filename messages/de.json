@@ -180,6 +180,18 @@
     "excPersonalLibrary": "Persönliche Bibliothek",
     "excExcalidrawLibrary": "Bibliothek",
     "excNoItemsAdded": "Noch keine Elemente...",
-    "excNoItemsDesc": "Wählen Sie ein Element auf der Leinwand aus, um es hier hinzuzufügen."
+    "excNoItemsDesc": "Wählen Sie ein Element auf der Leinwand aus, um es hier hinzuzufügen.",
+    "components": "🧩 Components",
+    "browseComponents": "Browse your imported components (search & filter)",
+    "componentBrowser": "Component Browser",
+    "searchComponents": "Search components or libraries…",
+    "searchLibraries": "Search libraries…",
+    "noComponentsFound": "No matching components",
+    "noLibrariesImported": "No component libraries imported yet",
+    "allLibraries": "All",
+    "componentsCount": "components",
+    "librariesCount": "libraries",
+    "remove": "Remove",
+    "removeSuccess": "removed"
   }
 }

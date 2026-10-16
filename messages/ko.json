@@ -180,6 +180,18 @@
     "excPersonalLibrary": "개인 라이브러리",
     "excExcalidrawLibrary": "라이브러리",
     "excNoItemsAdded": "추가된 항목 없음...",
-    "excNoItemsDesc": "캔버스에서 항목을 선택하여 여기에 추가하세요."
+    "excNoItemsDesc": "캔버스에서 항목을 선택하여 여기에 추가하세요.",
+    "components": "🧩 Components",
+    "browseComponents": "Browse your imported components (search & filter)",
+    "componentBrowser": "Component Browser",
+    "searchComponents": "Search components or libraries…",
+    "searchLibraries": "Search libraries…",
+    "noComponentsFound": "No matching components",
+    "noLibrariesImported": "No component libraries imported yet",
+    "allLibraries": "All",
+    "componentsCount": "components",
+    "librariesCount": "libraries",
+    "remove": "Remove",
+    "removeSuccess": "removed"
   }
 }

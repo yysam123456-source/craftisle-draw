@@ -180,6 +180,18 @@
     "excPersonalLibrary": "المكتبة الشخصية",
     "excExcalidrawLibrary": "المكتبة",
     "excNoItemsAdded": "لم تتم إضافة عناصر...",
-    "excNoItemsDesc": "اختر عنصرًا على اللوحة لإضافته هنا."
+    "excNoItemsDesc": "اختر عنصرًا على اللوحة لإضافته هنا.",
+    "components": "🧩 Components",
+    "browseComponents": "Browse your imported components (search & filter)",
+    "componentBrowser": "Component Browser",
+    "searchComponents": "Search components or libraries…",
+    "searchLibraries": "Search libraries…",
+    "noComponentsFound": "No matching components",
+    "noLibrariesImported": "No component libraries imported yet",
+    "allLibraries": "All",
+    "componentsCount": "components",
+    "librariesCount": "libraries",
+    "remove": "Remove",
+    "removeSuccess": "removed"
   }
 }

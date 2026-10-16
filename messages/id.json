@@ -182,6 +182,18 @@
     "excPersonalLibrary": "Perpustakaan pribadi",
     "excExcalidrawLibrary": "Perpustakaan",
     "excNoItemsAdded": "Belum ada item...",
-    "excNoItemsDesc": "Pilih item di kanvas untuk menambahkannya di sini."
+    "excNoItemsDesc": "Pilih item di kanvas untuk menambahkannya di sini.",
+    "components": "🧩 Components",
+    "browseComponents": "Browse your imported components (search & filter)",
+    "componentBrowser": "Component Browser",
+    "searchComponents": "Search components or libraries…",
+    "searchLibraries": "Search libraries…",
+    "noComponentsFound": "No matching components",
+    "noLibrariesImported": "No component libraries imported yet",
+    "allLibraries": "All",
+    "componentsCount": "components",
+    "librariesCount": "libraries",
+    "remove": "Remove",
+    "removeSuccess": "removed"
   }
 }

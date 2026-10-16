@@ -180,6 +180,18 @@
     "excPersonalLibrary": "個人素材",
     "excExcalidrawLibrary": "素材庫",
     "excNoItemsAdded": "尚無項目...",
-    "excNoItemsDesc": "在畫布上選取項目即可在此處新增。"
+    "excNoItemsDesc": "在畫布上選取項目即可在此處新增。",
+    "components": "🧩 組件",
+    "browseComponents": "瀏覽已加入的組件（支援搜尋與篩選）",
+    "componentBrowser": "組件瀏覽器",
+    "searchComponents": "搜尋組件名或庫名…",
+    "searchLibraries": "搜尋庫名…",
+    "noComponentsFound": "沒有符合的組件",
+    "noLibrariesImported": "尚未匯入任何組件庫",
+    "allLibraries": "全部",
+    "componentsCount": "個組件",
+    "librariesCount": "個庫",
+    "remove": "移除",
+    "removeSuccess": "已移除"
   }
 }

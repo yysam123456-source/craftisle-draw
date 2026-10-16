@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react"
 import ExcalidrawEditor, { toExcLangCode } from "@/components/ExcalidrawEditor"
 import LibrariesModal from "@/components/LibrariesModal"
+import ComponentBrowser from "@/components/ComponentBrowser"
 import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
@@ -56,6 +57,11 @@ export default function BoardClient({
   const [isPublic, setIsPublic] = useState(false)
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
   const [showLibrariesModal, setShowLibrariesModal] = useState(false)
+  const [showComponentBrowser, setShowComponentBrowser] = useState(false)
+  const [libRefreshKey, setLibRefreshKey] = useState(0)
+  // 🔴 组件浏览器需要 Excalidraw 的 api 才能把组件插入画布；
+  // 由编辑器在 onApiReady 时回传。
+  const [excApi, setExcApi] = useState<any>(null)
   const [langOpen, setLangOpen] = useState(false)
 
   // Strip locale prefix from pathname for language switching
@@ -295,6 +301,15 @@ export default function BoardClient({
         >
           {t("libraries")}
         </button>
+
+        {/* 🔴 组件浏览器：导入的库多了以后，原生 library 面板找不到东西 */}
+        <button
+          onClick={() => setShowComponentBrowser(true)}
+          className="text-xs px-3 py-1.5 border border-blue-300 text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 mr-2"
+          title={t("browseComponents")}
+        >
+          {t("components")}
+        </button>
       </div>
 
         {/* Excalidraw editor - pt-12 = 48px to offset fixed top bar */}
@@ -308,6 +323,8 @@ export default function BoardClient({
           readOnly={readOnly}
           langCode={toExcLangCode(locale)}
           onSave={(elements, appState, opts) => handleSave(elements, appState, opts)}
+          onApiReady={setExcApi}
+          libRefreshKey={libRefreshKey}
         />
       </div>
 
@@ -316,6 +333,15 @@ export default function BoardClient({
         open={showLibrariesModal}
         onClose={() => setShowLibrariesModal(false)}
         locale={locale}
+        onImportedChange={() => setLibRefreshKey(k => k + 1)}
+      />
+
+      {/* 🔴 组件浏览器（已导入库的组件，支持搜索/按库筛选/点击插入） */}
+      <ComponentBrowser
+        open={showComponentBrowser}
+        onClose={() => setShowComponentBrowser(false)}
+        api={excApi}
+        refreshKey={libRefreshKey}
       />
     </div>
   )

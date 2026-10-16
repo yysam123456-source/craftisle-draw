@@ -71,6 +71,18 @@ export async function GET() {
     out.target = { error: String(e?.message ?? e), code: e?.code ?? null }
   }
 
+  // ③d 🔴 决定性证据：共享库里是否真存在用户数据？
+  // 若 User 表有数据 ⇒ draw 本就应复用它（改 schema 大小写去迁就，而不是建新表）
+  // 只回显**行数**，不回显任何邮箱/姓名等个人数据。
+  try {
+    const c = await prisma.$queryRawUnsafe<Array<{ n: number }>>(
+      'SELECT count(*)::int as n FROM "User"'
+    )
+    out.userTableRowCount = c[0]?.n ?? null
+  } catch (e: any) {
+    out.userTableRowCount = { error: String(e?.message ?? e), code: e?.code ?? null }
+  }
+
   // ④ 源码期望的列（直接查一次，暴露真实 Prisma 报错）
   try {
     await prisma.boards.findMany({ take: 1 })

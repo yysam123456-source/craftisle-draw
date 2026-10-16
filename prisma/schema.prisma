@@ -7,6 +7,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Role 枚举：生产库 users.role 列是 Postgres 枚举类型 Role，
+// 实测值 USER / CONTRIBUTOR / MODERATOR / ADMIN（勿擅自增删）
+enum Role {
+  USER
+  CONTRIBUTOR
+  MODERATOR
+  ADMIN
+}
+
+// ── 主站共享表 User ────────────────────────────────────────────────
+// 🔴 2026-10-16 修复：此前 boards 接口全线 500。
+// 根因：DATABASE_URL 指向主站共享库 neondb，但本schema 的 model 名是
+// 小写 users/accounts/sessions/verification_tokens，而这些表在共享库里
+// 一张都不存在（真实表名是 PascalCase 的 User/Account/Session/VerificationToken）。
+// 修复方式：保留小写 model 名（代码里 prisma.users.* 无需改动），
+// 用 @@map 指到真实表、@map 指到真实列。
+// ⚠️ 字段名以**生产库实测**为准，不是照抄主站 schema（主站已漂移：
+//    stripePriceId / stripeCurrentPeriodEnd 在库里是驼峰）。
+model users {
+  id     String  @id @default(cuid())
+  name   String?
+  email  String? @unique
+  image  String?
+
+  // 🔴 真实列是驼峰 emailVerified / createdAt / updatedAt
+  email_verified DateTime? @map("emailVerified")
+  created_at     DateTime  @default(now()) @map("createdAt")
+  updated_at     DateTime  @default(now()) @updatedAt @map("updatedAt")
+
+  // 🔴 真实列是 Postgres 枚举 Role，不能当 String 用
+  role Role @default(USER)
+
+  // 🔴 真实列名一半蛇形一半驼峰，逐一按实测映射
+  stripe_customer_id        String?   @unique
+  stripe_subscription_id    String?   @unique
+  stripe_price_id           String?   @map("stripePriceId")
+  stripe_current_period_end DateTime? @map("stripeCurrentPeriodEnd")
+
+  accounts accounts[]
+  sessions sessions[]
+  boards   boards[]
+
+  @@map("User")
+}
+
+// ── 主站共享表 Account ────────────────────────────────────────────
 model accounts {
   id                String  @id
   userId            String
@@ -20,57 +66,54 @@ model accounts {
   scope             String?
   id_token          String?
   session_state     String?
-  users             users   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  users users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
+  @@map("Account")
 }
 
-model boards {
-  id         String   @id @default(cuid())
-  title      String   @default("Untitled Board")
-  elements   Json
-  app_state  Json?
-  thumbnail  String?  // base64 PNG thumbnail for board list preview
-  is_public  Boolean  @default(false)
-  user_id    String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-}
-
+// ── 主站共享表 Session ─────────────────────────────────────────────
 model sessions {
   id           String   @id
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  users        users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  users users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@map("Session")
 }
 
-model users {
-  id                        String     @id @default(cuid())
-  name                      String?
-  email                     String?    @unique
-  image                     String?
-  created_at                DateTime   @default(now())
-  updated_at                DateTime   @default(now())
-  role                      String     @default("USER")
-  stripe_customer_id        String?    @unique
-  stripe_subscription_id    String?    @unique
-  stripe_price_id           String?
-  stripe_current_period_end DateTime?
-  email_verified            DateTime?
-  accounts                  accounts[]
-  boards                    boards[]
-  sessions                  sessions[]
-}
-
+// ── 主站共享表 VerificationToken ───────────────────────────────────
 model verification_tokens {
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
+  @@map("VerificationToken")
+}
+
+// ── draw 自己的表 boards ───────────────────────────────────────────
+// ⚠️ 共享库里**没有**这张表（draw 独有），需一次性建表。
+// 字段名沿用 draw 原有蛇形，与上面四个共享表无关。
+model boards {
+  id         String   @id @default(cuid())
+  title      String   @default("Untitled Board")
+  elements   Json
+  app_state  Json?
+  thumbnail  String? // base64 PNG thumbnail for board list preview
+  is_public  Boolean  @default(false)
+  user_id    String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  // 指向主站共享表 User(id)；用户删号时级联清掉白板
+  users users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("boards")
 }

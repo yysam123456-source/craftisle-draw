@@ -47,6 +47,30 @@ export async function GET() {
     out.boardsColumns = { error: String(e?.message ?? e), code: e?.code ?? null }
   }
 
+  // ③b 🔴 关键判定：当前库里到底有哪些表？
+  // 若「有其它表但没有 users/boards」⇒ DATABASE_URL 指到了**错误的库**
+  // 若「一张表都没有」⇒ 是个**空库**（Neon 免费实例被回收 / 指到了新建实例）
+  try {
+    const t = await prisma.$queryRawUnsafe<Array<{ table_name: string }>>(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name"
+    )
+    out.allPublicTables = t.map((x) => x.table_name)
+  } catch (e: any) {
+    out.allPublicTables = { error: String(e?.message ?? e), code: e?.code ?? null }
+  }
+
+  // ③c 当前连接指向哪个库/主机（只回显 host 与库名，**不回显密码**）
+  try {
+    const cur = await prisma.$queryRawUnsafe<Array<{ db: string; host: string; ver: string }>>(
+      "SELECT current_database() as db, inet_server_addr()::text as host, version() as ver"
+    )
+    out.target = cur[0]
+      ? { database: cur[0].db, host: cur[0].host, version: String(cur[0].ver).split(" ")[0] }
+      : null
+  } catch (e: any) {
+    out.target = { error: String(e?.message ?? e), code: e?.code ?? null }
+  }
+
   // ④ 源码期望的列（直接查一次，暴露真实 Prisma 报错）
   try {
     await prisma.boards.findMany({ take: 1 })

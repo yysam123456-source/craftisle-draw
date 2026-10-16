@@ -42,10 +42,6 @@ interface ExcalidrawEditorProps {
   readOnly?: boolean
   langCode?: string
   onSave?: (elements: any[], appState: any, opts?: { thumbnail?: string }) => void
-  /** 🔴 回传 Excalidraw api，供组件浏览器把组件插入画布 */
-  onApiReady?: (api: any) => void
-  /** 🔴 已导入库版本号；变化时让组件浏览器重新加载 */
-  libRefreshKey?: number
 }
 
 /**
@@ -147,8 +143,6 @@ export default function ExcalidrawEditor({
   readOnly = false,
   langCode = "en",
   onSave,
-  onApiReady,
-  libRefreshKey = 0,
 }: ExcalidrawEditorProps) {
   const excalidrawRef = useRef<any>(null)
   const saveTimerRef = useRef<any>(null)
@@ -162,15 +156,10 @@ export default function ExcalidrawEditor({
   }, [])
 
   // Initialize API ref
-  const onExcalidrawAPIReady = useCallback(
-    (api: any) => {
-      excalidrawRef.current = api
-      if (typeof window !== "undefined") (window as any).__excalidrawAPI = api
-      // 🔴 通知父级，供组件浏览器插入组件
-      onApiReady?.(api)
-    },
-    [onApiReady]
-  )
+  const onExcalidrawAPIReady = useCallback((api: any) => {
+    excalidrawRef.current = api
+    if (typeof window !== "undefined") (window as any).__excalidrawAPI = api
+  }, [])
 
   // ── Load & inject libraries from our own localStorage key ──
   const injectLibraries = useCallback(async (api: any) => {
@@ -230,53 +219,6 @@ export default function ExcalidrawEditor({
     window.addEventListener("craftisle-library-changed", handler)
     return () => window.removeEventListener("craftisle-library-changed", handler)
   }, [excalidrawRef.current, injectLibraries])
-
-  // 🔴 已导入库列表变化（含移除）后重新注入。
-  // 关键：updateLibrary({merge:true}) 只增不减 ⇒ 移除库后画布里仍留着旧组件。
-  // 这里用 merge:false 全量覆盖，才能真正「移除」。
-  const prevLibKeyRef = useRef<string>("")
-  useEffect(() => {
-    let cancelled = false
-    ;(async () => {
-      const raw = typeof window !== "undefined" ? localStorage.getItem("craftisle-imported-libs") : null
-      const files: string[] = raw ? JSON.parse(raw) : []
-      const sig = JSON.stringify(files.slice().sort())
-      if (sig === prevLibKeyRef.current) return
-      prevLibKeyRef.current = sig
-
-      const allItems: any[][] = []
-      for (const file of files) {
-        try {
-          const res = await fetch(`/libraries/${file}`)
-          if (!res.ok) continue
-          const data = await res.json()
-          const items = Array.isArray(data?.libraryItems)
-            ? data.libraryItems
-            : Array.isArray(data?.library)
-            ? data.library
-            : []
-          for (const item of items) {
-            const els = Array.isArray(item) ? item : item?.elements
-            if (Array.isArray(els) && els.length) allItems.push(els)
-          }
-        } catch { /* skip */ }
-      }
-      if (cancelled || !excalidrawRef.current?.updateLibrary) return
-      try {
-        await excalidrawRef.current.updateLibrary({
-          libraryItems: allItems,
-          // 🔴 merge:false ⇒ 覆盖式更新，移除库才能真正从画布消失
-          merge: false,
-          defaultStatus: "published",
-          openLibraryMenu: false,
-        })
-        excalidrawRef.current.refresh?.()
-      } catch (e) {
-        console.error("[lib] re-inject failed:", e)
-      }
-    })()
-    return () => { cancelled = true }
-  }, [libRefreshKey])
 
   // Generate thumbnail: export PNG → resize to 240x180 → base64
   const generateThumbnail = useCallback(async (): Promise<string | null> => {

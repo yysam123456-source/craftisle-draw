@@ -3,36 +3,91 @@ import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import BoardList from "@/components/BoardList";
 import { auth } from "@/auth";
-import Script from "next/script";
+import { locales } from "@/i18n/request";
 
-// Hub-level structured data linking this sub-site to the craftisle.com organization
-const hubJsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://craftisle.com/#organization",
-      name: "Craftisle",
-      url: "https://craftisle.com",
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://draw.craftisle.com/#website",
-      url: "https://draw.craftisle.com",
-      name: "Craftisle Draw",
-      publisher: { "@id": "https://craftisle.com/#organization" },
-    },
-  ],
-};
+const SITE = "https://draw.craftisle.com";
+
+/**
+ * Structured data for the homepage.
+ *
+ * Two rules were broken before:
+ *  1. nothing labelled this sub-site as a WebSite with its own @id, and
+ *  2. the SoftwareApplication node was missing entirely on the page itself.
+ * Both are declared here (plus the hub Organization reference) and rendered as
+ * an inline <script type="application/ld+json"> so that the markup is present
+ * in the server response, not only after hydration.
+ */
+function buildHomeJsonLd(locale: string) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://craftisle.com/#organization",
+        name: "Craftisle",
+        url: "https://craftisle.com",
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE}/#website`,
+        url: SITE,
+        name: "Craftisle Draw",
+        description:
+          "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+        inLanguage: locale,
+        publisher: { "@id": "https://craftisle.com/#organization" },
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": `${SITE}/#software`,
+        name: "Craftisle Draw",
+        alternateName: "Craftisle Draw — Online Whiteboard",
+        applicationCategory: "DesignApplication",
+        applicationSubCategory: "Online whiteboard & diagram tool",
+        operatingSystem: "Any (web browser)",
+        browserRequirements: "Requires a modern browser with HTML canvas support",
+        url: `${SITE}/${locale}`,
+        description:
+          "Browser-based whiteboard and diagram editor built on Excalidraw. Infinite canvas, hand-drawn style, real-time collaboration and PNG/SVG export.",
+        isPartOf: { "@id": `${SITE}/#website` },
+        publisher: { "@id": "https://craftisle.com/#organization" },
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+          availability: "https://schema.org/InStock",
+        },
+        featureList: [
+          "Infinite canvas with zoom and pan",
+          "Hand-drawn (Excalidraw) visual style",
+          "Real-time collaboration via share link",
+          "Export to PNG and SVG",
+          "Free to use, no credit card required",
+        ],
+        screenshot: `${SITE}/og-image.png`,
+      },
+    ],
+  };
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'seo' });
-  
+
   return {
     title: t('title'),
     description: t('description'),
     keywords: t('keywords').split(', '),
+    metadataBase: new URL(SITE),
+    alternates: {
+      // Self-referencing canonical for the localized homepage. This was absent,
+      // so the localized home pages had no canonical signal at all.
+      canonical: `${SITE}/${locale}`,
+      languages: {
+        ...Object.fromEntries(locales.map((l) => [l, `${SITE}/${l}`])),
+        "x-default": `${SITE}/en`,
+      },
+    },
   };
 }
 
@@ -124,20 +179,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
       </section>
       
-      {/* JSON-LD for FAQ */}
-      <Script
+      {/* JSON-LD: FAQ + WebSite + SoftwareApplication, server-rendered inline */}
+      <script
         id="faq-json-ld"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* JSON-LD linking this sub-site to the Craftisle organization hub */}
-      <Script
+      <script
         id="hub-json-ld"
         type="application/ld+json"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(hubJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildHomeJsonLd(locale)) }}
       />
     </div>
   );

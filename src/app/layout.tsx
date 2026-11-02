@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next"
-import Script from "next/script"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
 import { AdLoader } from "@/components/AdLoader"
 import { AdSenseLoader } from "@/components/AdSenseLoader"
@@ -175,11 +174,9 @@ const jsonLd = {
       publisher: {
         "@id": "https://craftisle.com/#organization",
       },
-      potentialAction: {
-        "@type": "SearchAction",
-        target: "https://draw.craftisle.com/search?q={search_term_string}",
-        "query-input": "required name=search_term_string",
-      },
+      // NOTE: the previous potentialAction (SearchAction -> /search?q=...) was
+      // removed: draw.craftisle.com has no /search route, so the target was a
+      // dead URL, and Google retired the sitelinks search box in late 2024.
     },
     {
       "@type": "BreadcrumbList",
@@ -221,10 +218,16 @@ export default function RootLayout({
       <head>
         {/* Monetag site verification */}
         <meta name="monetag" content="95c89403a193eef38bbc05e97d7c067c" />
-        <Script
+        {/*
+          JSON-LD must be an inline server-rendered script tag.
+          Previously this used next/script strategy="beforeInteractive", which
+          Next only honours inside the root layout's <head> for external scripts;
+          the inline payload ended up injected at hydration time, so a raw HTML
+          fetch of the page contained no structured data at all.
+        */}
+        <script
           id="json-ld"
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <link rel="manifest" href="/manifest.json" />

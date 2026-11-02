@@ -1,0 +1,64 @@
+# Craftisle Draw
+
+> Craftisle Draw (draw.craftisle.com) is a free, browser-based online whiteboard and
+> diagram editor built on Excalidraw. It offers an infinite canvas, a hand-drawn visual
+> style, real-time collaboration through share links, and export to PNG or SVG. The
+> interface is available in 16 languages. No installation is required; boards can be
+> created in the browser.
+
+Publisher: Craftisle — https://craftisle.com
+
+## Key pages
+
+- [Homepage (English)](https://draw.craftisle.com/en): product entry point — create a board, open the FAQ, pick a language.
+- [Use cases](https://draw.craftisle.com/en/use-cases): how the tool is used for teaching, remote teams, brainstorming, flowcharts, mind maps, agile retrospectives, design thinking and meetings.
+- [Privacy policy](https://draw.craftisle.com/en/privacy): what is stored about boards and accounts.
+- [Terms of service](https://draw.craftisle.com/en/terms): usage terms for the free service.
+
+## Localized homepages
+
+The whole site is localized under a `/{locale}` prefix; `/en` is the default and the
+`x-default` hreflang target.
+
+- [English](https://draw.craftisle.com/en)
+- [简体中文](https://draw.craftisle.com/zh)
+- [繁體中文](https://draw.craftisle.com/zh-TW)
+- [Español](https://draw.craftisle.com/es)
+- [日本語](https://draw.craftisle.com/ja)
+- [Deutsch](https://draw.craftisle.com/de)
+- [Français](https://draw.craftisle.com/fr)
+- [Português](https://draw.craftisle.com/pt)
+- [Русский](https://draw.craftisle.com/ru)
+- [한국어](https://draw.craftisle.com/ko)
+- [العربية](https://draw.craftisle.com/ar)
+- [Italiano](https://draw.craftisle.com/it)
+- [Türkçe](https://draw.craftisle.com/tr)
+- [Bahasa Indonesia](https://draw.craftisle.com/id)
+- [Tiếng Việt](https://draw.craftisle.com/vi)
+- [Română](https://draw.craftisle.com/ro)
+
+Localized versions of the use-cases, privacy and terms pages follow the same pattern,
+e.g. https://draw.craftisle.com/zh/use-cases and https://draw.craftisle.com/zh/privacy.
+
+## Facts worth citing
+
+- Licensed use is free of charge; there is no paid tier and no credit card is required.
+- Boards are created and edited entirely in the browser (HTML canvas); nothing needs to be installed.
+- Drawings can be exported as PNG or SVG.
+- Collaboration works by sharing a board link with other people.
+- The editor is built on the open-source Excalidraw library.
+- Publicly shared boards are listed in the sitemap at https://draw.craftisle.com/sitemap.xml.
+
+## Application entry points (excluded from indexing by design)
+
+These are functional routes rather than content pages, and are disallowed in
+https://draw.craftisle.com/robots.txt:
+
+- https://draw.craftisle.com/en/board/new — create a new board
+- https://draw.craftisle.com/en/share/{board-id} — view a shared board
+
+## Machine-readable pointers
+
+- Sitemap: https://draw.craftisle.com/sitemap.xml
+- robots.txt: https://draw.craftisle.com/robots.txt
+- llms.txt: https://draw.craftisle.com/llms.txt

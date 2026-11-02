@@ -31,7 +31,7 @@ export default function TermsPage() {
           <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">2. Description of Service</h2>
           <p>
             Craftisle Draw is a free online whiteboard tool that allows users to create hand-drawn diagrams, flowcharts, 
-            and collaborative boards. The Service is provided "as is" and "as available" without warranties of any kind.
+            and boards that can be shared through a read-only link. The Service is provided "as is" and "as available" without warranties of any kind.
           </p>
         </section>
 

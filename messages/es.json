@@ -21,7 +21,7 @@
       "free": "¿Es gratuito usar Craftisle Draw?",
       "freeAnswer": "Sí, Craftisle Draw es completamente gratuito. No es necesario registrarse para probarlo.",
       "collaborate": "¿Puedo colaborar con otros en tiempo real?",
-      "collaborateAnswer": "Sí, puedes compartir tu pizarra y colaborar en tiempo real.",
+      "collaborateAnswer": "No. Un tablero se puede compartir con un enlace de solo lectura, pero no hay edición simultánea.",
       "export": "¿Puedo exportar mis dibujos?",
       "exportAnswer": "Sí, puedes exportar tus dibujos como archivos PNG o SVG.",
       "account": "¿Necesito crear una cuenta?",

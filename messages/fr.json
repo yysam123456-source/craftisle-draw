@@ -21,7 +21,7 @@
       "free": "Est-ce que Craftisle Draw est gratuit ?",
       "freeAnswer": "Oui, Craftisle Draw est entièrement gratuit. Aucune inscription requise pour le tester.",
       "collaborate": "Puis-je collaborer avec d'autres en temps réel ?",
-      "collaborateAnswer": "Oui, vous pouvez partager votre tableau et collaborer en temps réel.",
+      "collaborateAnswer": "Non. Un tableau peut être partagé via un lien en lecture seule, mais l'édition simultanée n'est pas disponible.",
       "export": "Puis-je exporter mes dessins ?",
       "exportAnswer": "Oui, vous pouvez exporter vos dessins en fichiers PNG ou SVG.",
       "account": "Dois-je créer un compte ?",

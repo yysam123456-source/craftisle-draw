@@ -2,7 +2,7 @@
 
 > Craftisle Draw (draw.craftisle.com) is a free, browser-based online whiteboard and
 > diagram editor built on Excalidraw. It offers an infinite canvas, a hand-drawn visual
-> style, real-time collaboration through share links, and export to PNG or SVG. The
+> style, read-only board sharing through links, and export to PNG, SVG or JSON. The
 > interface is available in 16 languages. No installation is required; boards can be
 > created in the browser.
 
@@ -44,8 +44,9 @@ e.g. https://draw.craftisle.com/zh/use-cases and https://draw.craftisle.com/zh/p
 
 - Licensed use is free of charge; there is no paid tier and no credit card is required.
 - Boards are created and edited entirely in the browser (HTML canvas); nothing needs to be installed.
-- Drawings can be exported as PNG or SVG.
-- Collaboration works by sharing a board link with other people.
+- Drawings can be exported as PNG, SVG or JSON.
+- Sharing works by sending a board link; the recipient opens it read-only. There is no
+  real-time co-editing, so two people cannot edit the same board at the same time.
 - The editor is built on the open-source Excalidraw library.
 - Publicly shared boards are listed in the sitemap at https://draw.craftisle.com/sitemap.xml.
 

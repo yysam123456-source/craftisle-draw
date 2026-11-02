@@ -33,7 +33,7 @@ function buildHomeJsonLd(locale: string) {
         url: SITE,
         name: "Craftisle Draw",
         description:
-          "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+          "Free whiteboard in the browser, built on Excalidraw: hand-drawn diagrams, flowcharts and notes on an infinite canvas, with PNG, SVG and JSON export.",
         inLanguage: locale,
         publisher: { "@id": "https://craftisle.com/#organization" },
       },
@@ -48,7 +48,7 @@ function buildHomeJsonLd(locale: string) {
         browserRequirements: "Requires a modern browser with HTML canvas support",
         url: `${SITE}/${locale}`,
         description:
-          "Browser-based whiteboard and diagram editor built on Excalidraw. Infinite canvas, hand-drawn style, real-time collaboration and PNG/SVG export.",
+          "Browser-based whiteboard and diagram editor built on Excalidraw. Infinite canvas, hand-drawn style, boards saved to your account, read-only sharing and PNG, SVG or JSON export.",
         isPartOf: { "@id": `${SITE}/#website` },
         publisher: { "@id": "https://craftisle.com/#organization" },
         offers: {
@@ -60,9 +60,9 @@ function buildHomeJsonLd(locale: string) {
         featureList: [
           "Infinite canvas with zoom and pan",
           "Hand-drawn (Excalidraw) visual style",
-          "Real-time collaboration via share link",
-          "Export to PNG and SVG",
-          "Free to use, no credit card required",
+          "Read-only board sharing via link",
+          "Export to PNG, SVG and JSON",
+          "Free to use",
         ],
         screenshot: `${SITE}/og-image.png`,
       },
@@ -164,6 +164,48 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
       )}
       
+      {/* SEO/GEO: 服务端渲染的说明正文。只做 en —— 其余 15 个 locale 没有对应译文，
+          塞英文会造成双语混杂，补 16 种译文属于内容侧另一件事。
+          这段进的是首字节 HTML，不执行 JS 的爬虫能读到（原来全页仅 188 词）。 */}
+      {locale === 'en' && (
+        <section className="mt-16 pt-16 border-t border-gray-200" aria-labelledby="about-draw-heading">
+          <h2 id="about-draw-heading" className="text-2xl font-bold text-gray-900 mb-6">What Craftisle Draw is</h2>
+          <p className="text-gray-600 mb-4">
+            Craftisle Draw is a whiteboard for sketching diagrams, flowcharts and notes in a browser tab. It is
+            built on Excalidraw 0.18.1, so the drawing model, the element types and the hand-drawn rendering
+            style are the ones Excalidraw users already know.
+          </p>
+          <p className="text-gray-600 mb-4">
+            Boards are stored in an account rather than only on the device, so a diagram is still there when
+            you come back on another machine.
+          </p>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 mt-10">What you can do on the canvas</h2>
+          <ul className="text-gray-600 mb-4 list-disc pl-6 space-y-2">
+            <li>Draw rectangles, ellipses, diamonds and arrows, and connect them with binding arrows that follow a shape when it moves.</li>
+            <li>Sketch freehand with the freedraw tool, then keep the hand-drawn look or switch to a clean scheme.</li>
+            <li>Type text anywhere, add sticky notes, and drop in images from your device.</li>
+            <li>Export the board as PNG, SVG or a JSON scene file you can keep and re-import later.</li>
+            <li>Share a board by link so somebody else can open it, read-only, without an account.</li>
+          </ul>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 mt-10">How it works</h2>
+          <p className="text-gray-600 mb-4">
+            Opening a board loads its scene into the canvas; every change is saved back to the board while you
+            work. Export renders the shapes in the browser, which is why a PNG or SVG comes out matching what
+            is on screen. A shared link serves the board in a read-only view.
+          </p>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 mt-10">What it does not do</h2>
+          <p className="text-gray-600 mb-4">
+            There is no real-time co-editing: two people cannot draw on the same board at once, and no live
+            cursor or presence is shown. Creating or saving a board requires signing in, the share link is
+            read-only rather than editable, and there is no version history or comment thread — a shared link
+            shows the board as it stood when it was shared.
+          </p>
+        </section>
+      )}
+
       {/* FAQ Section */}
       <section className="mt-16 pt-16 border-t border-gray-200" aria-labelledby="faq-heading">
         <h2 id="faq-heading" className="text-2xl font-bold text-gray-900 mb-8">{t('faqTitle')}</h2>

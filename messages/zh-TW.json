@@ -19,9 +19,9 @@
     "faqTitle": "常見問題",
     "faq": {
       "free": "Craftisle Draw 免費使用嗎？",
-      "freeAnswer": "是的，Craftisle Draw 完全免費使用，無需註冊即可試用。",
+      "freeAnswer": "免費。畫板需要登入後才能儲存。",
       "collaborate": "我可以與他人即時協作嗎？",
-      "collaborateAnswer": "您可以與他人共享白板並即時協作。",
+      "collaborateAnswer": "不支援。畫板可以透過唯讀連結分享，但不支援多人同時編輯。",
       "export": "我可以匯出我的繪圖嗎？",
       "exportAnswer": "您可以將繪圖匯出為 PNG 或 SVG 檔案。",
       "account": "我需要建立帳戶嗎？",

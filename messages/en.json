@@ -8,16 +8,16 @@
   },
   "home": {
     "title": "Free Online Whiteboard",
-    "description": "Create hand-drawn diagrams, flowcharts, and collaborative boards with Craftisle Draw. Free online whiteboard tool powered by Excalidraw.",
+    "description": "Create hand-drawn diagrams, flowcharts and sketches with Craftisle Draw, a free whiteboard built on Excalidraw.",
     "or": "or",
     "learnMore": "learn more about Craftisle",
     "pleaseSignIn": "Please sign in to view your boards",
     "faqTitle": "Frequently Asked Questions",
     "faq": {
       "free": "Is Craftisle Draw free to use?",
-      "freeAnswer": "Yes, Craftisle Draw is completely free to use. No signup required for testing.",
+      "freeAnswer": "Yes. Craftisle Draw is free to use; an account is needed to save boards.",
       "collaborate": "Can I collaborate with others in real-time?",
-      "collaborateAnswer": "Yes, you can share your board with others and collaborate in real-time.",
+      "collaborateAnswer": "No. A board can be shared as a read-only link, but simultaneous editing is not available.",
       "export": "Can I export my drawings?",
       "exportAnswer": "Yes, you can export your drawings as PNG or SVG files.",
       "account": "Do I need to create an account?",
@@ -28,14 +28,14 @@
   },
   "seo": {
     "title": "Free Online Whiteboard | Craftisle Draw",
-    "description": "Create hand-drawn diagrams, flowcharts, and collaborative boards. No signup required. Real-time collaboration, infinite canvas, export to PNG/SVG.",
-    "keywords": "free online whiteboard no sign up, online whiteboard for teaching, collaborative whiteboard real time free, hand drawn diagram tool online, flowchart maker online free, mind map online free, virtual whiteboard for remote teams, brainstorming tool online free, excalidraw alternative free, whiteboard for agile teams"
+    "description": "Free whiteboard built on Excalidraw: hand-drawn diagrams, flowcharts and notes on an infinite canvas. Boards save to your account; export to PNG, SVG or JSON.",
+    "keywords": "online whiteboard, excalidraw, free whiteboard, flowchart maker, mind map tool, hand drawn diagram tool, whiteboard export png svg, excalidraw alternative"
   },
   "useCases": {
     "teaching": "Online Whiteboard for Teaching",
     "teachingDesc": "Use Craftisle Draw as a free online whiteboard for teaching. Create interactive lessons, explain concepts with hand-drawn diagrams, and share whiteboards with students.",
     "remoteTeams": "Virtual Whiteboard for Remote Teams",
-    "remoteTeamsDesc": "Real-time collaborative whiteboard for remote teams. Brainstorm, plan sprints, and collaborate visually with your team.",
+    "remoteTeamsDesc": "A whiteboard for remote teams. Sketch a sprint plan or a system diagram together in a call, then share the board as a read-only link.",
     "brainstorming": "Brainstorming Tool Online Free",
     "brainstormingDesc": "Free brainstorming tool online. Generate ideas with your team on an infinite canvas. Use sticky notes, draw connections, and export your brainstorming session.",
     "flowchart": "Flowchart Maker Online Free",
@@ -47,7 +47,7 @@
     "designThinking": "Design Thinking Whiteboard",
     "designThinkingDesc": "Design thinking whiteboard for innovation. Use our free online whiteboard to run design thinking workshops.",
     "meetings": "Meeting Presentation Whiteboard",
-    "meetingsDesc": "Meeting presentation whiteboard. Create visual presentations, annotate in real-time, and share with stakeholders.",
+    "meetingsDesc": "Meeting presentation whiteboard. Build a visual deck on the canvas and share the finished board with stakeholders as a read-only link.",
     "title": "Use Cases for Craftisle Draw | Free Online Whiteboard",
     "description": "Explore the most popular ways to use Craftisle Draw: teaching, remote teams, brainstorming, flowcharts, mind maps, agile retros, design thinking, and meetings. Free, no signup required.",
     "h1": "Use Cases for Craftisle Draw",
@@ -58,10 +58,10 @@
     "howToStep2": "Pick a use case below",
     "howToStep2Desc": "Start from a scenario that matches your goal: meeting notes, a flowchart, a wireframe, or a retro board. Every use case works the same way — just draw, type, and connect.",
     "howToStep3": "Share or export",
-    "howToStep3Desc": "Invite teammates with a link for real-time collaboration, or export your work as PNG or SVG to drop straight into docs and slides."
+    "howToStep3Desc": "Share the board as a read-only link so teammates can follow along, or export it as PNG, SVG or JSON to drop into docs and slides."
   },
   "footer": {
-    "description": "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+    "description": "Free whiteboard in the browser, built on Excalidraw: hand-drawn diagrams, flowcharts and notes on an infinite canvas.",
     "quickLinks": "Quick Links",
     "legal": "Legal",
     "privacy": "Privacy Policy",

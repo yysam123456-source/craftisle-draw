@@ -19,9 +19,9 @@
     "faqTitle": "常见问题",
     "faq": {
       "free": "Craftisle Draw 免费使用吗？",
-      "freeAnswer": "是的，Craftisle Draw 完全免费使用，无需注册即可试用。",
+      "freeAnswer": "免费。画板需要登录后才能保存。",
       "collaborate": "我可以与他人实时协作吗？",
-      "collaborateAnswer": "可以，您可以与他人共享白板并实时协作。",
+      "collaborateAnswer": "不支持。画板可以通过只读链接分享，但不支持多人同时编辑。",
       "export": "我可以导出我的绘图吗？",
       "exportAnswer": "可以，您可以将绘图导出为 PNG 或 SVG 文件。",
       "account": "我需要创建账户吗？",

@@ -5,59 +5,29 @@ import { AdSenseLoader } from "@/components/AdSenseLoader"
 
 export const metadata: Metadata = {
   title: {
-    default: "Craftisle Draw — Free Online Whiteboard & Collaborative Drawing Tool",
+    default: "Craftisle Draw — Free Online Excalidraw Whiteboard",
     template: "%s | Craftisle Draw",
   },
+  // 🔴 文案必须对得上运行时：本站没有实时协作层（Excalidraw 的 collaboration
+  //    需要独立后端），且创建/保存画板需要登录。原先的 "Real-time collaboration"
+  //    "No signup required for testing" 都是可被当场证伪的声明。
   description:
-    "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards. No signup required for testing. Real-time collaboration, infinite canvas, and export to PNG/SVG. Perfect for teaching, brainstorming, and team collaboration.",
+    "A free whiteboard in the browser, built on Excalidraw. Sketch hand-drawn diagrams, flowcharts and notes on an infinite canvas, save boards to your account, and export to PNG, SVG or JSON. A finished board can be shared as a read-only link.",
   keywords: [
     "online whiteboard",
-    "collaborative drawing",
     "excalidraw",
     "free whiteboard",
     "online diagram tool",
     "flowchart maker",
     "mind map tool",
     "digital whiteboard",
-    "virtual whiteboard",
-    "team collaboration tool",
-    "free online whiteboard no sign up",
-    "online whiteboard for teaching",
-    "collaborative whiteboard real time free",
     "hand drawn diagram tool online",
-    "flowchart maker online free",
-    "mind map online free",
-    "virtual whiteboard for remote teams",
-    "sketch board online free",
-    "brainstorming tool online free",
-    "draw diagrams online free no download",
-    "excalidraw alternative free",
-    "online drawing board for teams",
-    "free digital whiteboard",
-    "interactive whiteboard online",
-    "whiteboard for online meetings",
-    "online whiteboard with drawing tools",
-    "free whiteboard for teachers",
-    "real time collaborative whiteboard",
-    "whiteboard app for remote work",
+    "whiteboard export png svg",
     "online canvas for drawing",
+    "whiteboard for teaching",
     "free diagram tool online",
-    "whiteboard software free online",
-    "create whiteboard online free",
-    "shared whiteboard online free",
-    "whiteboard for agile teams",
-    "online retrospective whiteboard",
-    "free whiteboard for students",
-    "best free online whiteboard",
-    "whiteboard tool for presentations",
-    "online whiteboard no registration",
-    "free whiteboard unlimited collaborators",
-    "whiteboard with templates free",
-    "online whiteboard export png svg",
-    "hand drawn style whiteboard",
-    "whiteboard for design thinking",
-    "visual collaboration tool free",
-    "online whiteboard for workshops",
+    "excalidraw alternative",
+    "browser whiteboard app",
   ],
   authors: [{ name: "Craftisle" }],
   creator: "Craftisle",
@@ -76,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Craftisle Draw — Free Online Whiteboard",
     description:
-      "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+      "Free whiteboard in the browser, built on Excalidraw: hand-drawn diagrams, flowcharts and notes on an infinite canvas, with PNG, SVG and JSON export.",
     url: "https://draw.craftisle.com",
     siteName: "Craftisle Draw",
     images: [
@@ -94,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Craftisle Draw — Free Online Whiteboard",
     description:
-      "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+      "Free whiteboard in the browser, built on Excalidraw: hand-drawn diagrams, flowcharts and notes on an infinite canvas, with PNG, SVG and JSON export.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -130,7 +100,7 @@ const jsonLd = {
       "@type": "WebApplication",
       name: "Craftisle Draw",
       description:
-        "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+        "Free whiteboard in the browser, built on Excalidraw: hand-drawn diagrams, flowcharts and notes on an infinite canvas, with PNG, SVG and JSON export.",
       url: "https://draw.craftisle.com",
       applicationCategory: "Productivity",
       operatingSystem: "Any",
@@ -143,9 +113,10 @@ const jsonLd = {
       featureList: [
         "Infinite canvas",
         "Hand-drawn style",
-        "Real-time collaboration",
-        "Export to PNG/SVG",
-        "No signup required for testing",
+        "Excalidraw element library",
+        "Export to PNG, SVG and JSON",
+        "Read-only board sharing",
+        "Boards saved to your account",
       ],
     },
     {
@@ -170,7 +141,7 @@ const jsonLd = {
       url: "https://draw.craftisle.com",
       name: "Craftisle Draw",
       description:
-        "Free online whiteboard tool powered by Excalidraw. Create hand-drawn diagrams, flowcharts, and collaborative boards.",
+        "Free whiteboard in the browser, built on Excalidraw: hand-drawn diagrams, flowcharts and notes on an infinite canvas, with PNG, SVG and JSON export.",
       publisher: {
         "@id": "https://craftisle.com/#organization",
       },

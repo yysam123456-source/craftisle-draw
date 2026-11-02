@@ -37,7 +37,7 @@ export default function PrivacyPage() {
           <ul className="list-disc pl-6 space-y-2">
             <li>To provide and maintain our service</li>
             <li>To allow you to create and manage whiteboards</li>
-            <li>To enable collaboration features</li>
+            <li>To serve a board through a read-only share link</li>
             <li>To improve our service based on usage patterns</li>
           </ul>
         </section>

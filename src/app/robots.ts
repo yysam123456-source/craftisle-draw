@@ -8,11 +8,15 @@ import { MetadataRoute } from "next"
 //    加了具名组反而会让这些爬虫获准访问 /api/ 和 /board/。
 const AI_AGENTS = [
   "GPTBot",
+  "OAI-SearchBot", // ChatGPT Search 收录/退出的管理 bot（11-04 八站审计补齐）
   "ChatGPT-User",
   "ClaudeBot",
+  "Claude-SearchBot",
   "anthropic-ai",
   "PerplexityBot",
+  "Perplexity-User",
   "Google-Extended",
+  "CCBot",
 ]
 
 const ALLOW = ["/", "/share/"]

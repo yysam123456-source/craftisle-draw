@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next"
+import { headers } from "next/headers"
+import { locales, defaultLocale } from "@/i18n/request"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
 import { AdLoader } from "@/components/AdLoader"
 import { AdSenseLoader } from "@/components/AdSenseLoader"
@@ -179,13 +181,33 @@ export const viewport: Viewport = {
   ],
 }
 
-export default function RootLayout({
+/**
+ * 🔴 2026-11-05（DEBT-48）：`<html lang>` 必须与页面实际语言一致。
+ * 原先写死 "en"，16 个语种（ja/ko/ar/...）的 title 已本地化却全部谎报英语。
+ *
+ * 为什么不用「把 [locale]/layout.tsx 提升为根布局」那套（pdfcraft DEBT-47 的做法）：
+ * draw 的根布局有 222 行且内含 JSON-LD、manifest、msapplication、广告组件，
+ * 搬迁还要处理根级 error/not-found 的多根布局分组，风险高得多。
+ *
+ * 实际可用的是 next-intl 自己的官方契约：middleware 把解析出的 locale 写进
+ * 请求头 `X-NEXT-INTL-LOCALE`（HEADER_LOCALE_NAME），并通过
+ * `NextResponse.next({ request: { headers } })` 透传给下游；next-intl 的
+ * `getLocale()` 也是读这个头。所以根布局用 headers() 即可**服务端**拿到真实
+ * locale，零结构改动、零客户端脚本、SSR 原始 HTML 就是对的。
+ *
+ * 白名单校验：值不在 locales 里就退回 defaultLocale —— 既符合「宁可漏报
+ * 不可错报」，也避免外部请求头注入任意 lang。
+ */
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const requestHeaders = await headers()
+  const raw = requestHeaders.get("X-NEXT-INTL-LOCALE")
+  const lang = raw && (locales as readonly string[]).includes(raw) ? raw : defaultLocale
   return (
-    <html lang="en">
+    <html lang={lang}>
       <head>
         {/* Monetag site verification */}
         <meta name="monetag" content="95c89403a193eef38bbc05e97d7c067c" />
